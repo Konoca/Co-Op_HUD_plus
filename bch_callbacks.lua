@@ -1,9 +1,5 @@
 local function onGameStart(_, isCont)
     Better_Coop_HUD.players = {}
-    Better_Coop_HUD.players_seeds = {}
-    Better_Coop_HUD.player_counter = 0
-    Better_Coop_HUD.twin_counter = 0
-
     Better_Coop_HUD.pills = {}
 
     -- TODO save and load data for continued games (specifically pills)
