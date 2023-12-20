@@ -22,9 +22,3 @@ A mod for The Binding of Isaac: Repentence that changes the HUD to better displa
     * Improves the look of heart icons
 * Encyclopedia (https://steamcommunity.com/sharedfiles/filedetails/?id=2376005362)
     * Allows players to check their current items and what they do
-
-## Known issues
-* When new players spawn in, sometimes their health will not show up
-    * This is quickly fixed after entering a new room
-* Stats get messed up with Jacob & Esau
-    * Just exit the run and hit continue
