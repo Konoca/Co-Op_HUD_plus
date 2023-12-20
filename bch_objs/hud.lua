@@ -52,19 +52,6 @@ local function setDefaultHUD(game, bool)
     end
 end
 
-local function renderPlayer(player_num, player_index, screen_size, screen_center)
-    local p = Better_Coop_HUD.players[player_index]
-
-    if not p or not p.is_real then return player_num end
-
-    local idx = player_num + 1
-    local isOnRight = (idx % 2) == 0
-    local isOnBottom = (idx > 2)
-
-    p:render(screen_size, screen_center, isOnRight, isOnBottom, Vector(0,0))
-    return idx
-end
-
 local function minimapConfig(setting, value)
     if MinimapAPI.OverrideConfig[setting] ~= value then
         MinimapAPI.OverrideConfig[setting] = value
@@ -89,11 +76,23 @@ local function onRender()
     lastTimeString = renderTimer(game, lastTimeString)
 
     -- players
-    -- TODO everything messes up when coop players join, need to leave and continue to fix
-    local player_num = 0
-    for i = 0, #Better_Coop_HUD.players do
-        if player_num >= game:GetNumPlayers() then break end
-        player_num = renderPlayer(player_num, i, screen_size, screen_center)
+    local twins = 0
+    for i = 0, game:GetNumPlayers() - 1, 1 do
+        local player = Isaac.GetPlayer(i)
+        if Better_Coop_HUD.players[i] then Better_Coop_HUD.players[i]:update(player) end
+        if not Better_Coop_HUD.players[i] then
+            Better_Coop_HUD.players[i] = Better_Coop_HUD.Player.new(player, i - twins)
+        end
+
+        local p = Better_Coop_HUD.players[i]
+        if not p.is_real then twins = twins + 1 end
+        if p.is_real then
+            local idx = p.number + 1
+            local isOnRight = (idx % 2) == 0
+            local isOnBottom = (idx > 2)
+
+            p:render(screen_size, screen_center, isOnRight, isOnBottom, Vector(0,0))
+        end
     end
 
     -- bombs, keys, coins, etc.

@@ -1,4 +1,4 @@
-function Better_Coop_HUD.Player.new(player_entity)
+function Better_Coop_HUD.Player.new(player_entity, player_num)
     local self = setmetatable({}, Better_Coop_HUD.Player)
 
     self.player_entity = player_entity
@@ -8,16 +8,16 @@ function Better_Coop_HUD.Player.new(player_entity)
     self.is_real = self:getIsReal()
     self.twin = nil
 
-    if self.is_real then
-        self.number = Better_Coop_HUD.player_counter
-        Better_Coop_HUD.player_counter = Better_Coop_HUD.player_counter + 1
+    self.number = player_num
+
+    if not self.is_real then
+        self.number = self.number - 1
     end
 
     local twin_entity = self.player_entity:GetOtherTwin()
     if twin_entity ~= nil and self.is_real then
-        self.twin = Better_Coop_HUD.Player.new(twin_entity)
+        self.twin = Better_Coop_HUD.Player.new(twin_entity, player_num)
         self.twin.number = self.number
-        -- self.twin = Better_Coop_HUD.players[self.index + 1]
     end
 
     -- TODO T.Issac & T.Cain inventories
