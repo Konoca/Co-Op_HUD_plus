@@ -1,4 +1,4 @@
-function Better_Coop_HUD.Player.new(player_entity)
+function Better_Coop_HUD.Player.new(player_entity, player_num)
     local self = setmetatable({}, Better_Coop_HUD.Player)
 
     self.player_entity = player_entity
@@ -8,16 +8,16 @@ function Better_Coop_HUD.Player.new(player_entity)
     self.is_real = self:getIsReal()
     self.twin = nil
 
-    if self.is_real then
-        self.number = Better_Coop_HUD.player_counter
-        Better_Coop_HUD.player_counter = Better_Coop_HUD.player_counter + 1
+    self.number = player_num
+
+    if not self.is_real then
+        self.number = self.number - 1
     end
 
     local twin_entity = self.player_entity:GetOtherTwin()
     if twin_entity ~= nil and self.is_real then
-        self.twin = Better_Coop_HUD.Player.new(twin_entity)
+        self.twin = Better_Coop_HUD.Player.new(twin_entity, player_num)
         self.twin.number = self.number
-        -- self.twin = Better_Coop_HUD.players[self.index + 1]
     end
 
     -- TODO T.Issac & T.Cain inventories
@@ -78,6 +78,10 @@ function Better_Coop_HUD.Player:render(screen_size, screen_center, horizontal_mi
 
     -- TODO active/pocket item highlighting for Jacob & Esau
 
+    local edge = Better_Coop_HUD.config.offset + offset
+    local edge_multipliers = Vector(1, 1)
+    local edge_indexed = Better_Coop_HUD.config.offset + offset
+
     local horizontal_edge = Better_Coop_HUD.config.offset.X + offset.X
     local horizontal_multiplier = 1
 
@@ -87,10 +91,14 @@ function Better_Coop_HUD.Player:render(screen_size, screen_center, horizontal_mi
     if horizontal_mirror then
         horizontal_edge = screen_size.X - (horizontal_edge + Better_Coop_HUD.config.mirrored_extra_offset.X)
         horizontal_multiplier = -1
+        edge_multipliers.X = -1
+        edge_indexed.X = horizontal_edge
     end
     if vertical_mirror then
         vertical_edge = screen_size.Y - (vertical_edge + Better_Coop_HUD.config.mirrored_extra_offset.Y)
         vertical_multiplier = -1
+        edge_multipliers.Y = -1
+        edge_indexed.Y = vertical_edge
     end
 
     -- active item
@@ -146,11 +154,7 @@ function Better_Coop_HUD.Player:render(screen_size, screen_center, horizontal_mi
 
     -- stats & misc
     if self.is_real then
-        self.stats:render(
-            horizontal_edge + (Better_Coop_HUD.config.stats.pos.X * horizontal_multiplier),
-            horizontal_multiplier,
-            vertical_edge + Better_Coop_HUD.config.stats.pos.Y
-        )
+        self.stats:render(edge, edge_indexed, edge_multipliers, Vector(0, 0))
     end
 
     if self.twin then
@@ -161,13 +165,6 @@ function Better_Coop_HUD.Player:render(screen_size, screen_center, horizontal_mi
             vertical_mirror,
             Better_Coop_HUD.config.twin_pos
         )
-        self.twin.stats:render(
-            horizontal_edge + (
-                (Better_Coop_HUD.config.stats.pos.X + (Better_Coop_HUD.config.stats.space_between_icon_text * 1.6))
-                * horizontal_multiplier
-            ),
-            horizontal_multiplier,
-            vertical_edge + Better_Coop_HUD.config.stats.pos.Y
-        )
+        self.twin.stats:render(edge, edge_indexed, edge_multipliers, Better_Coop_HUD.config.stats.text.twin_offset)
     end
 end
