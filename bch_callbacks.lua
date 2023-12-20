@@ -1,7 +1,3 @@
-local function GetPlayerIndex(player)
-    return player:GetCollectibleRNG(1):GetSeed()
-end
-
 local function onGameStart(_, isCont)
     Better_Coop_HUD.players = {}
     Better_Coop_HUD.players_seeds = {}
