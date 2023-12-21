@@ -83,7 +83,6 @@ function Better_Coop_HUD.Stats:render(edge, edge_indexed, edge_multipliers, addi
 
     local stats = {self.speed, self.fire_delay, self.damage, self.range, self.shot_speed, self.luck}
     for i = 0, #stats - 1, 1 do
-        print(edge, edge_indexed, edge_multipliers, mirrored, is_lower_text, pos, text_pos)
         stats[i + 1]:render(
             pos + (Better_Coop_HUD.config.stats.offset * i),
             text_pos + (Better_Coop_HUD.config.stats.text.offset * i),
