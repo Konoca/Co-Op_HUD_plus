@@ -124,29 +124,6 @@ function Better_Coop_HUD.Health:_getHeartsHelper(
     return hearts
 end
 
-function Better_Coop_HUD.Health:_handleBoneHearts(red_hearts)
-    local bone_hearts = {}
-    if self.bone == 0 then return bone_hearts end
-
-    local replace_reds = 0
-
-    if #red_hearts ~= 0 and self.red > self.max_red then
-        for i = 0, self.bone - 1, 1 do
-            if (self.red - (replace_reds*2)) <= self.max_red then break end
-            red_hearts[#red_hearts - i].heart_type = 'Bone'
-            red_hearts[#red_hearts - i]:updateSprite()
-            replace_reds = replace_reds + 1
-        end
-    end
-
-    -- TODO replace with loop to insert bone hearts with soul hearts using `EntityPlayer:IsBoneHeart(int heart)`
-    local bones = self.bone - replace_reds
-    for i = 1, bones, 1 do
-        bone_hearts = self:_getHeartsHelper(bones, 'Bone', false, false, false, true, nil, '')
-    end
-    return bone_hearts
-end
-
 function Better_Coop_HUD.Health:getHearts()
     local hearts = {}
 
@@ -169,7 +146,7 @@ function Better_Coop_HUD.Health:getHearts()
     end
 
     -- red hearts
-    local red_hearts_count = math.floor(self.red / 2)
+    local red_hearts_count = (self.red < self.max_red) and math.floor(self.red / 2) or math.floor(self.max_red / 2)
     local red_hearts = self:_getHeartsHelper(red_hearts_count, red, false, false, false, false, nil, '')
     if self.red % 2 == 1 then
         local half_heart = Better_Coop_HUD.Heart.new(red, true, false, false, false)
@@ -191,6 +168,15 @@ function Better_Coop_HUD.Health:getHearts()
     -- broken hearts
     local broken_hearts = self:_getHeartsHelper(self.broken, broken, false, false, false, false, nil, '')
 
+    -- bone hearts
+    local remaining_reds = self.red - self.max_red
+    for i = 1, self.bone + soul_hearts_count, 1 do
+        if self.player_entity:IsBoneHeart(i-1) then
+            table.insert(soul_hearts, i, Better_Coop_HUD.Heart.new('Bone', remaining_reds == 1, false, false, remaining_reds <= 0))
+            remaining_reds = remaining_reds - 2
+        end
+    end
+
     -- eternal heart
     if self.eternal == 1 then
         local eternal_table = soul_hearts
@@ -201,9 +187,6 @@ function Better_Coop_HUD.Health:getHearts()
         eternal_table[#eternal_table].has_eternal = true
         eternal_table[#eternal_table]:updateSprite()
     end
-
-    -- bone hearts
-    local bone_hearts = self:_handleBoneHearts(red_hearts)
 
     -- rotten hearts
     local type2 = ''
@@ -217,7 +200,6 @@ function Better_Coop_HUD.Health:getHearts()
     for i = 1, #red_hearts, 1 do table.insert(hearts, red_hearts[i]) end
     for i = 1, #empty_hearts, 1 do table.insert(hearts, empty_hearts[i]) end
     for i = 1, #soul_hearts, 1 do table.insert(hearts, soul_hearts[i]) end
-    for i = 1, #bone_hearts, 1 do table.insert(hearts, bone_hearts[i]) end
 
     -- golden hearts
     for i = 0, self.golden - 1, 1 do
