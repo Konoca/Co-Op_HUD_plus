@@ -579,12 +579,14 @@ function Better_Coop_HUD.Pockets:render(edge_indexed, edge_multipliers)
         ::skip_pocket::
     end
 
-    if self.order[0].type ~= Better_Coop_HUD.PocketItem.TYPE_NONE then
+    if self.order[0].type ~= Better_Coop_HUD.PocketItem.TYPE_NONE and Better_Coop_HUD.config.pocket.text.display then
         local text_pos = edge_indexed + (Better_Coop_HUD.config.pocket.text.pos * edge_multipliers)
+        local text_scale = Better_Coop_HUD.config.pocket.text.scale
+        if edge_multipliers.X == -1 then text_pos.X = text_pos.X - (self.order[0].name:len() * 2.5) end
         Isaac.RenderScaledText(
             self.order[0].name,
             text_pos.X, text_pos.Y,
-            1, 1,
+            text_scale.X, text_scale.Y,
             1, 1, 1, 0.5
         )
     end

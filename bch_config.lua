@@ -80,8 +80,8 @@ Better_Coop_HUD.config = {
         },
         text = {
             display = true,
-            pos = Vector(40, 19),
-            scale = Vector(1, 1),
+            pos = Vector(40, 21),
+            scale = Vector(0.5, 0.5),
         },
     },
 
