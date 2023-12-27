@@ -1,7 +1,10 @@
 local function onGameStart(_, isCont)
     Better_Coop_HUD.players = {}
     Better_Coop_HUD.joining = {}
-    Better_Coop_HUD.pills = {}
+    Better_Coop_HUD.pills = {
+        cache = {},
+        known = {},
+    }
 
     -- TODO save and load data for continued games (specifically pills)
     if isCont then
@@ -28,9 +31,15 @@ Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, onGameStart)
 
 
 local function getPill(_, pillEffect, pillColor)
-    Better_Coop_HUD.pills[pillColor] = pillEffect
+    Better_Coop_HUD.pills.cache[pillColor] = pillEffect
 end
 Better_Coop_HUD:AddCallback(ModCallbacks.MC_GET_PILL_EFFECT, getPill)
+
+
+local function usePill(_, pillEffect, entityPlayer, useFlags)
+    Better_Coop_HUD.pills.known[pillEffect] = true
+end
+Better_Coop_HUD:AddCallback(ModCallbacks.MC_USE_PILL, usePill)
 
 
 local function getPlayerExists(idx)
