@@ -9,6 +9,8 @@ Better_Coop_HUD.PATHS = {
         hearts = 'gfx/ui/ui_hearts.anm2',
         stats = 'gfx/ui/bch_hudstats2.anm2', -- custom, edited from default
         misc = 'gfx/ui/bch_hudpickups.anm2', -- custom, edited from default
+        inv = 'gfx/ui/bch_inventory.anm2', -- custom, edited from default
+        crafting = 'gfx/ui/bch_crafting.anm2', -- custom, edited from default
     },
 }
 
@@ -66,8 +68,6 @@ Better_Coop_HUD.PILL = {
     [PillEffect.PILLEFFECT_EXPERIMENTAL] = 'Experimental Pill',
 }
 
-Better_Coop_HUD.Item.ANIMATION_NAME = 'Idle'
-
 Better_Coop_HUD.Trinket.SLOT_PRIMARY = 0
 Better_Coop_HUD.Trinket.SLOT_SECONDARY = 1
 
@@ -107,3 +107,41 @@ Better_Coop_HUD.Misc.BLACK_HEART = 13
 Better_Coop_HUD.Misc.GIGA_BOMB = 14
 Better_Coop_HUD.Misc.RED_HEART = 15
 Better_Coop_HUD.Misc.POOP = 16
+
+Better_Coop_HUD.Inventory.RED_HEART = 1
+Better_Coop_HUD.Inventory.SOUL_HEART = 2
+Better_Coop_HUD.Inventory.ETERNAL_HEART = 3
+Better_Coop_HUD.Inventory.BLACK_HEART = 4
+Better_Coop_HUD.Inventory.GOLD_HEART = 5
+Better_Coop_HUD.Inventory.BONE_HEART = 6
+Better_Coop_HUD.Inventory.ROTTEN_HEART = 7
+
+Better_Coop_HUD.Inventory.PENNY = 8
+Better_Coop_HUD.Inventory.NICKEL = 9
+Better_Coop_HUD.Inventory.DIME = 10
+Better_Coop_HUD.Inventory.LUCKY_PENNY = 11
+
+Better_Coop_HUD.Inventory.KEY = 12
+Better_Coop_HUD.Inventory.GOLDEN_KEY = 13
+Better_Coop_HUD.Inventory.CHARGED_KEY = 14
+
+Better_Coop_HUD.Inventory.BOMB = 15
+Better_Coop_HUD.Inventory.GOLDEN_BOMB = 16
+Better_Coop_HUD.Inventory.GIGA_BOMB = 17
+
+Better_Coop_HUD.Inventory.MICRO_BATTERY = 18
+Better_Coop_HUD.Inventory.LIL_BATTERY = 19
+Better_Coop_HUD.Inventory.MEGA_BATTERY = 20
+
+Better_Coop_HUD.Inventory.CARD = 21
+Better_Coop_HUD.Inventory.PILL = 22
+Better_Coop_HUD.Inventory.RUNE = 23
+
+Better_Coop_HUD.Inventory.DICE_SHARD = 24
+Better_Coop_HUD.Inventory.CRACKED_KEY = 25
+
+Better_Coop_HUD.Inventory.GOLDEN_PENNY = 26
+Better_Coop_HUD.Inventory.GOLDEN_PILL = 27
+Better_Coop_HUD.Inventory.GOLDEN_BATTERY = 28
+
+Better_Coop_HUD.Inventory.POOP = 29

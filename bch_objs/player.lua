@@ -20,8 +20,6 @@ function Better_Coop_HUD.Player.new(player_entity, player_num)
         self.twin.number = self.number
     end
 
-    -- TODO T.Issac & T.Cain inventories
-
     self.health = Better_Coop_HUD.Health.new(player_entity)
 
     self.active_items = {
@@ -37,6 +35,8 @@ function Better_Coop_HUD.Player.new(player_entity, player_num)
     self.pockets = Better_Coop_HUD.Pockets.new(player_entity, nil)
 
     self.stats = Better_Coop_HUD.Stats.new(player_entity, self)
+
+    self.inventory = Better_Coop_HUD.Inventory.new(player_entity)
 
     return self
 end
@@ -57,6 +57,8 @@ function Better_Coop_HUD.Player:update(player_entity)
     self.pockets = Better_Coop_HUD.Pockets.new(player_entity, self)
 
     self.stats = Better_Coop_HUD.Stats.new(player_entity, self)
+
+    self.inventory = Better_Coop_HUD.Inventory.new(player_entity)
 
     self.player_entity = player_entity
     self.player_type = self.player_entity:GetPlayerType()
@@ -129,6 +131,9 @@ function Better_Coop_HUD.Player:render(screen_size, screen_center, horizontal_mi
 
     -- health
     self.health:render(edge_indexed, edge_multipliers)
+
+    -- inventory
+    self.inventory:render(edge_indexed, edge_multipliers)
 
     -- stats & misc
     if self.is_real then
