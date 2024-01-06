@@ -1,8 +1,9 @@
-function Better_Coop_HUD.Stat.new(player_entity, stat)
+function Better_Coop_HUD.Stat.new(player_entity, stat, is_percent)
     local self = setmetatable({}, Better_Coop_HUD.Stat)
 
     self.player_entity = player_entity
     self.stat = stat
+    self.is_percent = is_percent
 
     self.value = self:getValue()
     self.sprite = self:getSprite()
@@ -17,6 +18,11 @@ function Better_Coop_HUD.Stat:getValue()
     if self.stat == Better_Coop_HUD.Stat.RANGE then return self.player_entity.TearRange / 40 end
     if self.stat == Better_Coop_HUD.Stat.SHOT_SPEED then return self.player_entity.ShotSpeed end
     if self.stat == Better_Coop_HUD.Stat.LUCK then return self.player_entity.Luck end
+
+    -- TODO devil chance starts at 135%, angel chance also stored in devil chance. if can be either, need to split devil in half
+    if self.stat == Better_Coop_HUD.Stat.DEVIL then return Game():GetRoom():GetDevilRoomChance() * 100 end
+    if self.stat == Better_Coop_HUD.Stat.ANGEL then return Game():GetRoom():GetDevilRoomChance() * 100 end
+    if self.stat == Better_Coop_HUD.Stat.PLANETARIUM then return Game():GetLevel():GetPlanetariumChance() * 100 end
 end
 
 function Better_Coop_HUD.Stat:getSprite()
@@ -35,7 +41,7 @@ function Better_Coop_HUD.Stat:render(pos_vector, text_pos_vector, render_icon)
 
     -- TODO visual difference if stat changed
     Isaac.RenderScaledText(
-        string.format('%.2f', self.value),
+        string.format(self.is_percent and '%.1f%%' or '%.2f', self.value),
         text_pos_vector.X, text_pos_vector.Y,
         Better_Coop_HUD.config.stats.text.scale.X,
         Better_Coop_HUD.config.stats.text.scale.Y,
@@ -55,6 +61,15 @@ function Better_Coop_HUD.Stats.new(player_entity, player)
     self.range = Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.RANGE)
     self.shot_speed = Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.SHOT_SPEED)
     self.luck = Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.LUCK)
+
+    self.stats = {self.speed, self.fire_delay, self.damage, self.range, self.shot_speed, self.luck}
+
+    -- TODO handle duality
+    if self.player.number == 0 and self.player.is_real then
+        table.insert(self.stats, Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.DEVIL, true))
+        table.insert(self.stats, Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.ANGEL, true))
+        table.insert(self.stats, Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.PLANETARIUM, true))
+    end
 
     return self
 end
@@ -81,9 +96,8 @@ function Better_Coop_HUD.Stats:render(edge, edge_indexed, edge_multipliers, addi
         text_pos = text_pos + (Better_Coop_HUD.config.stats.text.offset / 2)
     end
 
-    local stats = {self.speed, self.fire_delay, self.damage, self.range, self.shot_speed, self.luck}
-    for i = 0, #stats - 1, 1 do
-        stats[i + 1]:render(
+    for i = 0, #self.stats - 1, 1 do
+        self.stats[i + 1]:render(
             pos + (Better_Coop_HUD.config.stats.offset * i),
             text_pos + (Better_Coop_HUD.config.stats.text.offset * i),
             render_sprite
