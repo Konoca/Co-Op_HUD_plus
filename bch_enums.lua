@@ -11,6 +11,7 @@ Better_Coop_HUD.PATHS = {
         misc = 'gfx/ui/bch_hudpickups.anm2', -- custom, edited from default
         inv = 'gfx/ui/bch_inventory.anm2', -- custom, edited from default
         crafting = 'gfx/ui/bch_crafting.anm2', -- custom, edited from default
+        poops = 'gfx/ui/ui_poops.anm2',
     },
 }
 
