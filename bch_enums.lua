@@ -9,6 +9,9 @@ Better_Coop_HUD.PATHS = {
         hearts = 'gfx/ui/ui_hearts.anm2',
         stats = 'gfx/ui/bch_hudstats2.anm2', -- custom, edited from default
         misc = 'gfx/ui/bch_hudpickups.anm2', -- custom, edited from default
+        inv = 'gfx/ui/bch_inventory.anm2', -- custom, edited from default
+        crafting = 'gfx/ui/bch_crafting.anm2', -- custom, edited from default
+        poops = 'gfx/ui/ui_poops.anm2',
     },
 }
 
@@ -65,8 +68,6 @@ Better_Coop_HUD.PILL = {
     [PillEffect.PILLEFFECT_SHOT_SPEED_UP] = 'Shot Speed Up',
     [PillEffect.PILLEFFECT_EXPERIMENTAL] = 'Experimental Pill',
 }
-
-Better_Coop_HUD.Item.ANIMATION_NAME = 'Idle'
 
 Better_Coop_HUD.Trinket.SLOT_PRIMARY = 0
 Better_Coop_HUD.Trinket.SLOT_SECONDARY = 1

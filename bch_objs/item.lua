@@ -52,7 +52,7 @@ function Better_Coop_HUD.ActiveItem:getSprite()
     local frame = 0
     if self.current_charge >= self.max_charge and self.max_charge > 0 then frame = 1 end
 
-    sprite:SetFrame(Better_Coop_HUD.Item.ANIMATION_NAME, frame)
+    sprite:SetFrame('Idle', frame)
     sprite:LoadGraphics()
     return sprite
 end
@@ -112,7 +112,7 @@ function Better_Coop_HUD.ActiveItem:getBookSprite()
 
     sprite:ReplaceSpritesheet(1, bookpath)
 
-    sprite:SetFrame(Better_Coop_HUD.Item.ANIMATION_NAME, 0)
+    sprite:SetFrame('Idle', 0)
     sprite:LoadGraphics()
     return Sprite()
 end
@@ -239,7 +239,7 @@ function Better_Coop_HUD.Trinket:getSprite()
 	sprite:ReplaceSpritesheet(1, path)
 
 	sprite:LoadGraphics()
-	sprite:SetFrame(Better_Coop_HUD.Item.ANIMATION_NAME, 0)
+	sprite:SetFrame('Idle', 0)
 
 	return sprite
 end
@@ -299,7 +299,10 @@ function Better_Coop_HUD.PocketItem.new(entity, slot)
         --     self.name2 = name
         -- end
 
-        self.name = Better_Coop_HUD.pills.known[effectID] and Better_Coop_HUD.PILL[effectID] or Better_Coop_HUD.PILL[PillEffect.PILLEFFECT_NULL]
+        local isPillKnown = Better_Coop_HUD.pills.known[effectID]
+        local pillName = Better_Coop_HUD.PILL[effectID]
+
+        self.name = isPillKnown and pillName or Better_Coop_HUD.PILL[PillEffect.PILLEFFECT_NULL]
     end
 
     self.sprite = self:getSprite()
@@ -378,7 +381,7 @@ function Better_Coop_HUD.PocketActiveItem:getSprite()
     local frame = 0
     if self.current_charge >= self.max_charge and self.max_charge > 0 then frame = 1 end
 
-    sprite:SetFrame(Better_Coop_HUD.Item.ANIMATION_NAME, frame)
+    sprite:SetFrame('Idle', frame)
     sprite:LoadGraphics()
     return sprite
 end
