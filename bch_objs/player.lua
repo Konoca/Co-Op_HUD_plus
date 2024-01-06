@@ -36,7 +36,7 @@ function Better_Coop_HUD.Player.new(player_entity, player_num)
 
     self.stats = Better_Coop_HUD.Stats.new(player_entity, self)
 
-    self.inventory = Better_Coop_HUD.Inventory.new(player_entity)
+    self.inventory = Better_Coop_HUD.Inventory.new(player_entity, nil)
 
     return self
 end
@@ -58,7 +58,7 @@ function Better_Coop_HUD.Player:update(player_entity)
 
     self.stats = Better_Coop_HUD.Stats.new(player_entity, self)
 
-    self.inventory = Better_Coop_HUD.Inventory.new(player_entity)
+    self.inventory = Better_Coop_HUD.Inventory.new(player_entity, self)
 
     self.player_entity = player_entity
     self.player_type = self.player_entity:GetPlayerType()

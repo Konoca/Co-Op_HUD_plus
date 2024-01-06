@@ -111,3 +111,36 @@ local function selectCharacter(_)
 end
 Better_Coop_HUD:AddCallback(ModCallbacks.MC_INPUT_ACTION, initNewPlayer)
 Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, selectCharacter)
+
+-- requires Repentogon
+local function getPlayerFromEntity(player)
+    local idx = player.ControllerIndex
+    for i = 0, #Better_Coop_HUD.players, 1 do
+        if Better_Coop_HUD.players[i] and Better_Coop_HUD.players[i].player_entity.ControllerIndex == idx then
+            return Better_Coop_HUD.players[i]
+        end
+    end
+    return nil
+end
+local function addCollectible(_ ,type, charge, first_time, slot, vardata, player)
+    local item = Isaac.GetItemConfig():GetCollectible(type)
+    if item.Type == ItemType.ITEM_ACTIVE or item.Type == ItemType.ITEM_TRINKET then return end
+    if item.ID == CollectibleType.COLLECTIBLE_BIRTHRIGHT then return end
+
+    local p = getPlayerFromEntity(player)
+    if not p then return end
+
+    p.inventory:addCollectible(item)
+end
+local function shiftCollectibles(_)
+    if Game():IsPaused() then return end
+
+    for i = 0, 4 +1, 1 do
+        if Input.IsActionTriggered(ButtonAction.ACTION_DROP, i) then
+            local p = getPlayerFromEntity(Isaac.GetPlayer(i))
+            if p then p.inventory:shiftCollectibles() end
+        end
+    end
+end
+Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, addCollectible)
+Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, shiftCollectibles)

@@ -1,9 +1,12 @@
-function Better_Coop_HUD.Inventory.new(player_entity)
+function Better_Coop_HUD.Inventory.new(player_entity, previous_player)
     local self = setmetatable({}, Better_Coop_HUD.Inventory)
 
     self.player_entity = player_entity
-    self.inv = {}
+    self.previous_player = previous_player
+    self.inv = previous_player and previous_player.inventory.inv or {}
     self.display = false
+
+    self.max_slots = 8
 
     self.ptype = player_entity:GetPlayerType()
     if self.ptype == PlayerType.PLAYER_CAIN_B then
@@ -14,9 +17,7 @@ function Better_Coop_HUD.Inventory.new(player_entity)
     end
 
     if self.ptype == PlayerType.PLAYER_ISAAC_B then
-        self.inv = {}
-        -- TODO get isaac items, store sprite path
-
+        if player_entity:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then self.max_slots = 12 end
         self.anim = Better_Coop_HUD.PATHS.ANIMATIONS.inv
         self.display = true
     end
@@ -29,7 +30,7 @@ end
 function Better_Coop_HUD.Inventory:getSprites()
     if not self.display then return end
     local sprites = {}
-    for i = 1, 8, 1 do
+    for i = 1, self.max_slots, 1 do
         local s = Sprite()
 
         if self.ptype == PlayerType.PLAYER_CAIN_B then
@@ -70,8 +71,8 @@ function Better_Coop_HUD.Inventory:render(edge_indexed, edge_multipliers)
     local edge = edge_indexed + (Better_Coop_HUD.config.inventory.pos * edge_multipliers)
 
     local row = 0
-    for i = 1, 8, 1 do
-        if i % 5 == 0 and i ~= 1 then
+    for i = 1, self.max_slots, 1 do
+        if i % ((self.max_slots / 2) + 1) == 0 and i ~= 1 then
             row = row + 1
             offset.X = 0
             offset.Y = offset.Y + Better_Coop_HUD.config.inventory.spacing.Y
@@ -102,4 +103,18 @@ function Better_Coop_HUD.Inventory:renderResult(edge_indexed, edge_multipliers)
 
     sprite:LoadGraphics()
     sprite:Render(pos)
+end
+
+function Better_Coop_HUD.Inventory:addCollectible(item)
+    if #self.inv == self.max_slots then
+        self.inv[1] = item.GfxFileName
+        return
+    end
+    table.insert(self.inv, item.GfxFileName)
+end
+
+function Better_Coop_HUD.Inventory:shiftCollectibles()
+    for i = 1, #self.inv - 1, 1 do
+        table.insert(self.inv, 1, table.remove(self.inv, #self.inv) )
+    end
 end
