@@ -20,9 +20,111 @@ function Better_Coop_HUD.Stat:getValue()
     if self.stat == Better_Coop_HUD.Stat.LUCK then return self.player_entity.Luck end
 
     -- TODO devil chance starts at 135%, angel chance also stored in devil chance. if can be either, need to split devil in half
-    if self.stat == Better_Coop_HUD.Stat.DEVIL then return Game():GetRoom():GetDevilRoomChance() * 100 end
-    if self.stat == Better_Coop_HUD.Stat.ANGEL then return Game():GetRoom():GetDevilRoomChance() * 100 end
+    if self.stat == Better_Coop_HUD.Stat.DEVIL then return self:getAngelDevilChance().devil * 100 end
+    if self.stat == Better_Coop_HUD.Stat.ANGEL then return self:getAngelDevilChance().angel * 100 end
     if self.stat == Better_Coop_HUD.Stat.PLANETARIUM then return Game():GetLevel():GetPlanetariumChance() * 100 end
+end
+
+-- TODO this only works for angel modifications, needs to take into account angel/devil only and splits
+function Better_Coop_HUD.Stat:getAngelDevilChance()
+    local game = Game()
+    local level = game:GetLevel()
+    local room = game:GetRoom()
+    local stage = level:GetStage()
+
+    -- stages where you cant get a deal
+    local disallowed_stages = {
+        [1] = true,
+        [9] = true,
+        [10] = true,
+        [11] = true,
+        [12] = true,
+    }
+
+    local chances = {
+        deal = 0.0,
+        angel = 0.0,
+        devil = 0.0,
+        -- duality = 0.0,
+    }
+
+    if disallowed_stages[stage] then return chances end
+
+    chances.deal = room:GetDevilRoomChance()
+    chances.deal = chances.deal > 1 and 1 or chances.deal
+
+    chances.angel = 1.0
+
+    local mods = {}
+
+    local collectibles = {
+        [CollectibleType.COLLECTIBLE_KEY_PIECE_1] = 0.75,
+        [CollectibleType.COLLECTIBLE_KEY_PIECE_2] = 0.75,
+        [CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES] = 0.75,
+    }
+
+    local trinkets = {
+        [TrinketType.TRINKET_ROSARY_BEAD] = 0.5,
+    }
+
+    local level_flags = {
+        [LevelStateFlag.STATE_BUM_KILLED] = 0.75,
+        [LevelStateFlag.STATE_BUM_LEFT] = 0.9,
+        [LevelStateFlag.STATE_EVIL_BUM_LEFT] = 1.1,
+    }
+
+    -- check items
+    -- local duality = false
+    local eucharist = false
+    for i = 0, game:GetNumPlayers() - 1, 1 do
+        local p = Isaac.GetPlayer(i)
+
+        for k, v in pairs(collectibles) do
+            if p:HasCollectible(k) then
+                table.insert(mods, v)
+            end
+        end
+        for k, v in pairs(trinkets) do
+            if p:HasTrinket(k) then
+                table.insert(mods, v)
+            end
+        end
+
+        if p:HasCollectible(CollectibleType.COLLECTIBLE_EUCHARIST) then eucharist = true end
+        -- if p:HasCollectible(CollectibleType.COLLECTIBLE_DUALITY) then duality = true end
+    end
+    if eucharist then
+        -- https://bindingofisaacrebirth.fandom.com/wiki/Eucharist
+        chances.devil = 0
+        chances.angel = 1
+        return chances
+    end
+
+    -- check level flags
+    for k, v in pairs(level_flags) do
+        if level:GetStateFlag(k) then
+            table.insert(mods, v)
+        end
+    end
+
+    -- donation machine
+    if game:GetDonationModAngel() >= 10 then
+        table.insert(mods, 0.5)
+    end
+
+    -- calculation
+    if game:GetStateFlag(GameStateFlag.STATE_DEVILROOM_VISITED) then
+        chances.angel = 0.5
+        for i = 1, #mods, 1 do
+            chances.angel = chances.angel * mods[i]
+        end
+        chances.angel = 1.0 - (chances.angel * (1.0 - level:GetAngelRoomChance()))
+    end
+
+    chances.devil = chances.deal * (1.0 - chances.angel)
+    chances.angel = chances.deal * chances.angel
+
+    return chances
 end
 
 function Better_Coop_HUD.Stat:getSprite()
