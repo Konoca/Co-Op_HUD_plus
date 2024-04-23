@@ -149,8 +149,8 @@ function CoopHUDplus.ActiveItem:render(item_pos_vec, bar_pos_vec, scale, display
 
     if self.current_charge and self.max_charge and self.max_charge > 0 and display_charge then
         self.chargeBar.bg:Render(bar_pos_vec)
-        self.chargeBar.beth:Render(bar_pos_vec, self:getChargeBarCharge(self.soul_charge))
-        self.chargeBar.beth:Render(bar_pos_vec, self:getChargeBarCharge(self.blood_charge))
+        if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY then self.chargeBar.beth:Render(bar_pos_vec, self:getChargeBarCharge(self.soul_charge)) end
+        if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY_B then self.chargeBar.beth:Render(bar_pos_vec, self:getChargeBarCharge(self.blood_charge)) end
         self.chargeBar.charge:Render(bar_pos_vec, self:getChargeBarCharge(self.current_charge))
         self.chargeBar.extra:Render(bar_pos_vec, self:getChargeBarCharge(self.extra_charge))
         self.chargeBar.overlay:Render(bar_pos_vec)
