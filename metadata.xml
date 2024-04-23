@@ -3,8 +3,7 @@
     <name>!!! (REPENTOGON) Co-Op HUD+</name>
     <directory>co-op_hud+</directory>
     <id>3229942849</id>
-    <description>
-[h1] THIS MOD REQUIRES REPENTOGON, READ MORE [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138]HERE[/url] [/h1]
+    <description>[h1] THIS MOD REQUIRES REPENTOGON, READ MORE [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138]HERE[/url] [/h1]
 A mod for The Binding of Isaac: Repentence that changes the HUD to better display information when playing with multiple people. This mod is based on coopHUD by Srokks, which is no longer being updated.
 
 This mod is currently a work-in-progress, all issues should be reported [url=https://github.com/Konoca/Co-Op_HUD_plus/issues] here [/url]
@@ -12,7 +11,7 @@ This mod is currently a work-in-progress, all issues should be reported [url=htt
 [h3] Features [/h3]
 [list]
 [*] Renders active items, hearts, pocket items, and trinkets in a readable position for all four players
-[*] Stats for all four players displayed relative to their character info (P1 & P3 on left, P2 & P4 on right)
+[*] Stats for all four players displayed relative to their character info (P1 and P3 on left, P2 and P4 on right)
 [*] Press H to switch between Co-Op HUD+ and the default HUD
 [*] Timer always shown at the top of the screen
 [*] Configurable using MCM (still a WIP)
@@ -44,9 +43,8 @@ coopHUD ( https://steamcommunity.com/sharedfiles/filedetails/?id=2731267631 )
 
 [b] _Kilburn [/b]
 
-[b] The Modding of Isaac Discord server ( https://discord.gg/KbevtvgD4z ) [/b]
-    </description>
-    <version>0.1</version>
+[b] The Modding of Isaac Discord server ( https://discord.gg/KbevtvgD4z ) [/b]</description>
+    <version>0.2</version>
     <visibility>Friends Only</visibility>
     <tag id="Tweaks"/>
     <tag id="Graphics"/>
