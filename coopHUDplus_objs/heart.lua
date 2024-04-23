@@ -247,9 +247,12 @@ function CoopHUDplus.Health:render(edge_indexed, edge_multipliers)
     if self.extra_lives == 0 then return end
 
     pos = edge + (offset * edge_multipliers)
+    local tmp = CoopHUDplus.config.health.space_between_hearts / 2
+    pos.X = edge_multipliers.X == 1 and pos.X - tmp or pos.X + (tmp / 3)
+
     Isaac.RenderScaledText(
         'x'..self.extra_lives,
-        pos.X - (CoopHUDplus.config.health.space_between_hearts / 2), pos.Y,
+        pos.X, pos.Y,
         CoopHUDplus.config.stats.text.scale.X,
         CoopHUDplus.config.stats.text.scale.Y,
         1, 1, 1, 0.5
