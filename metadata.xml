@@ -1,8 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <metadata>
-	<name>!!! (REPENTOGON) Co-Op HUD+</name>
-	<directory>co-op_hud+</directory>
-	<description/>
-	<version>0.1</version>
-	<visibility/>
+    <name>!!! (REPENTOGON) Co-Op HUD+</name>
+    <directory>co-op_hud+</directory>
+    <id>3229942849</id>
+    <description></description>
+    <version>0.2</version>
+    <visibility>Friends Only</visibility>
+    <tag id="Tweaks"/>
+    <tag id="Graphics"/>
 </metadata>
-
