@@ -60,10 +60,19 @@ function CoopHUDplus.Heart:getSprite()
     return sprite
 end
 
-function CoopHUDplus.Heart:render(pos)
+function CoopHUDplus.Heart:render(pos, flip)
+    self.sprite.heart.FlipX = flip
     self.sprite.heart:Render(pos)
-    if self.sprite.golden then self.sprite.golden:Render(pos) end
-    if self.sprite.eternal then self.sprite.eternal:Render(pos) end
+
+    if self.sprite.golden then
+        self.sprite.golden.FlipX = flip
+        self.sprite.golden:Render(pos)
+    end
+
+    if self.sprite.eternal then
+        self.sprite.eternal.FlipX = flip
+        self.sprite.eternal:Render(pos)
+    end
 end
 
 function CoopHUDplus.Health.new(player_entity)
@@ -229,7 +238,7 @@ function CoopHUDplus.Health:render(edge_indexed, edge_multipliers)
 
         pos = edge + (offset * edge_multipliers)
 
-        self.hearts[i+1]:render(pos)
+        self.hearts[i+1]:render(pos, edge_multipliers.X == -1)
 
         offset.X = offset.X + CoopHUDplus.config.health.space_between_hearts
     end
