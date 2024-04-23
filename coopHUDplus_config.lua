@@ -104,6 +104,7 @@ CoopHUDplus.config = {
             pos = Vector(10, 84),
             offset = Vector(0, 12),
             mirrored_offset = Vector(45, 0),
+            lowered_offset = Vector(6, 6),
             scale = Vector(0.5, 0.5),
 
             twin_offset = Vector(20, 0)
