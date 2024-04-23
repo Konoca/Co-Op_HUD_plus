@@ -15,7 +15,7 @@ CoopHUDplus.Inventory.handle_player = {
     end,
 
     [PlayerType.PLAYER_CAIN_B] = function (self)
-        self.inv = EID.BoC.BagItems
+        self.inv = self.player_entity:GetBagOfCraftingContent()
         self.display = true
         self.result = self:getResult()
 
@@ -94,7 +94,8 @@ function CoopHUDplus.Inventory:getResult()
         return itemconfig:GetCollectible(0).GfxFileName
     end
 
-    local id = EID:calculateBagOfCrafting(self.inv)
+    -- local id = EID:calculateBagOfCrafting(self.inv)
+    local id = self.player_entity:GetBagOfCraftingOutput()
     return itemconfig:GetCollectible(id).GfxFileName
 end
 
@@ -125,7 +126,7 @@ function CoopHUDplus.Inventory:render(edge_indexed, edge_multipliers)
 end
 
 function CoopHUDplus.Inventory:renderResult(edge_indexed, edge_multipliers)
-    if self.ptype ~= PlayerType.PLAYER_CAIN_B then return end
+    if self.player_entity:GetPlayerType() ~= PlayerType.PLAYER_CAIN_B then return end
 
     local pos = edge_indexed + (CoopHUDplus.config.inventory.result_pos * edge_multipliers)
     local sprite = Sprite()
