@@ -127,8 +127,9 @@ CoopHUDplus.config = {
             display = true,
         },
         greed_machine = {
-            pos = Vector(0, 0),
+            pos = Vector(0, 75),
             scale = Vector(1, 1),
+            text_offset = Vector(4, 0),
         },
         text = {
             offset = Vector(6, -6),
