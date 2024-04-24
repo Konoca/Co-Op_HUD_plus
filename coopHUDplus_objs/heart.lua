@@ -100,6 +100,8 @@ function CoopHUDplus.Health.new(player_entity)
     self.extra_lives = self.player_entity:GetExtraLives()
 
     self.total_hearts = math.ceil((self.max_red + self.soul) / 2)
+
+    self.hasHoly = self.player_entity:GetEffects():GetCollectibleEffect(CollectibleType.COLLECTIBLE_HOLY_MANTLE)
     self.hearts = self:getHearts()
 
     return self
@@ -218,7 +220,11 @@ function CoopHUDplus.Health:getHearts()
 
     for i = 1, #broken_hearts, 1 do table.insert(hearts, broken_hearts[i]) end
 
-    -- TODO holy card & holy mantle
+    -- TODO eventually render over a heart instead of replace heart
+    if self.hasHoly then
+        hearts[#hearts].heart_type = 'holy_mantle'
+        hearts[#hearts]:updateSprite()
+    end
 
     return hearts
 end
