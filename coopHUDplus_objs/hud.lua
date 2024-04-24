@@ -62,7 +62,7 @@ local hudOff = false
 local lastTimeString = ''
 local function onRender()
     local game = Game()
-    if CoopHUDplus.config.disable or game:IsPaused() then return end -- TODO HUD disappears when paused
+    if CoopHUDplus.config.disable or game:IsPaused() then return end -- TODO HUD disappears when pause screen open, IsPaused is so the HUD doesnt appear during cutscenes
 
     -- TODO show character selection for players that are joining
     -- For now, hide HUD if someone is joining.

@@ -8,7 +8,6 @@ local function onGameStart(_, isCont)
         known = {},
     }
 
-    -- TODO save and load data for continued games (specifically pills)
     if isCont and CoopHUDplus:HasData() then
         local data = json.decode(CoopHUDplus:LoadData())
         CoopHUDplus.SAVED_PLAYER_DATA = data.player_invs
