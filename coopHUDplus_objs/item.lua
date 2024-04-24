@@ -585,6 +585,7 @@ function CoopHUDplus.Pockets:render(edge_indexed, edge_multipliers)
         local text_pos = edge_indexed + (CoopHUDplus.config.pocket.text.pos * edge_multipliers)
         local text_scale = CoopHUDplus.config.pocket.text.scale
         if edge_multipliers.X == -1 then text_pos.X = text_pos.X - (self.order[0].name:len() * 2.5) end
+        if edge_multipliers.Y == -1 then text_pos.Y = text_pos.Y - CoopHUDplus.config.pocket.text.pos.Y / 3 end
         Isaac.RenderScaledText(
             self.order[0].name,
             text_pos.X, text_pos.Y,

@@ -99,7 +99,13 @@ local function onRender()
             local isOnRight = (idx % 2) == 0
             local isOnBottom = (idx > 2)
 
-            p:render(screen_size, screen_center, isOnRight, isOnBottom, Vector(0,0))
+            -- p.player_entity:SetColor(CoopHUDplus.Player.COLORS[idx], 15, 1, false, true)
+            local color = Color(1, 1, 1, 1, 0, 0, 0)
+            local pColor = CoopHUDplus.Player.COLORS[idx]
+            color:SetColorize(pColor[1], pColor[2], pColor[3], pColor[4])
+            if CoopHUDplus.config.player_colors then p.player_entity:SetColor(color, 15, 1, false, true) end
+
+            p:render(screen_size, screen_center, isOnRight, isOnBottom, Vector(0,0), pColor)
         end
     end
 

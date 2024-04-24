@@ -94,14 +94,16 @@ function CoopHUDplus.Health.new(player_entity)
     self.rotten = self.player_entity:GetRottenHearts()
     self.broken = self.player_entity:GetBrokenHearts()
 
-    -- TODO give to last red heart not last heart, if no red give to first heart
     self.eternal = self.player_entity:GetEternalHearts()
 
     -- not a heart sprite
     self.extra_lives = self.player_entity:GetExtraLives()
 
     self.total_hearts = math.ceil((self.max_red + self.soul) / 2)
+
+    self.hasHoly = self.player_entity:GetEffects():GetCollectibleEffect(CollectibleType.COLLECTIBLE_HOLY_MANTLE)
     self.hearts = self:getHearts()
+
     return self
 end
 
@@ -218,7 +220,11 @@ function CoopHUDplus.Health:getHearts()
 
     for i = 1, #broken_hearts, 1 do table.insert(hearts, broken_hearts[i]) end
 
-    -- TODO holy card & holy mantle
+    -- TODO eventually render over a heart instead of replace heart
+    if self.hasHoly then
+        hearts[#hearts].heart_type = 'holy_mantle'
+        hearts[#hearts]:updateSprite()
+    end
 
     return hearts
 end
@@ -243,5 +249,18 @@ function CoopHUDplus.Health:render(edge_indexed, edge_multipliers)
         offset.X = offset.X + CoopHUDplus.config.health.space_between_hearts
     end
 
-    -- TODO extra lives
+
+    if self.extra_lives == 0 then return end
+
+    pos = edge + (offset * edge_multipliers)
+    local tmp = CoopHUDplus.config.health.space_between_hearts / 2
+    pos.X = edge_multipliers.X == 1 and pos.X - tmp or pos.X + (tmp / 3)
+
+    Isaac.RenderScaledText(
+        'x'..self.extra_lives,
+        pos.X, pos.Y,
+        CoopHUDplus.config.stats.text.scale.X,
+        CoopHUDplus.config.stats.text.scale.Y,
+        1, 1, 1, 0.5
+    )
 end
