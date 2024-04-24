@@ -73,10 +73,16 @@ function CoopHUDplus.Miscs.new()
     local diffMap = {
         [Difficulty.DIFFICULTY_NORMAL] = nil,
         [Difficulty.DIFFICULTY_HARD] = CoopHUDplus.Misc.HARD,
-        [Difficulty.DIFFICULTY_GREED] = nil,
+        [Difficulty.DIFFICULTY_GREED] = CoopHUDplus.Misc.GREED,
         [Difficulty.DIFFICULTY_GREEDIER] = CoopHUDplus.Misc.GREEDIER,
     }
     self.difficulty = CoopHUDplus.Misc.new(nil, diffMap[gameDiff])
+
+    if game:IsGreedMode() then
+        local maxWaves = game:GetGreedWavesNum() - 1
+        local currWave = game:GetLevel().GreedModeWave
+        self.difficulty = CoopHUDplus.Misc.new(string.format('%d/%d', currWave, maxWaves), diffMap[gameDiff])
+    end
 
     -- greed donation machine jam percentage
     if game:IsGreedMode() and game:GetLevel():GetStage() == LevelStage.STAGE7_GREED then
@@ -138,7 +144,7 @@ function CoopHUDplus.Miscs:render(screen_center)
     if CoopHUDplus.config.misc.difficulty.display then
         pos = CoopHUDplus.config.misc.difficulty.pos + CoopHUDplus.config.offset
         scale = CoopHUDplus.config.misc.difficulty.scale
-        self.difficulty:render(pos, scale, nil, Vector(0, 0))
+        self.difficulty:render(pos, scale, '%s', CoopHUDplus.config.misc.difficulty.greed_wave_offset)
     end
 
     if self.jam_perc then

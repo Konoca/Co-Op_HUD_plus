@@ -125,6 +125,7 @@ CoopHUDplus.config = {
             pos = Vector(0, 75),
             scale = Vector(1, 1),
             display = true,
+            greed_wave_offset = Vector(4, -1),
         },
         greed_machine = {
             pos = Vector(0, 75),
