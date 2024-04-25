@@ -78,6 +78,7 @@ local function initNewPlayer(_)
     if level:GetAbsoluteStage() ~= LevelStage.STAGE1_1 then return end
     if level:GetCurrentRoomIndex() ~= level:GetStartingRoomIndex() then return end
     if not room:IsFirstVisit() then return end
+    if game.Challenge > 0 then return end
 
     for i = 0, 4 +1, 1 do
         if Input.IsActionTriggered(ButtonAction.ACTION_JOINMULTIPLAYER, i) then
