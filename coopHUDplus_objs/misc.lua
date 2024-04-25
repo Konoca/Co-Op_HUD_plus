@@ -113,12 +113,14 @@ function CoopHUDplus.Miscs.new()
     return self
 end
 
-function CoopHUDplus.Miscs:render(screen_center)
+function CoopHUDplus.Miscs:render(screen_size, screen_center)
     if not CoopHUDplus.players[0] then return end
 
+    local pos = Vector(0, 0)
+    if CoopHUDplus.config.misc.pickups.center_anchor then pos = screen_center end
+    if CoopHUDplus.config.misc.pickups.bottom_anchor then pos.Y = screen_size.Y end
+    pos = pos + CoopHUDplus.config.misc.pickups.pos
     local offset = CoopHUDplus.config.misc.pickups.offset
-    local pos = CoopHUDplus.config.misc.pickups.pos
-    if CoopHUDplus.config.misc.pickups.center_anchor then pos = pos + screen_center end
     local scale = CoopHUDplus.config.misc.pickups.scale
 
     local map = {

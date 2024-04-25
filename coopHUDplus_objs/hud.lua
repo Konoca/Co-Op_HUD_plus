@@ -110,7 +110,7 @@ local function onRender()
     end
 
     -- bombs, keys, coins, etc.
-    CoopHUDplus.Miscs.new():render(screen_center)
+    CoopHUDplus.Miscs.new():render(screen_size, screen_center)
 
     -- mod overrides
     if MinimapAPI then
