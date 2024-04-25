@@ -252,6 +252,18 @@ function CoopHUDplus.Trinket:render(pos_vector, scale)
 end
 
 -- Pocket Item (pill, card, rune)
+local function stripPocketItemName(item_config)
+    if not item_config then return '???' end
+
+    local name = item_config.Name
+    if name:sub(1, 1) ~= '#' then return name end
+
+    name = name:sub(2, -5)
+    name = name:gsub('_', ' ')
+    name = name:lower():gsub('%f[%a].', string.upper)
+    return name
+end
+
 function CoopHUDplus.PocketItem.new(entity, slot)
     local self = setmetatable({}, CoopHUDplus.PocketItem)
 
@@ -266,17 +278,7 @@ function CoopHUDplus.PocketItem.new(entity, slot)
         self.type = CoopHUDplus.PocketItem.TYPE_CARD
         self.item_config = Isaac.GetItemConfig():GetCard(self.id)
 
-        self.name = '???'
-
-        if self.item_config then
-            -- TODO add ID to name as roman numeral
-            local name = self.item_config.Name
-            name = name:sub(2, -5)
-            name = name:gsub('_', ' ')
-            name = name:lower():gsub('%f[%a].', string.upper)
-            self.name = name
-        end
-
+        self.name = stripPocketItemName(self.item_config)
     end
 
     -- Is item a pill?
@@ -288,16 +290,6 @@ function CoopHUDplus.PocketItem.new(entity, slot)
         if not effectID then effectID = PillEffect.PILLEFFECT_NULL end
 
         self.item_config = Isaac.GetItemConfig():GetPillEffect(effectID)
-
-        -- self.name = '???'
-        --
-        -- if self.item_config then
-        --     local name = self.item_config.Name
-        --     name = name:sub(2, -5)
-        --     name = name:gsub('_', ' ')
-        --     name = name:lower():gsub('%f[%a].', string.upper)
-        --     self.name2 = name
-        -- end
 
         local isPillKnown = CoopHUDplus.pills.known[effectID]
         local pillName = CoopHUDplus.PILL[effectID]
@@ -349,15 +341,7 @@ function CoopHUDplus.PocketActiveItem.new(entity, slot)
         self.type = CoopHUDplus.PocketItem.TYPE_ACTIVE
         self.item_config = Isaac.GetItemConfig():GetCollectible(self.id)
 
-        self.name = '???'
-
-        if self.item_config then
-            local name = self.item_config.Name
-            name = name:sub(2, -5)
-            name = name:gsub('_', ' ')
-            name = name:lower():gsub('%f[%a].', string.upper)
-            self.name = name
-        end
+        self.name = stripPocketItemName(self.item_config)
 
         self.current_charge = entity:GetActiveCharge(slot)
         self.max_charge = Isaac.GetItemConfig():GetCollectible(self.id).MaxCharges
