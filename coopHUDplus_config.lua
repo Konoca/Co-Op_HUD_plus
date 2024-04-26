@@ -63,28 +63,33 @@ CoopHUDplus.config = {
         --    pos = Vector(129, 10),
         --    scale = Vector(0.5, 0.5),
         -- },
-        -- TODO line up item with hearts
         [0] = {
-            pos = Vector(30, 25),
+            pos = Vector(28, 25),
             scale = Vector(0.5, 0.5),
         },
         [1] = {
-            pos = Vector(20, 25),
+            pos = Vector(18, 25),
             scale = Vector(0.5, 0.5),
         },
         [2] = {
-            pos = Vector(10, 25),
+            pos = Vector(8, 25),
             scale = Vector(0.5, 0.5),
         },
         [3] = {
             pos = Vector(0, 25),
-            scale = Vector(0.5, 0.5),
+            scale = Vector(0.25, 0.25),
         },
         text = {
             display = true,
             pos = Vector(40, 21),
             scale = Vector(0.5, 0.5),
         },
+        chargebar = {
+            display = true,
+            stay_on_right = false,
+            pos = Vector(8, 1),
+            scale = Vector(0.5, 0.5)
+        }
     },
 
     health = {
