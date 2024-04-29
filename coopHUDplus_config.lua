@@ -9,7 +9,7 @@ CoopHUDplus.config = {
 
     enable_toggle_hud = true,
 
-    player_colors = true,
+    player_colors = false,
 
     active_item = {
         book_correction_offset = Vector(0, -5),
