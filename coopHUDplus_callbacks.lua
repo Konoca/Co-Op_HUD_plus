@@ -22,7 +22,6 @@ end
 function CoopHUDplus.decodeConfigVectors(config)
     local new_config = {}
     for key, value in pairs(config) do
-        print('BEFORE', key, value)
         local num = tonumber(key)
         if key == nil or value == nil then goto skip_decode end
 
@@ -44,7 +43,6 @@ function CoopHUDplus.decodeConfigVectors(config)
 
         new_config[key] = value
         ::skip_decode::
-        print('AFTER', key, value)
     end
     return new_config
 end
@@ -71,7 +69,7 @@ CoopHUDplus:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, onGameStart)
 
 local function onGameExit(_, shouldSave)
     local data = {}
-    data.config = encodeConfigVectors(CoopHUDplus.config)
+    data.config = CoopHUDplus.encodeConfigVectors(CoopHUDplus.config)
 
     if shouldSave then
         data.pills = CoopHUDplus.pills

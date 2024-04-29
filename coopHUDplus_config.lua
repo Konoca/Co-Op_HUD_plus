@@ -24,7 +24,6 @@ CoopHUDplus.config = {
             scale = Vector(1, 1),
         },
         [1] = {
-            -- pos = Vector(-15, 25),
             pos = Vector(-15, -6),
             chargebar = {
                 pos = Vector(-6, 26),
@@ -105,7 +104,6 @@ CoopHUDplus.config = {
 
     misc = {
         pickups = {
-            -- pos = Vector(0, 137),
             pos = Vector(0, -10),
             scale = Vector(1, 1),
             offset = Vector(25, 0),
