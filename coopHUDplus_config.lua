@@ -47,22 +47,6 @@ CoopHUDplus.config = {
     },
 
     pocket = {
-        -- [0] = {
-        --    pos = Vector(117, 0),
-        --    scale = Vector(0.5, 0.5),
-        -- },
-        -- [1] = {
-        --    pos = Vector(117, 10),
-        --    scale = Vector(0.5, 0.5),
-        -- },
-        -- [2] = {
-        --    pos = Vector(129, 0),
-        --    scale = Vector(0.5, 0.5),
-        -- },
-        -- [3] = {
-        --    pos = Vector(129, 10),
-        --    scale = Vector(0.5, 0.5),
-        -- },
         [0] = {
             pos = Vector(28, 25),
             scale = Vector(0.5, 0.5),
@@ -137,7 +121,7 @@ CoopHUDplus.config = {
         greed_machine = {
             pos = Vector(0, 75),
             scale = Vector(1, 1),
-            text_offset = Vector(4, 0),
+            text_offset = Vector(4, -1),
         },
         text = {
             offset = Vector(6, -6),
@@ -156,6 +140,7 @@ CoopHUDplus.config = {
         mAPI = {
             pos = Vector(4, 4),
             frame = Vector(55, 55),
+            override = true,
         },
         EID = {
             XPosition = 135,
@@ -163,6 +148,7 @@ CoopHUDplus.config = {
             DisplayMode = 'local',
             HUDOffset = 10,
             enable = true,
+            override = false,
         },
     },
 }
