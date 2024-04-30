@@ -47,6 +47,25 @@ function CoopHUDplus.decodeConfigVectors(config)
     return new_config
 end
 
+function CoopHUDplus.ensureCompatibility(table1, table2)
+    local new_config = {}
+    for key, value in pairs(table1) do
+        local new_value = table2[key]
+        if new_value == nil then
+            new_config[key] = value
+            goto skip_key
+        end
+
+        if type(value) == 'table' then
+            new_value = CoopHUDplus.ensureCompatibility(value, new_value)
+        end
+
+        new_config[key] = new_value
+        ::skip_key::
+    end
+    return new_config
+end
+
 function CoopHUDplus.createStreak(name, description, display_bottom_paper)
     local animation = Sprite()
     animation:Load(CoopHUDplus.PATHS.ANIMATIONS.streak, true)
@@ -71,7 +90,11 @@ local function onGameStart(_, isCont)
     if not CoopHUDplus:HasData() then return end
     local data = json.decode(CoopHUDplus:LoadData())
 
-    if data.config then CoopHUDplus.config = CoopHUDplus.decodeConfigVectors(data.config) end
+    if data.config then
+        -- CoopHUDplus.config = CoopHUDplus.decodeConfigVectors(data.config)
+        local savedData = CoopHUDplus.decodeConfigVectors(data.config)
+        CoopHUDplus.config = CoopHUDplus.ensureCompatibility(CoopHUDplus.config, savedData)
+    end
 
     if isCont then
         CoopHUDplus.SAVED_PLAYER_DATA = data.player_invs
