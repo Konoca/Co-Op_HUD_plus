@@ -24,7 +24,7 @@
     [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2681875787] Mod Config Menu [/url] recommended, but not required.
         The placement of literally everything can be changed, so please feel free to make the HUD unique to you! Everything can be configured through MCM, with Sprite scaling being the only exception. If you wish to resize any of the sprites, you will need to edit the config file, instructions can be found [url=] here [/url]
 
-    [h3] Bug Reporting [\h3]
+    [h3] Bug Reporting [/h3]
     All issues should either be reported [url=https://github.com/Konoca/Co-Op_HUD_plus/issues] here [/url] or by creating a Discussion thread.
     Please include as much detail as you can, including:
     [list]
@@ -53,7 +53,7 @@
 
     [b] The Modding of Isaac Discord server ( https://discord.gg/KbevtvgD4z ) [/b]
     </description>
-    <version>0.5</version>
+    <version>0.4.6</version>
     <visibility>Public</visibility>
     <tag id="Tweaks"/>
     <tag id="Graphics"/>
