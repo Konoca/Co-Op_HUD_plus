@@ -87,9 +87,9 @@ for i = 0, 3, 1 do
         CoopHUDplus.MCM.categories.pocket,
         {
             Type = ModConfigMenu.OptionType.NUMBER,
-            CurrentSetting = function() return CoopHUDplus.config.pocket.text.pos.X end,
-            Display = function() return 'Pos (X): ' .. CoopHUDplus.config.pocket.text.pos.X end,
-            OnChange = function(n) CoopHUDplus.config.pocket.text.pos.X = n end,
+            CurrentSetting = function() return CoopHUDplus.config.pocket[i].pos.X end,
+            Display = function() return 'Pos (X): ' .. CoopHUDplus.config.pocket[i].pos.X end,
+            OnChange = function(n) CoopHUDplus.config.pocket[i].pos.X = n end,
         }
     )
     ModConfigMenu.AddSetting(
@@ -97,9 +97,9 @@ for i = 0, 3, 1 do
         CoopHUDplus.MCM.categories.pocket,
         {
             Type = ModConfigMenu.OptionType.NUMBER,
-            CurrentSetting = function() return CoopHUDplus.config.pocket.text.pos.Y end,
-            Display = function() return 'Pos (Y): ' .. CoopHUDplus.config.pocket.text.pos.Y end,
-            OnChange = function(n) CoopHUDplus.config.pocket.text.pos.Y = n end,
+            CurrentSetting = function() return CoopHUDplus.config.pocket[i].pos.Y end,
+            Display = function() return 'Pos (Y): ' .. CoopHUDplus.config.pocket[i].pos.Y end,
+            OnChange = function(n) CoopHUDplus.config.pocket[i].pos.Y = n end,
         }
     )
 end
