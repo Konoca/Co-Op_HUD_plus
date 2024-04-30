@@ -212,7 +212,6 @@ function CoopHUDplus.ActiveItem:render(item_pos_vec, bar_pos_vec, scale, display
             item_pos_vec.X + CoopHUDplus.config.active_item.book_correction_offset.X,
             item_pos_vec.Y + CoopHUDplus.config.active_item.book_correction_offset.Y
         )
-        -- bar_pos_vec = Vector(bar_pos_vec.X, bar_pos_vec.Y)
     end
     self.sprite:Render(item_pos_vec)
 
@@ -265,15 +264,15 @@ end
 -- Pocket Item (pill, card, rune)
 local function getPocketItemName(item_config)
     if not item_config then return '???' end
-    --
-    -- local name = item_config.Name
-    -- if name:sub(1, 1) ~= '#' then return name end
-    --
-    -- name = name:sub(2, -5)
-    -- name = name:gsub('_', ' ')
-    -- name = name:lower():gsub('%f[%a].', string.upper)
-    -- return name
-    return XMLData.GetEntryById(XMLNode.ITEM, item_config.ID).name
+
+    local name = item_config.Name
+    if name:sub(1, 1) ~= '#' then return name end
+
+    name = name:sub(2, -5)
+    name = name:gsub('_', ' ')
+    name = name:lower():gsub('%f[%a].', string.upper)
+    return name
+    -- return XMLData.GetEntryById(XMLNode.ITEM, item_config.ID).name
 end
 
 function CoopHUDplus.PocketItem.new(entity, slot)

@@ -13,6 +13,7 @@ CoopHUDplus.MCM.categories = {
     pocket = 'Pocket Items',
     trinket = 'Trinket',
     inventory = 'Inventory',
+    streak = 'Streak',
 }
 
 local dir = 'coopHUDplus_mcm/'
@@ -25,3 +26,4 @@ require(dir..'active_item')
 require(dir..'pocket')
 require(dir..'trinket')
 require(dir..'inventory')
+require(dir..'streak')
