@@ -1,50 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
-    <name>!!! (REPENTOGON) Co-Op HUD+</name>
+    <name>!!! (RGON) Co-Op HUD+</name>
     <directory>co-op_hud+</directory>
     <id>3229942849</id>
-    <description>[h1] THIS MOD REQUIRES REPENTOGON, READ MORE [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138]HERE[/url] [/h1]
-A mod for The Binding of Isaac: Repentence that changes the HUD to better display information when playing with multiple people. This mod is based on coopHUD by Srokks, which is no longer being updated.
+    <description>
+    [h1] THIS MOD REQUIRES REPENTOGON, READ MORE [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138]HERE[/url] [/h1]
+    A mod for The Binding of Isaac: Repentence that changes the HUD to better display information when playing with multiple people. This mod is based on coopHUD by Srokks, which is no longer being updated.
 
-This mod is currently a work-in-progress, all issues should be reported [url=https://github.com/Konoca/Co-Op_HUD_plus/issues] here [/url]
+    [h3] Features [/h3]
+    [list]
+        [*] Renders active items, hearts, pocket items, and trinkets in a readable position for all four players
+        [*] Stats for all four players displayed relative to their character info (P1 and P3 on left, P2 and P4 on right)
+        [*] Player color coding (P1 Blue, P2 Red, P3 Green, P4 Yellow)
+        [*] Press H to switch between Co-Op HUD+ and the default HUD
+        [*] Timer always shown at the top of the screen
+        [*] Tainted Isaac Inventory correctly displayed for all players
+        [*] Tainted ??? Poop Spells correctly displayed for all players
+        [*] Tainted Cain Bag of Crafting correctly displayed for all players
+        [*] Entirely customizable!
+    [/list]
 
-[h3] Features [/h3]
-[list]
-    [*] Renders active items, hearts, pocket items, and trinkets in a readable position for all four players
-    [*] Stats for all four players displayed relative to their character info (P1 and P3 on left, P2 and P4 on right)
-    [*] Player color coding (P1 Blue, P2 Red, P3 Green, P4 Yellow)
-    [*] Press H to switch between Co-Op HUD+ and the default HUD
-    [*] Timer always shown at the top of the screen
-    [*] Tainted Isaac Inventory correctly displayed for all players
-    [*] Tainted ??? Poop Spells correctly displayed for all players
-    [*] Tainted Cain Bag of Crafting correctly displayed for all players
-    [*] Entirely customizable! (MCM still WIP, but config file can be edited)
-[/list]
+    [h3] Customization [/h3]
+    [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2681875787] Mod Config Menu [/url] recommended, but not required.
+        The placement of literally everything can be changed, so please feel free to make the HUD unique to you! Everything can be configured through MCM, with Sprite scaling being the only exception. If you wish to resize any of the sprites, you will need to edit the config file, instructions can be found [url=https://github.com/Konoca/Co-Op_HUD_plus/wiki/Customization] here [/url]
 
-[h3] Supported Mods [/h3]
-[list]
-    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2681875787] Mod Config Menu [/url]
-[/list]
+    [h3] Bug Reporting [/h3]
+    All issues should either be reported [url=https://github.com/Konoca/Co-Op_HUD_plus/issues] here [/url] or by creating a Discussion thread.
+    Please include as much detail as you can, including:
+    [list]
+        [*] How to replicate the Bug
+        [*] Mods you had enabled
+        [*] Console logs
+        [*] Any other info you think is relevant
+    [/list]
 
-[h3] Recommended Mods to Enhance HUD [/h3]
-[list]
-    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2492654252] Boss Rush Wave Counter [/url]
-    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2769063897] Unintrusive Pause Menu [/url]
-    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2376005362] Encyclopedia [/url]
-[/list]
+    [h3] Known Issues [/h3]
+    [list]
+        [*] Repentence+ causes HP to disappear. A fix is planned for the future.
+        [*] DInfinity sprite does not update to show current setting
+        [*] 4.5volt does not show progress towards charge
+    [/list]
 
-[h3] Acknowledgements [/h3]
-[b] Srokks ( https://steamcommunity.com/id/srokks ) [/b]
-coopHUD ( https://steamcommunity.com/sharedfiles/filedetails/?id=2731267631 )
+    [h3] Acknowledgements [/h3]
+    [b] Srokks ( https://steamcommunity.com/id/srokks ) [/b]
+    coopHUD ( https://steamcommunity.com/sharedfiles/filedetails/?id=2731267631 )
 
-[b] wofsauge ( https://steamcommunity.com/id/Wofsauge, https://github.com/wofsauge ) [/b]
-[url=https://wofsauge.github.io/IsaacDocs/rep/index.html] TBoI Lua API Documentation [/url]
-[url=https://steamcommunity.com/sharedfiles/filedetails/?id=1906405707] reHUD [/url]
+    [b] wofsauge ( https://steamcommunity.com/id/Wofsauge, https://github.com/wofsauge ) [/b]
+    [url=https://wofsauge.github.io/IsaacDocs/rep/index.html] TBoI Lua API Documentation [/url]
+    [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1906405707] reHUD [/url]
 
-[b] _Kilburn [/b]
+    [b] _Kilburn [/b]
 
-[b] The Modding of Isaac Discord server ( https://discord.gg/KbevtvgD4z ) [/b]</description>
-    <version>0.4</version>
+    [b] The Modding of Isaac Discord server ( https://discord.gg/KbevtvgD4z ) [/b]
+    </description>
+    <version>0.5</version>
     <visibility>Public</visibility>
     <tag id="Tweaks"/>
     <tag id="Graphics"/>

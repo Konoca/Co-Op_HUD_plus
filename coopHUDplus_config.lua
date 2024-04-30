@@ -1,4 +1,4 @@
-CoopHUDplus.config = {
+function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
     disable = false,
 
     offset = Vector(20, 20),
@@ -9,7 +9,7 @@ CoopHUDplus.config = {
 
     enable_toggle_hud = true,
 
-    player_colors = true,
+    player_colors = false,
 
     active_item = {
         book_correction_offset = Vector(0, -5),
@@ -134,6 +134,30 @@ CoopHUDplus.config = {
         result_pos = Vector(65, 46)
     },
 
+    streak = {
+        pos = Vector(0, 50),
+        center_anchor = true,
+        bottom_anchor = false,
+        name = {
+            offset = Vector(0, -10),
+            scale = Vector(1, 1),
+            box_width = 10,
+            box_center = true,
+        },
+        description = {
+            offset = Vector(0, 10),
+            scale = Vector(0.5, 0.5),
+            box_width = 10,
+            box_center = true,
+        },
+        curse = {
+            offset = Vector(0, 21),
+            scale = Vector(0.5, 0.5),
+            box_width = 10,
+            box_center = true,
+        }
+    },
+
     mods = {
         mAPI = {
             pos = Vector(4, 4),
@@ -149,4 +173,16 @@ CoopHUDplus.config = {
             override = false,
         },
     },
+
+    test2 = {
+        test1 = 5,
+        testT = {
+            test = 1,
+            test123 = 123,
+            test321 = 321,
+        }
+    }
 }
+end
+
+CoopHUDplus.ResetConfig()

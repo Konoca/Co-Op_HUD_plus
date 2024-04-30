@@ -47,6 +47,38 @@ function CoopHUDplus.decodeConfigVectors(config)
     return new_config
 end
 
+function CoopHUDplus.ensureCompatibility(table1, table2)
+    local new_config = {}
+    for key, value in pairs(table1) do
+        local new_value = table2[key]
+        if new_value == nil then
+            new_config[key] = value
+            goto skip_key
+        end
+
+        if type(value) == 'table' then
+            new_value = CoopHUDplus.ensureCompatibility(value, new_value)
+        end
+
+        new_config[key] = new_value
+        ::skip_key::
+    end
+    return new_config
+end
+
+function CoopHUDplus.createStreak(name, description, display_bottom_paper)
+    local animation = Sprite()
+    animation:Load(CoopHUDplus.PATHS.ANIMATIONS.streak, true)
+    if not display_bottom_paper then animation:ReplaceSpritesheet(1, '') end
+    animation:LoadGraphics()
+    animation:Play('Text', false)
+    CoopHUDplus.STREAK = {sprite = animation, name = name, description = description, invert_color = display_bottom_paper}
+end
+
+
+-----------------------------------------------------------------
+
+
 local function onGameStart(_, isCont)
     CoopHUDplus.players = {}
     CoopHUDplus.joining = {}
@@ -58,7 +90,11 @@ local function onGameStart(_, isCont)
     if not CoopHUDplus:HasData() then return end
     local data = json.decode(CoopHUDplus:LoadData())
 
-    if data.config then CoopHUDplus.config = CoopHUDplus.decodeConfigVectors(data.config) end
+    if data.config then
+        -- CoopHUDplus.config = CoopHUDplus.decodeConfigVectors(data.config)
+        local savedData = CoopHUDplus.decodeConfigVectors(data.config)
+        CoopHUDplus.config = CoopHUDplus.ensureCompatibility(CoopHUDplus.config, savedData)
+    end
 
     if isCont then
         CoopHUDplus.SAVED_PLAYER_DATA = data.player_invs
@@ -92,12 +128,6 @@ local function getPill(_, pillEffect, pillColor)
     CoopHUDplus.pills.cache[pillColor] = pillEffect
 end
 CoopHUDplus:AddCallback(ModCallbacks.MC_GET_PILL_EFFECT, getPill)
-
-
-local function usePill(_, pillEffect, entityPlayer, useFlags)
-    CoopHUDplus.pills.known[pillEffect] = true
-end
-CoopHUDplus:AddCallback(ModCallbacks.MC_USE_PILL, usePill)
 
 
 local function getPlayerExists(idx)
@@ -171,6 +201,14 @@ end
 CoopHUDplus:AddCallback(ModCallbacks.MC_INPUT_ACTION, initNewPlayer)
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, selectCharacter)
 
+local function newLevel(_)
+    local level = Game():GetLevel()
+    local name = level:GetName()
+    local curse = level:GetCurseName()
+    CoopHUDplus.createStreak(name, curse, curse ~= '')
+end
+CoopHUDplus:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newLevel)
+
 
 -- requires Repentogon
 local function getPlayerFromEntity(player)
@@ -184,12 +222,34 @@ local function getPlayerFromEntity(player)
 end
 local function addCollectible(_ ,type, charge, first_time, slot, vardata, player)
     local item = Isaac.GetItemConfig():GetCollectible(type)
-    if item.Type == ItemType.ITEM_ACTIVE or item.Type == ItemType.ITEM_TRINKET then return end
 
+    local game = Game()
+    local level = game:GetLevel()
+
+    if level:GetAbsoluteStage() == LevelStage.STAGE1_1
+        and level:GetCurrentRoomIndex() == level:GetStartingRoomIndex()
+        and game:GetRoom():IsFirstVisit() then
+
+        return
+    end
+
+    local xmldata = XMLData.GetEntryById(XMLNode.ITEM, type)
+    local name = xmldata.name
+    local description = xmldata.description
+    CoopHUDplus.createStreak(name, description, false)
+
+    if item.Type == ItemType.ITEM_ACTIVE or item.Type == ItemType.ITEM_TRINKET then return end
     local ignored_ids = {
         [CollectibleType.COLLECTIBLE_BIRTHRIGHT] = true,
         [CollectibleType.COLLECTIBLE_POLAROID] = true,
         [CollectibleType.COLLECTIBLE_NEGATIVE] = true,
+        [CollectibleType.COLLECTIBLE_KEY_PIECE_1] = true,
+        [CollectibleType.COLLECTIBLE_KEY_PIECE_2] = true,
+        [CollectibleType.COLLECTIBLE_KNIFE_PIECE_1] = true,
+        [CollectibleType.COLLECTIBLE_KNIFE_PIECE_2] = true,
+        [CollectibleType.COLLECTIBLE_DADS_NOTE] = true,
+        [CollectibleType.COLLECTIBLE_DAMOCLES_PASSIVE] = true,
+        [CollectibleType.COLLECTIBLE_DOGMA] = true,
     }
     if ignored_ids[item.ID] then return end
 
@@ -209,3 +269,36 @@ end
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, addCollectible)
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, shiftCollectibles, 0)
 
+
+local function customCommands(_, cmd, params)
+    print(cmd, params)
+    if cmd == CoopHUDplus.cmd_prefix..'reset' then CoopHUDplus.ResetConfig() end
+end
+CoopHUDplus:AddCallback(ModCallbacks.MC_EXECUTE_CMD, customCommands)
+
+
+local function usePill(_, pillEffect, entityPlayer, useFlags)
+    CoopHUDplus.pills.known[pillEffect] = true
+
+    local xmldata = XMLData.GetEntryById(XMLNode.PILL, pillEffect)
+    local name = xmldata.name
+    local description = xmldata.description
+    CoopHUDplus.createStreak(name, description, false)
+end
+CoopHUDplus:AddCallback(ModCallbacks.MC_USE_PILL, usePill)
+
+local function useCard(_, card, entityPlayer, useFlags)
+    local xmldata = XMLData.GetEntryById(XMLNode.CARD, card)
+    local name = xmldata.name
+    local description = xmldata.description
+    CoopHUDplus.createStreak(name, description, false)
+end
+CoopHUDplus:AddCallback(ModCallbacks.MC_USE_CARD, useCard)
+
+local function pickupTrinket(_, entityPlayer, trinketType, firstTime)
+    local xmldata = XMLData.GetEntryById(XMLNode.TRINKET, trinketType)
+    local name = xmldata.name
+    local description = xmldata.description
+    CoopHUDplus.createStreak(name, description, false)
+end
+CoopHUDplus:AddCallback(ModCallbacks.MC_POST_TRIGGER_TRINKET_ADDED, pickupTrinket)

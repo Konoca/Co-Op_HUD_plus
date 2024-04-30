@@ -62,7 +62,7 @@ local hudOff = false
 local lastTimeString = ''
 local function onRender()
     local game = Game()
-    if CoopHUDplus.config.disable or game:IsPaused() then return end -- TODO HUD disappears when pause screen open, IsPaused is so the HUD doesnt appear during cutscenes
+    if CoopHUDplus.config.disable or (game:IsPaused() and not game:IsPauseMenuOpen()) then return end -- TODO HUD disappears when pause screen open, IsPaused is so the HUD doesnt appear during cutscenes
 
     -- TODO show character selection for players that are joining
     -- For now, hide HUD if someone is joining.
@@ -113,6 +113,48 @@ local function onRender()
 
     -- bombs, keys, coins, etc.
     CoopHUDplus.Miscs.new():render(screen_size, screen_center)
+
+    -- UI streak animation
+    if CoopHUDplus.STREAK then
+        local pos = Vector(0, 0)
+        if CoopHUDplus.config.streak.center_anchor then pos.X = screen_center.X end
+        if CoopHUDplus.config.streak.bottom_anchor then pos.Y = screen_size.Y end
+        pos = pos + CoopHUDplus.config.streak.pos
+
+        CoopHUDplus.STREAK.sprite:Update()
+        CoopHUDplus.STREAK.sprite:Render(pos, Vector.Zero, Vector.Zero)
+
+        local frame = CoopHUDplus.STREAK.sprite:GetFrame()
+        if frame > 7 and frame < 60 then
+            local f, _ = Font(CoopHUDplus.PATHS.FONTS.streak)
+            f:DrawStringScaled(
+                CoopHUDplus.STREAK.name,
+                pos.X + CoopHUDplus.config.streak.name.offset.X,
+                pos.Y + CoopHUDplus.config.streak.name.offset.Y,
+                CoopHUDplus.config.streak.name.scale.X,
+                CoopHUDplus.config.streak.name.scale.Y,
+                KColor.White,
+                CoopHUDplus.config.streak.name.box_width,
+                CoopHUDplus.config.streak.name.box_center
+            )
+
+            local conf = CoopHUDplus.STREAK.invert_color and CoopHUDplus.config.streak.curse or CoopHUDplus.config.streak.description
+            f:DrawStringScaled(
+                CoopHUDplus.STREAK.description,
+                pos.X + conf.offset.X,
+                pos.Y + conf.offset.Y,
+                conf.scale.X,
+                conf.scale.Y,
+                CoopHUDplus.STREAK.invert_color and KColor.Black or KColor.White,
+                conf.box_width,
+                conf.box_center
+            )
+        end
+
+        if CoopHUDplus.STREAK.sprite:IsFinished() then
+            CoopHUDplus.STREAK = nil
+        end
+    end
 
     -- mod overrides
     if MinimapAPI and CoopHUDplus.config.mods.mAPI.override then
