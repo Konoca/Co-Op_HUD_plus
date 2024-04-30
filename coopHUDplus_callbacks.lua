@@ -184,6 +184,13 @@ local function getPlayerFromEntity(player)
 end
 local function addCollectible(_ ,type, charge, first_time, slot, vardata, player)
     local item = Isaac.GetItemConfig():GetCollectible(type)
+
+    -- Game():GetHUD():ShowItemText(player, item)
+    local animation = Sprite()
+    animation:Load(CoopHUDplus.PATHS.ANIMATIONS.streak, true)
+    animation:Play('Text', false)
+    table.insert(CoopHUDplus.ANIMATIONS, animation)
+
     if item.Type == ItemType.ITEM_ACTIVE or item.Type == ItemType.ITEM_TRINKET then return end
 
     local ignored_ids = {

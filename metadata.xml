@@ -34,6 +34,13 @@
         [*] Any other info you think is relevant
     [/list]
 
+    [h3] Known Issues [/h3]
+    [list]
+        [*] Repentence+ causes HP to disappear. A fix is planned for the future.
+        [*] DInfinity sprite does not update to show current setting
+        [*] 4.5volt does not show progress towards charge
+    [/list]
+
     [h3] Acknowledgements [/h3]
     [b] Srokks ( https://steamcommunity.com/id/srokks ) [/b]
     coopHUD ( https://steamcommunity.com/sharedfiles/filedetails/?id=2731267631 )
@@ -46,7 +53,7 @@
 
     [b] The Modding of Isaac Discord server ( https://discord.gg/KbevtvgD4z ) [/b]
     </description>
-    <version>0.5</version>
+    <version>0.4.6</version>
     <visibility>Public</visibility>
     <tag id="Tweaks"/>
     <tag id="Graphics"/>
