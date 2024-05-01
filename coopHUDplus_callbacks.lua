@@ -75,6 +75,16 @@ function CoopHUDplus.createStreak(name, description, display_bottom_paper)
     CoopHUDplus.STREAK = {sprite = animation, name = name, description = description, invert_color = display_bottom_paper}
 end
 
+function CoopHUDplus.getPlayerFromEntity(player)
+    local idx = player.ControllerIndex
+    for i = 0, #CoopHUDplus.players, 1 do
+        if CoopHUDplus.players[i] and CoopHUDplus.players[i].player_entity.ControllerIndex == idx then
+            return CoopHUDplus.players[i]
+        end
+    end
+    return nil
+end
+
 
 -----------------------------------------------------------------
 
@@ -211,15 +221,6 @@ CoopHUDplus:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newLevel)
 
 
 -- requires Repentogon
-local function getPlayerFromEntity(player)
-    local idx = player.ControllerIndex
-    for i = 0, #CoopHUDplus.players, 1 do
-        if CoopHUDplus.players[i] and CoopHUDplus.players[i].player_entity.ControllerIndex == idx then
-            return CoopHUDplus.players[i]
-        end
-    end
-    return nil
-end
 local function addCollectible(_ ,type, charge, first_time, slot, vardata, player)
     local item = Isaac.GetItemConfig():GetCollectible(type)
 
@@ -253,7 +254,7 @@ local function addCollectible(_ ,type, charge, first_time, slot, vardata, player
     }
     if ignored_ids[item.ID] then return end
 
-    local p = getPlayerFromEntity(player)
+    local p = CoopHUDplus.getPlayerFromEntity(player)
     if not p then return end
 
     p.inventory:addCollectible(item)
@@ -262,7 +263,7 @@ local function shiftCollectibles(_, entityPlayer, _)
     if Game():IsPaused() then return end
 
     if Input.IsActionTriggered(ButtonAction.ACTION_DROP, entityPlayer.ControllerIndex) then
-        local p = getPlayerFromEntity(entityPlayer)
+        local p = CoopHUDplus.getPlayerFromEntity(entityPlayer)
         if p then p.inventory:shiftCollectibles() end
     end
 end

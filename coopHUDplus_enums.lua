@@ -1,6 +1,6 @@
 CoopHUDplus.PATHS = {
     ANIMATIONS = {
-        active_item = 'gfx/ui/items_coop.anm2', -- animation file taken from coopHUD, credit to Srokks. I custom made the book border
+        active_item = 'gfx/ui/items_coop.anm2', -- taken from coopHUD (Srokks). I custom made the book border and D Infinity
         chargebar = 'gfx/ui/ui_chargebar.anm2',
         book = 'gfx/005.100_collectible.anm2',
         trinket = 'gfx/005.100_collectible.anm2',
@@ -16,6 +16,12 @@ CoopHUDplus.PATHS = {
     },
     FONTS = {
         streak = 'font/upheaval.fnt',
+    },
+    IMAGES = {
+        d_infinity = 'gfx/characters/costumes/costume_489_dinfinity.png',
+        virtues_belial = 'gfx/ui/hud_bookofvirtueswithbelial.png',
+        virtues = 'gfx/ui/hud_bookofvirtues.png',
+        belial = 'gfx/ui/hud_bookofbelial.png'
     }
 }
 
@@ -73,6 +79,19 @@ CoopHUDplus.PILL = {
     [PillEffect.PILLEFFECT_EXPERIMENTAL] = 'Experimental Pill',
 }
 
+CoopHUDplus.ActiveItem.D_INFINITY = {
+    D1 = 0,
+    D4 = 65536,
+    D6 = 131072,
+    E6 = 196608,
+    D7 = 262144,
+    D8 = 327680,
+    D10 = 393216,
+    D12 = 458752,
+    D20 = 524288,
+    D100 = 589824,
+}
+
 CoopHUDplus.Trinket.SLOT_PRIMARY = 0
 CoopHUDplus.Trinket.SLOT_SECONDARY = 1
 
@@ -119,3 +138,4 @@ CoopHUDplus.Player.COLORS = {
     [3] = {0.2, 1, 0.2, 0.25},
     [4] = {1, 1, 0, 0.25},
 }
+
