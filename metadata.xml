@@ -4,8 +4,12 @@
     <directory>co-op_hud+</directory>
     <id>3229942849</id>
     <description>
-    [h1] THIS MOD REQUIRES REPENTOGON, READ MORE [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138]HERE[/url] [/h1]
-    A mod for The Binding of Isaac: Repentence that changes the HUD to better display information when playing with multiple people. This mod is based on coopHUD by Srokks, which is no longer being updated.
+    [h1] THIS MOD REQUIRES REPENTOGON WHICH CAN NOT BE INSTALLED LIKE A NORMAL MOD, READ MORE [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138]HERE[/url] [/h1]
+
+    [h2] NOW COMPATIBLE WITH FIEND FOLIO AND REPENTENCE PLUS! [/h2]
+    This list also includes any other mods using the Custom Health API
+
+    Co-Op HUD+ is a mod that completely overhauls the in-game HUD to better display information when playing with multiple people. This mod is based on coopHUD by Srokks, which is no longer being updated.
 
     [h3] Features [/h3]
     [list]
@@ -34,11 +38,6 @@
         [*] Any other info you think is relevant
     [/list]
 
-    [h3] Known Issues [/h3]
-    [list]
-        [*] Repentence+ (possibly other large scale mods as well) causes HP to disappear. A fix is planned for the future.
-    [/list]
-
     [h3] Acknowledgements [/h3]
     [b] Srokks ( https://steamcommunity.com/id/srokks ) [/b]
     coopHUD ( https://steamcommunity.com/sharedfiles/filedetails/?id=2731267631 )
@@ -51,7 +50,7 @@
 
     [b] The Modding of Isaac Discord server ( https://discord.gg/KbevtvgD4z ) [/b]
     </description>
-    <version>0.6.1</version>
+    <version>0.7</version>
     <visibility>Public</visibility>
     <tag id="Tweaks"/>
     <tag id="Graphics"/>
