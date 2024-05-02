@@ -78,6 +78,7 @@ end
 function CoopHUDplus.Health.new(player_entity)
     local self = setmetatable({}, CoopHUDplus.Health)
     self.player_entity = player_entity
+    self.pType = self.player_entity:GetPlayerType()
 
     -- given in half-heart units
     self.max_red = player_entity:GetMaxHearts()
@@ -103,6 +104,13 @@ function CoopHUDplus.Health.new(player_entity)
 
     self.hasHoly = self.player_entity:GetEffects():GetCollectibleEffect(CollectibleType.COLLECTIBLE_HOLY_MANTLE)
     self.hearts = self:getHearts()
+
+    if self.pType == PlayerType.PLAYER_THESOUL_B
+        or (self.pType == PlayerType.PLAYER_THELOST and not self.hasHoly)
+        or (self.pType == PlayerType.PLAYER_THELOST_B and not self.hasHoly)
+    then
+        self.hearts = {}
+    end
 
     return self
 end
