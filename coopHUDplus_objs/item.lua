@@ -52,7 +52,7 @@ local function getChargeBar(pType, id, max_charge, scale)
     return sprite
 end
 
-local function getChargeBarCharge(current_charge, max_charge)
+local function getChargeBarCharge(current_charge, max_charge, partial_charge)
     if not current_charge then return Vector(1,1) end
 
     -- 22 = 1/6
@@ -60,23 +60,18 @@ local function getChargeBarCharge(current_charge, max_charge)
     -- 7 = 5/6
     -- 3 = full bar
     -- 26 = empty bar
-    if current_charge <= 0 then
-        return Vector(1, 26)
-    end
-
-    if current_charge >= max_charge then
-        return Vector(1, 3)
-    end
-
     local chargeMap = {
         [2] = {
+            [0] = 26,
             [1] = 14,   -- 1/2
         },
         [3] = {
+            [0] = 26,
             [1] = 19,   -- 1/3
             [2] = 10,   -- 2/3
         },
         [4] = {
+            [0] = 26,
             [1] = 20,   -- 1/4
             [2] = 14,   -- 1/2
             [3] = 8,    -- 3/4
@@ -85,6 +80,7 @@ local function getChargeBarCharge(current_charge, max_charge)
             -- TODO ..? The sprite exists but I can't find any items that use it. Might need to do for mod compatibility
         },
         [6] = {
+            [0] = 26,
             [1] = 22,   -- 1/6
             [2] = 19,   -- 1/3
             [3] = 14,   -- 1/2
@@ -95,6 +91,7 @@ local function getChargeBarCharge(current_charge, max_charge)
             -- TODO ..? Same as 5-room
         },
         [12] = {
+            [0] = 26,
             [1] = 24,   -- 1/12
             [2] = 22,   -- 1/6
             [3] = 20,   -- 1/4
@@ -109,8 +106,22 @@ local function getChargeBarCharge(current_charge, max_charge)
         },
     }
 
+    if current_charge <= 0 and (partial_charge == nil or partial_charge <= 0) then
+        return Vector(1, 26)
+    end
+
+    if current_charge >= max_charge then
+        return Vector(1, 3)
+    end
+
     if chargeMap[max_charge] == nil then
         return Vector(1, 28 - (current_charge * (24 / max_charge)))
+    end
+
+    if partial_charge ~= nil and partial_charge > 0 then
+        local init = chargeMap[max_charge][current_charge]
+        local partial = (init - chargeMap[max_charge][current_charge + 1]) * partial_charge
+        return Vector(1, init - partial)
     end
 
     return Vector(1, chargeMap[max_charge][current_charge])
@@ -124,6 +135,7 @@ function CoopHUDplus.ActiveItem.new(entity, slot)
     self.entity = entity
 
     self.id = entity:GetActiveItem(slot)
+    self.desc = entity:GetActiveItemDesc()
     self.current_charge = entity:GetActiveCharge(slot)
 
     if Isaac.GetItemConfig():GetCollectible(self.id) == nil then
@@ -145,11 +157,15 @@ end
 function CoopHUDplus.ActiveItem:getSprite()
     if self.id == 0 then return nil end
 
-    -- TODO dInfinity
-    -- TODO other special case active items
+    local animation = 'Idle'
+    local frame = 0
+    if self.current_charge + self.soul_charge >= self.max_charge and self.max_charge > 0 then frame = 1 end
 
     local sprite = Sprite()
     local path = Isaac.GetItemConfig():GetCollectible(self.id).GfxFileName
+
+    animation, path, frame = self:getSpecialActives(animation, path, frame)
+
     sprite:Load(CoopHUDplus.PATHS.ANIMATIONS.active_item, false)
     sprite:ReplaceSpritesheet(0, path)
     sprite:ReplaceSpritesheet(1, path)
@@ -162,12 +178,80 @@ function CoopHUDplus.ActiveItem:getSprite()
         if CoopHUDplus.config.active_item.book_charge_outline then sprite:ReplaceSpritesheet(5, bookpath) end
     end
 
-    local frame = 0
-    if self.current_charge + self.soul_charge >= self.max_charge and self.max_charge > 0 then frame = 1 end
-
-    sprite:SetFrame('Idle', frame)
+    sprite:SetFrame(animation, frame)
     sprite:LoadGraphics()
     return sprite
+end
+
+function CoopHUDplus.ActiveItem:getSpecialActives(animation, path, frame)
+    if self.id == CollectibleType.COLLECTIBLE_D_INFINITY then
+        animation = 'DInfinity'
+        path = CoopHUDplus.PATHS.IMAGES.d_infinity
+
+        local varData = self.desc.VarData
+        local tmpFrame = 0
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D4 == CoopHUDplus.ActiveItem.D_INFINITY.D4 then tmpFrame = 2 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D6 == CoopHUDplus.ActiveItem.D_INFINITY.D6 then tmpFrame = 4 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.E6 == CoopHUDplus.ActiveItem.D_INFINITY.E6 then tmpFrame = 6 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D7 == CoopHUDplus.ActiveItem.D_INFINITY.D7 then tmpFrame = 8 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D8 == CoopHUDplus.ActiveItem.D_INFINITY.D8 then tmpFrame = 10 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D10 == CoopHUDplus.ActiveItem.D_INFINITY.D10 then tmpFrame = 12 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D12 == CoopHUDplus.ActiveItem.D_INFINITY.D12 then tmpFrame = 14 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D20 == CoopHUDplus.ActiveItem.D_INFINITY.D20 then tmpFrame = 16 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D100 == CoopHUDplus.ActiveItem.D_INFINITY.D100 then tmpFrame = 18 end
+
+        frame = tmpFrame + frame
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_THE_JAR then
+        path = CoopHUDplus.PATHS.IMAGES.jar
+        animation = 'Jar'
+        frame = math.ceil(self.entity:GetJarHearts() / 2)
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_JAR_OF_FLIES then
+        path = CoopHUDplus.PATHS.IMAGES.jar_of_flies
+        animation = 'Jar'
+        frame = self.entity:GetJarFlies()
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_JAR_OF_WISPS then
+        path = CoopHUDplus.PATHS.IMAGES.jar_of_wisps
+        animation = 'WispJar'
+        frame = (self.desc.VarData - 1) + (15 * frame)
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_EVERYTHING_JAR then
+        path = CoopHUDplus.PATHS.IMAGES.everything_jar
+        animation = 'EverythingJar'
+        frame = self.current_charge + 1
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_MAMA_MEGA then
+        path = CoopHUDplus.PATHS.IMAGES.mama_mega
+        animation = 'EverythingJar'
+        if self.entity:HasGoldenBomb() then frame = 1 + frame end
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_SMELTER then
+        path = CoopHUDplus.PATHS.IMAGES.smelter
+        animation = 'DInfinity'
+        frame = 3 * frame
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_GLOWING_HOUR_GLASS then
+        path = CoopHUDplus.PATHS.IMAGES.glowing_hour_glass
+        animation = 'SoulUrn'
+        frame = (3 - self.desc.VarData) + 1
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_URN_OF_SOULS then
+        path = CoopHUDplus.PATHS.IMAGES.urn_of_souls
+        animation = 'SoulUrn'
+        frame = (21 * self.entity:GetEffects():GetCollectibleEffectNum(640)) + self.entity:GetUrnSouls() + 1
+    end
+
+    return animation, path, frame
 end
 
 function CoopHUDplus.ActiveItem:getBookSprite()
@@ -193,9 +277,9 @@ function CoopHUDplus.ActiveItem:getBookPath()
     local hasVirtues = self.entity:HasCollectible(bov) and self.id ~= bov
     local hasBelial = self.entity:HasCollectible(bob) and self.id ~= bob
 
-    if hasVirtues and hasBelial then return 'gfx/ui/hud_bookofvirtueswithbelial.png' end
-    if hasVirtues then return 'gfx/ui/hud_bookofvirtues.png' end
-    if hasBelial then return 'gfx/ui/hud_bookofbelial.png' end
+    if hasVirtues and hasBelial then return CoopHUDplus.PATHS.IMAGES.virtues_belial end
+    if hasVirtues then return CoopHUDplus.PATHS.IMAGES.virtues end
+    if hasBelial then return CoopHUDplus.PATHS.IMAGES.belial end
     return nil
 end
 
@@ -216,11 +300,12 @@ function CoopHUDplus.ActiveItem:render(item_pos_vec, bar_pos_vec, scale, display
     self.sprite:Render(item_pos_vec)
 
     if self.current_charge and self.max_charge and self.max_charge > 0 and display_charge then
+        local partial_charge = self.desc.PartialCharge
         self.chargeBar.bg:Render(bar_pos_vec)
         if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY then
             self.chargeBar.beth:Render(bar_pos_vec, getChargeBarCharge(self.soul_charge + self.current_charge, self.max_charge))
         end
-        self.chargeBar.charge:Render(bar_pos_vec, getChargeBarCharge(self.current_charge, self.max_charge))
+        self.chargeBar.charge:Render(bar_pos_vec, getChargeBarCharge(self.current_charge, self.max_charge, partial_charge))
         self.chargeBar.extra:Render(bar_pos_vec, getChargeBarCharge(self.extra_charge, self.max_charge))
         self.chargeBar.overlay:Render(bar_pos_vec)
     end
@@ -375,6 +460,11 @@ function CoopHUDplus.PocketActiveItem:getSprite()
     local path = Isaac.GetItemConfig():GetCollectible(self.id).GfxFileName
 
     sprite:Load(CoopHUDplus.PATHS.ANIMATIONS.active_item, false)
+
+    if self.id == CollectibleType.COLLECTIBLE_FLIP and self.pType == PlayerType.PLAYER_LAZARUS2_B then
+        path = CoopHUDplus.PATHS.IMAGES.flip
+    end
+
     sprite:ReplaceSpritesheet(0, path)
     sprite:ReplaceSpritesheet(1, path)
     sprite:ReplaceSpritesheet(2, path)
