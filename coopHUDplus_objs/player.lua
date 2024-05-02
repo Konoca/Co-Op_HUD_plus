@@ -71,6 +71,8 @@ end
 
 function CoopHUDplus.Player:getIsReal()
     if self.player_type == PlayerType.PLAYER_ESAU then return false end
+    if self.player_type == PlayerType.PLAYER_THESOUL_B then return false end
+    if self.player_type == PlayerType.PLAYER_LAZARUS2_B then return false end
     return true
 end
 
