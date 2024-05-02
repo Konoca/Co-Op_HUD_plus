@@ -16,7 +16,7 @@ function CoopHUDplus.Player.new(player_entity, player_num)
         self.twin.number = self.number
     end
 
-    self.health = CoopHUDplus.Health.new(player_entity)
+    self.health = CoopHUDplus.Health.new(player_entity, self.number)
 
     self.active_items = {
         [0] = CoopHUDplus.ActiveItem.new(player_entity, ActiveSlot.SLOT_PRIMARY),
@@ -41,7 +41,7 @@ function CoopHUDplus.Player.new(player_entity, player_num)
 end
 
 function CoopHUDplus.Player:update(player_entity)
-    self.health = CoopHUDplus.Health.new(player_entity)
+    self.health = CoopHUDplus.Health.new(player_entity, self.number)
 
     self.active_items = {
         [0] = CoopHUDplus.ActiveItem.new(player_entity, ActiveSlot.SLOT_PRIMARY),
