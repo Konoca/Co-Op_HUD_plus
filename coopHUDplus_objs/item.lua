@@ -52,7 +52,7 @@ local function getChargeBar(pType, id, max_charge, scale)
     return sprite
 end
 
-local function getChargeBarCharge(current_charge, max_charge)
+local function getChargeBarCharge(current_charge, max_charge, partial_charge)
     if not current_charge then return Vector(1,1) end
 
     -- 22 = 1/6
@@ -60,23 +60,18 @@ local function getChargeBarCharge(current_charge, max_charge)
     -- 7 = 5/6
     -- 3 = full bar
     -- 26 = empty bar
-    if current_charge <= 0 then
-        return Vector(1, 26)
-    end
-
-    if current_charge >= max_charge then
-        return Vector(1, 3)
-    end
-
     local chargeMap = {
         [2] = {
+            [0] = 26,
             [1] = 14,   -- 1/2
         },
         [3] = {
+            [0] = 26,
             [1] = 19,   -- 1/3
             [2] = 10,   -- 2/3
         },
         [4] = {
+            [0] = 26,
             [1] = 20,   -- 1/4
             [2] = 14,   -- 1/2
             [3] = 8,    -- 3/4
@@ -85,6 +80,7 @@ local function getChargeBarCharge(current_charge, max_charge)
             -- TODO ..? The sprite exists but I can't find any items that use it. Might need to do for mod compatibility
         },
         [6] = {
+            [0] = 26,
             [1] = 22,   -- 1/6
             [2] = 19,   -- 1/3
             [3] = 14,   -- 1/2
@@ -95,6 +91,7 @@ local function getChargeBarCharge(current_charge, max_charge)
             -- TODO ..? Same as 5-room
         },
         [12] = {
+            [0] = 26,
             [1] = 24,   -- 1/12
             [2] = 22,   -- 1/6
             [3] = 20,   -- 1/4
@@ -109,8 +106,22 @@ local function getChargeBarCharge(current_charge, max_charge)
         },
     }
 
+    if current_charge <= 0 and (partial_charge == nil or partial_charge <= 0) then
+        return Vector(1, 26)
+    end
+
+    if current_charge >= max_charge then
+        return Vector(1, 3)
+    end
+
     if chargeMap[max_charge] == nil then
         return Vector(1, 28 - (current_charge * (24 / max_charge)))
+    end
+
+    if partial_charge ~= nil and partial_charge > 0 then
+        local init = chargeMap[max_charge][current_charge]
+        local partial = (init - chargeMap[max_charge][current_charge + 1]) * partial_charge
+        return Vector(1, init - partial)
     end
 
     return Vector(1, chargeMap[max_charge][current_charge])
@@ -289,11 +300,12 @@ function CoopHUDplus.ActiveItem:render(item_pos_vec, bar_pos_vec, scale, display
     self.sprite:Render(item_pos_vec)
 
     if self.current_charge and self.max_charge and self.max_charge > 0 and display_charge then
+        local partial_charge = self.desc.PartialCharge
         self.chargeBar.bg:Render(bar_pos_vec)
         if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY then
             self.chargeBar.beth:Render(bar_pos_vec, getChargeBarCharge(self.soul_charge + self.current_charge, self.max_charge))
         end
-        self.chargeBar.charge:Render(bar_pos_vec, getChargeBarCharge(self.current_charge, self.max_charge))
+        self.chargeBar.charge:Render(bar_pos_vec, getChargeBarCharge(self.current_charge, self.max_charge, partial_charge))
         self.chargeBar.extra:Render(bar_pos_vec, getChargeBarCharge(self.extra_charge, self.max_charge))
         self.chargeBar.overlay:Render(bar_pos_vec)
     end
