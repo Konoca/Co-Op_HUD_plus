@@ -1,4 +1,4 @@
-function CoopHUDplus.Heart.new(heart_type, is_half_heart, is_golden, has_eternal, is_empty, sprite)
+function CoopHUDplus.Heart.new(heart_type, is_half_heart, is_golden, has_eternal, is_empty)
     local self = setmetatable({}, CoopHUDplus.Heart)
 
     self.heart_type = heart_type
@@ -7,8 +7,37 @@ function CoopHUDplus.Heart.new(heart_type, is_half_heart, is_golden, has_eternal
     self.is_golden = is_golden
     self.has_eternal = has_eternal
 
-    self.sprite = sprite
-    if sprite == nil then self.sprite = self:getSprite() end
+    self.sprite = self:getSprite()
+
+    return self
+end
+
+function CoopHUDplus.Heart.new_chapi(spriteFile, spriteAnim, spriteColor, goldenFile, goldenAnim, goldenColor, eternalFile, eternalAnim, eternalColor)
+    local self = setmetatable({}, CoopHUDplus.Heart)
+
+    self.sprite = {
+        heart = Sprite(),
+        golden = nil,
+        eternal = nil,
+    }
+
+    self.sprite.heart:Load(spriteFile, true)
+    self.sprite.heart:Play(spriteAnim, true)
+    self.sprite.heart.Color = spriteColor
+
+    if goldenFile ~= nil then
+        self.sprite.golden = Sprite()
+        self.sprite.golden:Load(goldenFile, true)
+        self.sprite.golden:Play(goldenAnim, true)
+        self.sprite.golden.Color = goldenColor
+    end
+
+    if eternalFile ~= nil then
+        self.sprite.eternal = Sprite()
+        self.sprite.eternal:Load(eternalFile, true)
+        self.sprite.eternal:Play(eternalAnim, true)
+        self.sprite.eternal.Color = eternalColor
+    end
 
     return self
 end
@@ -62,13 +91,21 @@ function CoopHUDplus.Heart:getSprite()
     return sprite
 end
 
-function CoopHUDplus.Heart:render(pos, flip, useCHAPI)
-    if useCHAPI then
-        self.sprite.FlipX = flip
-        self.sprite:Render(pos)
+function CoopHUDplus.Heart:setHolyMantle()
+    if CustomHealthAPI ~= nil then
+        self.sprite.heart = Sprite()
+        self.sprite.heart:Load('gfx/ui/CustomHealthAPI/hearts.anm2', true)
+        self.sprite.heart:Play('HolyMantle', true)
+        self.sprite.golden = nil
+        self.sprite.eternal = nil
         return
     end
 
+    self.heart_type = 'holy_mantle'
+    self:updateSprite()
+end
+
+function CoopHUDplus.Heart:render(pos, flip)
     self.sprite.heart.FlipX = flip
     self.sprite.heart:Render(pos)
 
@@ -113,13 +150,11 @@ function CoopHUDplus.Health.new(player_entity, player_number)
 
     self.hasHoly = self.player_entity:GetEffects():GetCollectibleEffect(CollectibleType.COLLECTIBLE_HOLY_MANTLE)
 
-    self.usingCHAPI = false
     self.hearts = self:getHearts()
 
     if self.pType == PlayerType.PLAYER_THESOUL_B
         or (self.pType == PlayerType.PLAYER_THELOST and not self.hasHoly)
         or (self.pType == PlayerType.PLAYER_THELOST_B and not self.hasHoly)
-        and not self.usingCHAPI
     then
         self.hearts = {}
     end
@@ -157,8 +192,10 @@ end
 
 function CoopHUDplus.Health:getHearts()
     -- Custom Heart API compatibility
-    if CustomHealthAPI ~= nil and self.pType >= PlayerType.NUM_PLAYER_TYPES then
-        self.usingCHAPI = true
+    if CustomHealthAPI ~= nil
+        and self.pType ~= PlayerType.PLAYER_THELOST and self.pType ~= PlayerType.PLAYER_THELOST_B
+        and self.pType ~= PlayerType.PLAYER_KEEPER and self.pType ~= PlayerType.PLAYER_KEEPER_B
+    then
         return self:getHeartsCHAPI()
     end
 
@@ -248,8 +285,7 @@ function CoopHUDplus.Health:getHearts()
 
     -- TODO eventually render over a heart instead of replace heart
     if self.hasHoly then
-        hearts[#hearts].heart_type = 'holy_mantle'
-        hearts[#hearts]:updateSprite()
+        hearts[#hearts]:setHolyMantle()
     end
 
     return hearts
@@ -281,13 +317,14 @@ function CoopHUDplus.Health:getHeartsCHAPI()
         local redHealth = nil
         local updateRedHealthIndex = nil
 
-        animationFile, animationName, updateRedHealthIndex, hasRedHealth, redKey, redHealth = self:_CHAPI_if_container(
-            animationFile, animationName, health, healthDefinition)
+        animationFile, animationName, updateRedHealthIndex, hasRedHealth, redKey, redHealth = self:_CHAPI_if_container(health, healthDefinition)
 
-        local sprite = nil
+        local spriteFile, spriteAnim, spriteColor = nil, nil, nil
+        local eternalFile, eternalAnim, eternalColor = nil, nil, nil
+        local goldenFile, goldenAnim, goldenColor = nil, nil, nil
 
         if animationName ~= nil then
-            sprite = self:_CHAPI_get_sprite(
+            spriteFile, spriteAnim, spriteColor = self:_CHAPI_get_sprite(
                 animationName, animationFile,
                 healthDefinition, hasRedHealth,
                 redKey, redHealth,
@@ -299,7 +336,7 @@ function CoopHUDplus.Health:getHeartsCHAPI()
             local eternalDefinition = CustomHealthAPI.PersistentData.HealthDefinitions["ETERNAL_HEART"]
 			animationFile = eternalDefinition.AnimationFilename
 			animationName = eternalDefinition.AnimationName
-            sprite = self:_CHAPI_get_sprite(
+            eternalFile, eternalAnim, eternalColor = self:_CHAPI_get_sprite(
                 animationName, animationFile,
                 healthDefinition, hasRedHealth,
                 redKey, nil,
@@ -311,7 +348,7 @@ function CoopHUDplus.Health:getHeartsCHAPI()
             local goldenDefinition = CustomHealthAPI.PersistentData.HealthDefinitions["GOLDEN_HEART"]
 			animationFile = goldenDefinition.AnimationFilename
 			animationName = goldenDefinition.AnimationName
-            sprite = self:_CHAPI_get_sprite(
+            goldenFile, goldenAnim, goldenColor = self:_CHAPI_get_sprite(
                 animationName, animationFile,
                 healthDefinition, hasRedHealth,
                 redKey, nil,
@@ -320,21 +357,28 @@ function CoopHUDplus.Health:getHeartsCHAPI()
             )
         end
 
-        local heart = CoopHUDplus.Heart.new(nil, nil, nil, nil, nil, sprite)
+        local heart = CoopHUDplus.Heart.new_chapi(spriteFile, spriteAnim, spriteColor, goldenFile, goldenAnim, goldenColor, eternalFile, eternalAnim, eternalColor)
         table.insert(hearts, heart)
 
         if updateRedHealthIndex then self.chapi.redIdx = self.chapi.redIdx + 1 end
         self.chapi.otherIdx = self.chapi.otherIdx + 1
     end
 
+    if self.hasHoly then
+        hearts[#hearts]:setHolyMantle()
+    end
+
     return hearts
 end
 
-function CoopHUDplus.Health:_CHAPI_if_container(animationFile, animationName, health, healthDefinition)
+function CoopHUDplus.Health:_CHAPI_if_container(health, healthDefinition)
     local hasRedHealth = false
     local redKey = nil
     local redHealth = nil
     local updateRedHealthIndex = false
+
+    local animationFile = nil
+    local animationName = nil
 
     if healthDefinition.Type == CustomHealthAPI.Enums.HealthTypes.CONTAINER then
         animationFile = healthDefinition.AnimationFilename
@@ -452,28 +496,7 @@ function CoopHUDplus.Health:_CHAPI_get_sprite(animationName, animationFile, heal
     CustomHealthAPI.PersistentData.PreventResyncing = false
     if prevent then return nil end
 
-    local healthSprite = CustomHealthAPI.Helper.GetHealthSprite(filename)
-    healthSprite:Play(animname, true)
-    healthSprite.Color = color
-
-    -- TODO this just breaks everything, not sure why but I should fix it to ensure compat
-    -- CustomHealthAPI.PersistentData.PreventResyncing = true
-    -- local callbacks = CustomHealthAPI.Helper.GetCallbacks(CustomHealthAPI.Enums.Callbacks.POST_RENDER_HEART)
-    -- for _, callback in ipairs(callbacks) do
-    --     callback.Function(
-    --         self.player_entity,
-    --         self.player_number,
-    --         healthIndex,
-    --         health,
-    --         redHealth,
-    --         filename,
-    --         animname,
-    --         Color.Lerp(color, Color(1,1,1,1,0,0,0), 0)
-    --     )
-    -- end
-    -- CustomHealthAPI.PersistentData.PreventResyncing = false
-
-    return healthSprite
+    return filename, animname, color
 end
 
 function CoopHUDplus.Health:render(edge_indexed, edge_multipliers)
@@ -491,7 +514,7 @@ function CoopHUDplus.Health:render(edge_indexed, edge_multipliers)
 
         pos = edge + (offset * edge_multipliers)
 
-        self.hearts[i+1]:render(pos, edge_multipliers.X == -1, self.usingCHAPI)
+        self.hearts[i+1]:render(pos, edge_multipliers.X == -1)
 
         offset.X = offset.X + CoopHUDplus.config.health.space_between_hearts
     end
