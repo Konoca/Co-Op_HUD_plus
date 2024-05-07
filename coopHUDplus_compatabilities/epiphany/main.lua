@@ -8,7 +8,6 @@ local function EpiphanyHudHelper(player, edges, edge_multipliers)
         end
     end
 end
-CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.POST_PLAYER_RENDER, EpiphanyHudHelper)
 
 
 local function EpiphanyLostHealth(health, pEntity)
@@ -22,7 +21,6 @@ local function EpiphanyLostHealth(health, pEntity)
 		health.hearts[1].sprite.heart:SetFrame("Idle", 1)
 	end
 end
-CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.PRE_HEALTH_RENDER, EpiphanyLostHealth)
 
 local function EpiphanyKeeperHealth(health, pEntity)
     if not CoopHUDplus.IS_HUD_VISIBLE or Game():GetLevel():GetCurses() & LevelCurse.CURSE_OF_THE_UNKNOWN > 0 then return end
@@ -91,4 +89,16 @@ local function EpiphanyKeeperHealth(health, pEntity)
     end
     table.insert(health.hearts, CoopHUDplus.Heart.new_sprite(heart, nil, nil))
 end
-CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.PRE_HEALTH_RENDER, EpiphanyKeeperHealth)
+
+local isaac = require('coopHUDplus_compatabilities.epiphany.isaac')
+local chargebars = require('coopHUDplus_compatabilities.epiphany.chargebars')
+local function AddCallbacks()
+    CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.POST_PLAYER_RENDER, EpiphanyHudHelper)
+    CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.PRE_HEALTH_RENDER, EpiphanyLostHealth)
+    CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.PRE_HEALTH_RENDER, EpiphanyKeeperHealth)
+
+    CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.POST_PLAYER_RENDER, isaac.EpiphanyIsaacFunc)
+    CoopHUDplus:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, chargebars.EpiphanySamsonCharge, 0)
+    CoopHUDplus:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, chargebars.EpiphanyCainCharge, 0)
+end
+return AddCallbacks
