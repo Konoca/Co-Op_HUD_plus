@@ -3,6 +3,9 @@ CoopHUDplus.joining = {}
 CoopHUDplus.pills = {}
 CoopHUDplus.SAVED_PLAYER_DATA = {}
 
+CoopHUDplus.DATA = {}
+CoopHUDplus.DATA.CALLBACKS = {}
+
 CoopHUDplus.Player = {}
 CoopHUDplus.Player.__index = CoopHUDplus.Player
 setmetatable(CoopHUDplus.Player, {
