@@ -6,7 +6,8 @@ CoopHUDplus.PATHS = {
         trinket = 'gfx/005.100_collectible.anm2',
         item = 'gfx/005.100_collectible.anm2',
         pocket_items = 'gfx/ui/coopHUDplus_cards_pills.anm2', -- custom made
-        hearts = 'gfx/ui/ui_hearts_copy.anm2', -- duplicate of default
+        hearts = 'gfx/ui/ui_hearts.anm2',
+        hearts_copy = 'gfx/ui/ui_hearts_copy.anm2', -- duplicate of default
         stats = 'gfx/ui/coopHUDplus_hudstats2.anm2', -- custom, edited from default
         misc = 'gfx/ui/coopHUDplus_hudpickups.anm2', -- custom, edited from default
         inv = 'gfx/ui/coopHUDplus_inventory.anm2', -- custom, edited from default
@@ -148,3 +149,7 @@ CoopHUDplus.Player.COLORS = {
     [4] = {1, 1, 0, 0.25},
 }
 
+CoopHUDplus.Callbacks = {
+    POST_PLAYER_RENDER = 1,
+    PRE_HEALTH_RENDER = 2,
+}

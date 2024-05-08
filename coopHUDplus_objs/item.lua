@@ -77,7 +77,11 @@ local function getChargeBarCharge(current_charge, max_charge, partial_charge)
             [3] = 8,    -- 3/4
         },
         [5] = {
-            -- TODO ..? The sprite exists but I can't find any items that use it. Might need to do for mod compatibility
+            [0] = 26,
+            [1] = 20,
+            [2] = 15,
+            [3] = 11,
+            [4] = 6,
         },
         [6] = {
             [0] = 26,
@@ -88,7 +92,14 @@ local function getChargeBarCharge(current_charge, max_charge, partial_charge)
             [5] = 7,    -- 5/6
         },
         [8] = {
-            -- TODO ..? Same as 5-room
+            [0] = 26,
+            [1] = 23,
+            [2] = 20,    -- 1/4
+            [3] = 17,
+            [4] = 14,    -- 1/2
+            [5] = 11,
+            [6] = 8,     -- 3/4
+            [7] = 5,
         },
         [12] = {
             [0] = 26,

@@ -153,4 +153,6 @@ function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror
 
         self.twin.stats:render(edge, edge_indexed, edge_multipliers, CoopHUDplus.config.stats.text.twin_offset, pColor)
     end
+
+    CoopHUDplus.Utils.CreateCallback(CoopHUDplus.Callbacks.POST_PLAYER_RENDER, self, edge_indexed, edge_multipliers)
 end
