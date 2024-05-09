@@ -311,11 +311,13 @@ function CoopHUDplus.Health:getHeartsCHAPI()
     -- Code taken directly from https://github.com/TaigaTreant/isaac-chapi/blob/main/customhealthapi/reimpl/renderhealthbar.lua#L387
     -- Modified to work with current rendering system
     self.chapi = {}
-	self.chapi.currentRedHealth = CustomHealthAPI.Helper.GetCurrentRedHealthForRendering(self.player_entity)
-	self.chapi.currentOtherHealth = CustomHealthAPI.Helper.GetCurrentOtherHealthForRendering(self.player_entity)
-	self.chapi.eternalIndex = CustomHealthAPI.Helper.GetEternalRenderIndex(self.player_entity)
-	self.chapi.goldenMask = CustomHealthAPI.Helper.GetGoldenRenderMask(self.player_entity)
     self.chapi.data = self.player_entity:GetData().CustomHealthAPISavedata
+    if self.chapi.data == nil then return hearts end
+
+    self.chapi.currentRedHealth = CustomHealthAPI.Helper.GetCurrentRedHealthForRendering(self.player_entity)
+    self.chapi.currentOtherHealth = CustomHealthAPI.Helper.GetCurrentOtherHealthForRendering(self.player_entity)
+    self.chapi.eternalIndex = CustomHealthAPI.Helper.GetEternalRenderIndex(self.player_entity)
+    self.chapi.goldenMask = CustomHealthAPI.Helper.GetGoldenRenderMask(self.player_entity)
 
     self.chapi.redIdx = 1
     self.chapi.otherIdx = 1
