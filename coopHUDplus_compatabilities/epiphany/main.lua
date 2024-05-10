@@ -93,14 +93,14 @@ end
 local function EpiphanyMultitool(misc, miscMap)
     local run_save = Epiphany:RunSave()
 
-    local multitoolHUD = Sprite()
-    multitoolHUD:Load("gfx/ui/multitoolhud.anm2", true)
-    multitoolHUD:SetFrame("Idle", 0)
-
     if run_save["MultitoolCount"] and run_save["MultitoolCount"] < 1 then
 		return
 	end
 	if run_save["HUDDifference"] then
+        local multitoolHUD = Sprite()
+        multitoolHUD:Load("gfx/ui/multitoolhud.anm2", true)
+        multitoolHUD:SetFrame("Idle", 0)
+
         misc.keys.sprite = multitoolHUD
 	end
 end
