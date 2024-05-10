@@ -90,6 +90,21 @@ local function EpiphanyKeeperHealth(health, pEntity)
     table.insert(health.hearts, CoopHUDplus.Heart.new_sprite(heart, nil, nil))
 end
 
+local function EpiphanyMultitool(misc, miscMap)
+    local run_save = Epiphany:RunSave()
+
+    local multitoolHUD = Sprite()
+    multitoolHUD:Load("gfx/ui/multitoolhud.anm2", true)
+    multitoolHUD:SetFrame("Idle", 0)
+
+    if run_save["MultitoolCount"] and run_save["MultitoolCount"] < 1 then
+		return
+	end
+	if run_save["HUDDifference"] then
+        misc.keys.sprite = multitoolHUD
+	end
+end
+
 local isaac = require('coopHUDplus_compatabilities.epiphany.isaac')
 local chargebars = require('coopHUDplus_compatabilities.epiphany.chargebars')
 local function AddCallbacks()
@@ -97,6 +112,7 @@ local function AddCallbacks()
     CoopHUDplus.Utils.AddCallback(modID, CoopHUDplus.Callbacks.POST_PLAYER_RENDER, EpiphanyHudHelper)
     CoopHUDplus.Utils.AddCallback(modID, CoopHUDplus.Callbacks.PRE_HEALTH_RENDER, EpiphanyLostHealth)
     CoopHUDplus.Utils.AddCallback(modID, CoopHUDplus.Callbacks.PRE_HEALTH_RENDER, EpiphanyKeeperHealth)
+    CoopHUDplus.Utils.AddCallback(modID, CoopHUDplus.Callbacks.PRE_MISC_RENDER, EpiphanyMultitool)
 
     CoopHUDplus.Utils.AddCallback(modID, CoopHUDplus.Callbacks.POST_PLAYER_RENDER, isaac.EpiphanyIsaacFunc)
     CoopHUDplus:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, chargebars.EpiphanySamsonCharge, 0)
