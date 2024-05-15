@@ -7,18 +7,18 @@ local function onGameStart(_, isCont)
         cache = {},
         known = {},
     }
+    CoopHUDplus.SAVED_PLAYER_DATA = {}
 
     if not CoopHUDplus:HasData() then return end
     local data = json.decode(CoopHUDplus:LoadData())
 
     if data.config then
-        -- CoopHUDplus.config = CoopHUDplus.decodeConfigVectors(data.config)
         local savedData = CoopHUDplus.Utils.decodeConfigVectors(data.config)
         CoopHUDplus.config = CoopHUDplus.Utils.ensureCompatibility(CoopHUDplus.config, savedData)
     end
 
     if isCont then
-        CoopHUDplus.SAVED_PLAYER_DATA = data.player_invs
+        CoopHUDplus.SAVED_PLAYER_DATA = data.players
         CoopHUDplus.pills = data.pills
     end
 end
@@ -30,11 +30,15 @@ local function onGameExit(_, shouldSave)
 
     if shouldSave then
         data.pills = CoopHUDplus.pills
-        data.player_invs = {}
+        data.players = {}
         for i = 0, #CoopHUDplus.players, 1 do
             local p = CoopHUDplus.players[i]
             if p then
-                data.player_invs[p.player_entity.ControllerIndex] = p.inventory.inv
+                -- local idx = p.player_entity.ControllerIndex
+                local idx = p.number
+                data.players[idx] = {}
+                data.players[idx].inv = p.inventory.inv
+                data.players[idx].items = p.items
             end
         end
     end
@@ -214,3 +218,14 @@ local function pickupTrinket(_, entityPlayer, trinketType, firstTime)
     CoopHUDplus.Utils.createStreak(name, description, false)
 end
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_TRIGGER_TRINKET_ADDED, pickupTrinket)
+
+
+
+local function addCollectibleToItems(_ ,type, charge, first_time, slot, vardata, player)
+    local p = CoopHUDplus.Utils.getPlayerFromEntity(player)
+    if not p then return end
+
+    local item = Isaac.GetItemConfig():GetCollectible(type)
+    table.insert(p.items, item.GfxFileName)
+end
+CoopHUDplus:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, addCollectibleToItems)

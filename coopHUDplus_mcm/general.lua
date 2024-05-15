@@ -13,6 +13,16 @@ ModConfigMenu.AddSetting(
     CoopHUDplus.MCM.categories.general,
     {
         Type = ModConfigMenu.OptionType.BOOLEAN,
+        CurrentSetting = function() return CoopHUDplus.config.display_during_pause end,
+        Display = function() return 'Enable HUD on pause: ' .. (CoopHUDplus.config.display_during_pause and 'on' or 'off') end,
+        OnChange = function(b) CoopHUDplus.config.display_during_pause = b end,
+    }
+)
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.general,
+    {
+        Type = ModConfigMenu.OptionType.BOOLEAN,
         CurrentSetting = function() return CoopHUDplus.config.enable_toggle_hud end,
         Display = function() return 'Enable HUD toggle: ' .. (CoopHUDplus.config.enable_toggle_hud and 'on' or 'off') end,
         OnChange = function(b) CoopHUDplus.config.enable_toggle_hud = b end,
@@ -39,6 +49,17 @@ ModConfigMenu.AddSetting(
         OnChange = function(b) CoopHUDplus.config.stats.text.colors = b end,
     }
 )
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.general,
+    {
+        Type = ModConfigMenu.OptionType.BOOLEAN,
+        CurrentSetting = function() return CoopHUDplus.config.items.colors end,
+        Display = function() return 'Enable Item colors: ' .. (CoopHUDplus.config.items.colors and 'on' or 'off') end,
+        OnChange = function(b) CoopHUDplus.config.items.colors = b end,
+    }
+)
+
 ModConfigMenu.AddSpace(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.general)
 ModConfigMenu.AddSetting(
     CoopHUDplus.MCM.title,

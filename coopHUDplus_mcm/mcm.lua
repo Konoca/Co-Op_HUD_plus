@@ -9,6 +9,7 @@ CoopHUDplus.MCM.categories = {
     misc = 'Misc.',
     health = 'Health',
     stats = 'Stats',
+    items = 'Items',
     active_item = 'Active Items',
     pocket = 'Pocket Items',
     trinket = 'Trinket',
@@ -20,6 +21,7 @@ local dir = 'coopHUDplus_mcm/'
 require(dir..'general')
 require(dir..'mods')
 require(dir..'stats')
+require(dir..'item')
 require(dir..'misc')
 require(dir..'health')
 require(dir..'active_item')
