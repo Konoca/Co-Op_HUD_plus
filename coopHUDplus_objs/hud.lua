@@ -68,7 +68,7 @@ local lastTimeString = ''
 local function onRender()
     local game = Game()
     if CoopHUDplus.config.disable then return end
-    if game:IsPaused() and not game:IsPauseMenuOpen() then return end
+    if game:IsPaused() and not (game:IsPauseMenuOpen() and CoopHUDplus.config.display_during_pause) then return end
 
     -- TODO show character selection for players that are joining
     -- For now, hide HUD if someone is joining.
@@ -110,7 +110,6 @@ local function onRender()
             local isOnRight = (idx % 2) == 0
             local isOnBottom = (idx > 2)
 
-            -- p.player_entity:SetColor(CoopHUDplus.Player.COLORS[idx], 15, 1, false, true)
             local color = Color(1, 1, 1, 1, 0, 0, 0)
             local pColor = CoopHUDplus.Player.COLORS[idx]
             color:SetColorize(pColor[1], pColor[2], pColor[3], pColor[4])
