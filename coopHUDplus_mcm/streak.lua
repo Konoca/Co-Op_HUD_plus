@@ -83,6 +83,18 @@ ModConfigMenu.AddSetting(
         OnChange = function(b) CoopHUDplus.config.streak.name.box_center = b end,
     }
 )
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.streak,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        -- Maximum = 100.0,
+        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.streak.name.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.streak.name.scale.X * 100) .. '%' end,
+        OnChange = function(n) CoopHUDplus.config.streak.name.scale = Vector(n/100, n/100) end,
+    }
+)
 
 ModConfigMenu.AddSpace(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.streak)
 ModConfigMenu.AddTitle(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.streak, 'Item Description')
@@ -126,6 +138,18 @@ ModConfigMenu.AddSetting(
         OnChange = function(b) CoopHUDplus.config.streak.description.box_center = b end,
     }
 )
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.streak,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        -- Maximum = 100.0,
+        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.streak.description.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.streak.description.scale.X * 100) .. '%' end,
+        OnChange = function(n) CoopHUDplus.config.streak.description.scale = Vector(n/100, n/100) end,
+    }
+)
 
 ModConfigMenu.AddSpace(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.streak)
 ModConfigMenu.AddTitle(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.streak, 'Curse Description')
@@ -167,5 +191,17 @@ ModConfigMenu.AddSetting(
         CurrentSetting = function() return CoopHUDplus.config.streak.curse.box_center end,
         Display = function() return 'Box Center: ' .. (CoopHUDplus.config.streak.curse.box_center and 'on' or 'off') end,
         OnChange = function(b) CoopHUDplus.config.streak.curse.box_center = b end,
+    }
+)
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.streak,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        -- Maximum = 100.0,
+        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.streak.curse.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.streak.curse.scale.X * 100) .. '%' end,
+        OnChange = function(n) CoopHUDplus.config.streak.curse.scale = Vector(n/100, n/100) end,
     }
 )

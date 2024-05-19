@@ -31,6 +31,18 @@ ModConfigMenu.AddSetting(
         OnChange = function(n) CoopHUDplus.config.pocket.text.pos.Y = n end,
     }
 )
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.pocket,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        -- Maximum = 100.0,
+        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.pocket.text.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.pocket.text.scale.X * 100) .. '%' end,
+        OnChange = function(n) CoopHUDplus.config.pocket.text.scale = Vector(n/100, n/100) end,
+    }
+)
 
 ModConfigMenu.AddSpace(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.pocket)
 ModConfigMenu.AddTitle(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.pocket, 'Chargebar')
@@ -78,6 +90,18 @@ ModConfigMenu.AddSetting(
         OnChange = function(n) CoopHUDplus.config.pocket.chargebar.pos.Y = n end,
     }
 )
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.pocket,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        -- Maximum = 100.0,
+        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.pocket.chargebar.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.pocket.chargebar.scale.X * 100) .. '%' end,
+        OnChange = function(n) CoopHUDplus.config.pocket.chargebar.scale = Vector(n/100, n/100) end,
+    }
+)
 
 for i = 0, 3, 1 do
     ModConfigMenu.AddSpace(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.pocket)
@@ -100,6 +124,18 @@ for i = 0, 3, 1 do
             CurrentSetting = function() return CoopHUDplus.config.pocket[i].pos.Y end,
             Display = function() return 'Pos (Y): ' .. CoopHUDplus.config.pocket[i].pos.Y end,
             OnChange = function(n) CoopHUDplus.config.pocket[i].pos.Y = n end,
+        }
+    )
+    ModConfigMenu.AddSetting(
+        CoopHUDplus.MCM.title,
+        CoopHUDplus.MCM.categories.pocket,
+        {
+            Type = ModConfigMenu.OptionType.NUMBER,
+            Minimum = 0.0,
+            -- Maximum = 100.0,
+            CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.pocket[i].scale.X * 100)) end,
+            Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.pocket[i].scale.X * 100) .. '%' end,
+            OnChange = function(n) CoopHUDplus.config.pocket[i].scale = Vector(n/100, n/100) end,
         }
     )
 end

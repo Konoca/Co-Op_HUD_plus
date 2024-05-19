@@ -20,6 +20,20 @@ ModConfigMenu.AddSetting(
         OnChange = function(n) CoopHUDplus.config.items.items_per_player = n end,
     }
 )
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.items,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        -- Maximum = 100.0,
+        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.items.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.items.scale.X * 100) .. '%' end,
+        OnChange = function(n)
+            CoopHUDplus.config.items.scale = Vector(n/100, n/100)
+        end,
+    }
+)
 
 ModConfigMenu.AddSpace(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.items)
 ModConfigMenu.AddSetting(
@@ -89,7 +103,7 @@ ModConfigMenu.AddSetting(
     CoopHUDplus.MCM.categories.items,
     {
         Type = ModConfigMenu.OptionType.BOOLEAN,
-        CurrentSetting = function() return CoopHUDplus.config.items.anchors.X end,
+        CurrentSetting = function() return CoopHUDplus.config.items.anchors.X == 1 end,
         Display = function()
             return 'Anchor to right-side: ' .. (CoopHUDplus.config.items.anchors.X == 1 and 'on' or 'off')
         end,
@@ -105,6 +119,6 @@ ModConfigMenu.AddSetting(
         Display = function()
             return 'Anchor to bottom: ' .. (CoopHUDplus.config.items.anchors.Y == 1 and 'on' or 'off')
         end,
-        OnChange = function(b) CoopHUDplus.config.items.dispanchors.Ylay = b and 1 or 0 end,
+        OnChange = function(b) CoopHUDplus.config.items.anchors.Y = b and 1 or 0 end,
     }
 )
