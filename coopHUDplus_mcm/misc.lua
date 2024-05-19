@@ -63,6 +63,18 @@ ModConfigMenu.AddSetting(
     CoopHUDplus.MCM.title,
     CoopHUDplus.MCM.categories.misc,
     {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        -- Maximum = 100.0,
+        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.misc.text.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.misc.text.scale.X * 100) .. '%' end,
+        OnChange = function(n) CoopHUDplus.config.misc.text.scale = Vector(n/100, n/100) end,
+    }
+)
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.misc,
+    {
         Type = ModConfigMenu.OptionType.BOOLEAN,
         CurrentSetting = function() return CoopHUDplus.config.misc.pickups.bottom_anchor end,
         Display = function() return 'Bottom Anchor: ' .. (CoopHUDplus.config.misc.pickups.bottom_anchor and 'on' or 'off') end,
@@ -120,6 +132,21 @@ ModConfigMenu.AddSetting(
         end,
     }
 )
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.misc,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        -- Maximum = 100.0,
+        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.difficulty.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.difficulty.scale.X * 100) .. '%' end,
+        OnChange = function(n)
+            CoopHUDplus.config.difficulty.scale = Vector(n/100, n/100)
+            CoopHUDplus.config.greed_machine.scale = Vector(n/100, n/100)
+        end,
+    }
+)
 
 ModConfigMenu.AddText(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.misc, 'Greed')
 ModConfigMenu.AddSetting(
@@ -146,5 +173,17 @@ ModConfigMenu.AddSetting(
             CoopHUDplus.config.misc.difficulty.greed_wave_offset.Y = n
             CoopHUDplus.config.misc.greed_machine.text_offset.Y = n
         end,
+    }
+)
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.misc,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        -- Maximum = 100.0,
+        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.difficulty.scale.X * 100)) end,
+        Display = function() return 'Text Scale: ' .. string.format('%.0f', CoopHUDplus.config.difficulty.scale.X * 100) .. '%' end,
+        OnChange = function(n) CoopHUDplus.config.text.scale = Vector(n/100, n/100) end,
     }
 )

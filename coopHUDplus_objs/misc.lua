@@ -28,12 +28,14 @@ function CoopHUDplus.Misc:render(pos, scale, text_format, additional_text_offset
     if self.value and text_format then
         -- TODO handle case when player can have more than 99 items
         local text_pos = pos + CoopHUDplus.config.misc.text.offset + additional_text_offset
-        Isaac.RenderScaledText(
+        local f, _ = Font(CoopHUDplus.PATHS.FONTS[CoopHUDplus.config.fonts.pickups])
+        f:DrawStringScaled(
             string.format(text_format, self.value),
             text_pos.X, text_pos.Y,
             CoopHUDplus.config.misc.text.scale.X,
             CoopHUDplus.config.misc.text.scale.Y,
-            1, 1, 1, 1
+            KColor(1, 1, 1, 1),
+            0, true
         )
     end
 end

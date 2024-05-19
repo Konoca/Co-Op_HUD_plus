@@ -546,11 +546,13 @@ function CoopHUDplus.Health:render(edge_indexed, edge_multipliers)
     local tmp = CoopHUDplus.config.health.space_between_hearts / 2
     pos.X = edge_multipliers.X == 1 and pos.X - tmp or pos.X + (tmp / 3)
 
-    Isaac.RenderScaledText(
+    local f, _ = Font(CoopHUDplus.PATHS.FONTS[CoopHUDplus.config.fonts.extra_lives])
+    f:DrawStringScaled(
         'x'..self.extra_lives,
         pos.X, pos.Y,
         CoopHUDplus.config.stats.text.scale.X,
         CoopHUDplus.config.stats.text.scale.Y,
-        1, 1, 1, 0.5
+        KColor(1, 1, 1, 0.5),
+        0, true
     )
 end

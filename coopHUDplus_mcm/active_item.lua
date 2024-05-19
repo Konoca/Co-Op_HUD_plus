@@ -42,6 +42,18 @@ for i = 0, 1, 1 do
             OnChange = function(n) CoopHUDplus.config.active_item[i].pos.Y = n end,
         }
     )
+    ModConfigMenu.AddSetting(
+        CoopHUDplus.MCM.title,
+        CoopHUDplus.MCM.categories.active_item,
+        {
+            Type = ModConfigMenu.OptionType.NUMBER,
+            Minimum = 0.0,
+            -- Maximum = 100.0,
+            CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.active_item[i].scale.X * 100)) end,
+            Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.active_item[i].scale.X * 100) .. '%' end,
+            OnChange = function(n) CoopHUDplus.config.active_item[i].scale = Vector(n/100, n/100) end,
+        }
+    )
 
     ModConfigMenu.AddText(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.active_item, 'Chargebar')
     ModConfigMenu.AddSetting(
