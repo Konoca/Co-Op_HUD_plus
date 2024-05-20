@@ -1,59 +1,4 @@
-local function getChargeBar(pType, id, max_charge, scale)
-    if id == 0 then return nil end
-
-    local sprite = {
-        overlay = Sprite(),
-        charge = Sprite(),
-        bg = Sprite(),
-        extra = Sprite(),
-        beth = Sprite(),
-    }
-
-    sprite.overlay:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
-    sprite.overlay:SetFrame('BarOverlay'..max_charge, 0)
-    sprite.overlay.Scale = scale
-
-    sprite.charge:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
-    sprite.charge:SetFrame('BarFull', 0)
-    sprite.charge.Scale = scale
-
-    sprite.bg:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
-    sprite.bg:SetFrame('BarEmpty', 0)
-    sprite.bg.Scale = scale
-
-    local extra_color = Color(1, 1, 1, 1, 0, 0, 0)
-    local beth_color = Color(1, 1, 1, 1, 0, 0, 0)
-
-    extra_color:SetColorize(1.8, 1.8, 0, 1)
-
-    -- Colors taken from coopHUD, credit to Srokks
-    beth_color:SetColorize(0.8, 0.9, 1.8, 1)
-    if pType == PlayerType.PLAYER_BETHANY_B then
-        beth_color:SetColorize(1, 0.2, 0.2, 1)
-    end
-
-    sprite.extra:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
-    sprite.extra:SetFrame('BarFull', 0)
-    sprite.extra.Color = extra_color
-    sprite.extra.Scale = scale
-
-    sprite.beth:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
-    sprite.beth:SetFrame('BarFull', 0)
-    sprite.beth.Color = beth_color
-    sprite.beth.Scale = scale
-
-    return sprite
-end
-
-local function getChargeBarCharge(current_charge, max_charge, partial_charge)
-    if not current_charge then return Vector(1,1) end
-
-    -- 22 = 1/6
-    -- 10 = 4/6
-    -- 7 = 5/6
-    -- 3 = full bar
-    -- 26 = empty bar
-    local chargeMap = {
+local chargeMap = {
         [2] = {
             [0] = 26,
             [1] = 14,   -- 1/2
@@ -109,6 +54,58 @@ local function getChargeBarCharge(current_charge, max_charge, partial_charge)
             [11] = 4,
         },
     }
+
+local function getChargeBar(pType, id, max_charge, scale)
+    if id == 0 then return nil end
+
+    local sprite = {
+        overlay = Sprite(),
+        charge = Sprite(),
+        bg = Sprite(),
+        extra = Sprite(),
+        beth = Sprite(),
+    }
+
+    if chargeMap[max_charge] ~= nil then
+        sprite.overlay:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
+        sprite.overlay:SetFrame('BarOverlay'..max_charge, 0)
+        sprite.overlay.Scale = scale
+    end
+
+    sprite.charge:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
+    sprite.charge:SetFrame('BarFull', 0)
+    sprite.charge.Scale = scale
+
+    sprite.bg:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
+    sprite.bg:SetFrame('BarEmpty', 0)
+    sprite.bg.Scale = scale
+
+    local extra_color = Color(1, 1, 1, 1, 0, 0, 0)
+    local beth_color = Color(1, 1, 1, 1, 0, 0, 0)
+
+    extra_color:SetColorize(1.8, 1.8, 0, 1)
+
+    -- Colors taken from coopHUD, credit to Srokks
+    beth_color:SetColorize(0.8, 0.9, 1.8, 1)
+    if pType == PlayerType.PLAYER_BETHANY_B then
+        beth_color:SetColorize(1, 0.2, 0.2, 1)
+    end
+
+    sprite.extra:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
+    sprite.extra:SetFrame('BarFull', 0)
+    sprite.extra.Color = extra_color
+    sprite.extra.Scale = scale
+
+    sprite.beth:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
+    sprite.beth:SetFrame('BarFull', 0)
+    sprite.beth.Color = beth_color
+    sprite.beth.Scale = scale
+
+    return sprite
+end
+
+local function getChargeBarCharge(current_charge, max_charge, partial_charge)
+    if not current_charge then return Vector(1,1) end
 
     if current_charge <= 0 and (partial_charge == nil or partial_charge <= 0) then
         return Vector(1, 26)
@@ -311,7 +308,7 @@ function CoopHUDplus.ActiveItem:render(item_pos_vec, bar_pos_vec, scale, display
         end
         self.chargeBar.charge:Render(bar_pos_vec, getChargeBarCharge(self.current_charge, self.max_charge, partial_charge))
         self.chargeBar.extra:Render(bar_pos_vec, getChargeBarCharge(self.extra_charge, self.max_charge))
-        self.chargeBar.overlay:Render(bar_pos_vec)
+        if chargeMap[self.max_charge] ~= nil then self.chargeBar.overlay:Render(bar_pos_vec) end
     end
 end
 
