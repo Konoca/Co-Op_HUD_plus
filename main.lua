@@ -1,5 +1,5 @@
 CoopHUDplus = RegisterMod('Co-Op HUD+', 1)
-CoopHUDplus.version = '0.7.7'
+CoopHUDplus.version = '0.7.8'
 
 
 require('coopHUDplus_objs.inits')
