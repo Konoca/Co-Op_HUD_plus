@@ -14,7 +14,13 @@ local function onGameStart(_, isCont)
 
     if data.config then
         local savedData = CoopHUDplus.Utils.decodeConfigVectors(data.config)
-        if savedData.version ~= nil then CoopHUDplus.config = CoopHUDplus.Utils.ensureCompatibility(CoopHUDplus.config, savedData) end
+        if savedData.version ~= nil then
+            CoopHUDplus.config = CoopHUDplus.Utils.ensureCompatibility(CoopHUDplus.config, savedData)
+        end
+
+        if not tonumber(CoopHUDplus.config.version) then
+            CoopHUDplus.config.version = CoopHUDplus.version
+        end
     end
 
     if isCont then
