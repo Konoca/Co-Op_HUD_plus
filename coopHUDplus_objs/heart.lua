@@ -123,6 +123,7 @@ function CoopHUDplus.Health.new(player_entity, player_number, is_twin)
 
     self.extra_lives = self.player_entity:GetExtraLives()
 
+    self.eternal = self.player_entity:GetEternalHearts()
     self.hasHoly = self.player_entity:GetEffects():GetCollectibleEffect(CollectibleType.COLLECTIBLE_HOLY_MANTLE)
 
     self.hearts = self:getHearts()
@@ -160,9 +161,9 @@ function CoopHUDplus.Health:getHearts()
     if self.is_twin or number < 0 then number = math.abs(number) + 4 end
     local heartsHUD = Game():GetHUD():GetPlayerHUD(number):GetHearts()
 
-    local lastHeart = 1
+    local lastHeart, lastEternal = 1, -1
     local heartsSkipped = false
-    for _, v in pairs(heartsHUD) do
+    for k, v in pairs(heartsHUD) do
         if not v:IsVisible() then
             table.insert(hearts, CoopHUDplus.Heart.new(nil, nil, nil))
             heartsSkipped = true
@@ -173,9 +174,17 @@ function CoopHUDplus.Health:getHearts()
         local golden = v:IsGoldenHeartOverlayVisible()
         local overlay = v:GetHeartOverlayAnim()
 
-        table.insert(hearts, CoopHUDplus.Heart.new(anim, golden, overlay))
-        if not heartsSkipped then lastHeart = lastHeart + 1 end
+        table.insert(hearts, CoopHUDplus.Heart.new(anim, golden, nil))
+        if not heartsSkipped then
+            lastHeart = k
+            if overlay ~= '' then lastEternal = k end
+        end
         ::skip_heart::
+    end
+
+    if self.eternal > 0 then
+        hearts[lastEternal].overlay_anim = 'WhiteHeartOverlay'
+        hearts[lastEternal]:updateSprite()
     end
 
     if self.hasHoly then
