@@ -31,6 +31,7 @@ local function saveGame(saveGameData)
     if saveGameData then
         data.pills = CoopHUDplus.pills
         data.players = {}
+
         for i = 0, #CoopHUDplus.players, 1 do
             local p = CoopHUDplus.players[i]
             if p then
@@ -39,6 +40,14 @@ local function saveGame(saveGameData)
                 data.players[idx].inv = p.inventory.inv
                 data.players[idx].items = p.items
             end
+        end
+
+        if data.pills.cache then
+            local lastCache, largestPill = 0, 0
+            for k, v in pairs(data.pills.cache) do lastCache, largestPill = k, v end
+
+            for i = 1, lastCache, 1 do if not data.pills.cache[i] then data.pills.cache[i] = false end end
+            for i = 1, largestPill, 1 do if not data.pills.known[i] then data.pills.known[i] = false end end
         end
     end
 
