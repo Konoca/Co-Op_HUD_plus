@@ -159,6 +159,7 @@ function CoopHUDplus.Health:getHearts()
 
     local number = self.player_number
     if self.is_twin or number < 0 then number = math.abs(number) + 4 end
+    if number >= 8 then number = 7 end
     local heartsHUD = Game():GetHUD():GetPlayerHUD(number):GetHearts()
 
     local lastHeart, lastEternal = 1, -1

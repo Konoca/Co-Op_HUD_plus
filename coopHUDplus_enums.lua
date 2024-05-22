@@ -172,4 +172,6 @@ CoopHUDplus.Callbacks = {
     POST_PLAYER_RENDER = 1,
     PRE_HEALTH_RENDER = 2,
     PRE_MISC_RENDER = 3,
+    PRE_STATS_RENDER = 4,
+    POST_HUD_RENDER = 5,
 }
