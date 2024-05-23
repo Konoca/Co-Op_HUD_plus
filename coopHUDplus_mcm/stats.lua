@@ -186,3 +186,36 @@ ModConfigMenu.AddSetting(
     }
 )
 
+ModConfigMenu.AddSpace(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.stats)
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.stats,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        CurrentSetting = function() return CoopHUDplus.config.stats.text.update.frames end,
+        Display = function() return 'Update Frames: ' .. CoopHUDplus.config.stats.text.update.frames end,
+        OnChange = function(n) CoopHUDplus.config.stats.text.update.frames = n end,
+        Info = {'How many frames a stat is being update by will be displayed'}
+    }
+)
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.stats,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        CurrentSetting = function() return CoopHUDplus.config.stats.text.update.offset.X end,
+        Display = function() return 'Update Offset (X): ' .. CoopHUDplus.config.stats.text.update.offset.X end,
+        OnChange = function(n) CoopHUDplus.config.stats.text.update.offset.X = n end,
+    }
+)
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.stats,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        CurrentSetting = function() return CoopHUDplus.config.stats.text.update.offset.Y end,
+        Display = function() return 'Update Offset (Y): ' .. CoopHUDplus.config.stats.text.update.offset.Y end,
+        OnChange = function(n) CoopHUDplus.config.stats.text.update.offset.Y = n end,
+    }
+)

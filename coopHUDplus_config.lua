@@ -116,6 +116,10 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
 
             twin_offset = Vector(20, 0),
             colors = true,
+            update = {
+                frames = 100,
+                offset = Vector(20, 0)
+            },
         }
     },
 
