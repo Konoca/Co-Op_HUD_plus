@@ -37,6 +37,7 @@ function CoopHUDplus.Misc:render(pos, scale, text_format, additional_text_offset
             KColor(1, 1, 1, 1),
             0, true
         )
+        f:Unload()
     end
 end
 

@@ -196,6 +196,7 @@ function CoopHUDplus.Stat:render(pos_vector, text_pos_vector, render_icon, pColo
             prefix = '+'
         end
 
+        -- TODO fix p2 and 4 stat text not being inverted
         local pos = text_pos_vector + CoopHUDplus.config.stats.text.update.offset
         f:DrawStringScaled(
             prefix..string.format(self.is_percent and '%.1f%%' or '%.2f', value),

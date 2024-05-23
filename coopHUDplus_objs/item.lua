@@ -713,5 +713,6 @@ function CoopHUDplus.Pockets:render(edge_indexed, edge_multipliers, opacity)
             KColor(1, 1, 1, 0.5 * opacity),
             0, true
         )
+        f:Unload()
     end
 end
