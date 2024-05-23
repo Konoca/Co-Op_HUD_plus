@@ -1,6 +1,8 @@
-function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
+local mod = CoopHUDplus
+
+function mod.ResetConfig() mod.config = {
     disable = false,
-    version = CoopHUDplus.version,
+    version = mod.version,
 
     offset = Vector(20, 20),
     mirrored_extra_offset = Vector(60, 0),
@@ -209,4 +211,4 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
 }
 end
 
-CoopHUDplus.ResetConfig()
+mod.ResetConfig()

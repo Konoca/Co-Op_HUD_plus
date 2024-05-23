@@ -1,25 +1,25 @@
-CoopHUDplus.Utils = {}
+local mod = CoopHUDplus
 
 local highestCallbackID = 0
-for _, v in pairs(CoopHUDplus.Callbacks) do
+for _, v in pairs(mod.Callbacks) do
     highestCallbackID = math.max(v, highestCallbackID)
-    CoopHUDplus.DATA.CALLBACKS[v] = CoopHUDplus.DATA.CALLBACKS[v] or {}
+    mod.DATA.CALLBACKS[v] = mod.DATA.CALLBACKS[v] or {}
 end
 
-function CoopHUDplus.Utils.CreateCallback(callbackID, ...)
-    local callbacks = CoopHUDplus.DATA.CALLBACKS[callbackID]
+function mod.Utils.CreateCallback(callbackID, ...)
+    local callbacks = mod.DATA.CALLBACKS[callbackID]
     for _, callback in ipairs(callbacks) do
         callback.Function(...)
     end
 end
 
-function CoopHUDplus.Utils.AddCallback(modID, callbackID, func, ...)
+function mod.Utils.AddCallback(modID, callbackID, func, ...)
     if callbackID < 1 or callbackID > highestCallbackID then
-        print('Co-Op HUD+ Error: Invalid Callback ID')
+        print(mod.Name..' Error: Invalid Callback ID')
         return
     end
 
-    local callbacks = CoopHUDplus.DATA.CALLBACKS[callbackID]
+    local callbacks = mod.DATA.CALLBACKS[callbackID]
     callbacks[#callbacks+1] = {
         ModID = modID,
         CallbackID = callbackID,
@@ -29,13 +29,13 @@ function CoopHUDplus.Utils.AddCallback(modID, callbackID, func, ...)
     }
 end
 
-function CoopHUDplus.Utils.AddPriorityCallback(modID, callbackID, priority, func, ...)
+function mod.Utils.AddPriorityCallback(modID, callbackID, priority, func, ...)
     if callbackID < 1 or callbackID > highestCallbackID then
-        print('Co-Op HUD+ Error: Invalid Callback ID')
+        print(mod.Name..' Error: Invalid Callback ID')
         return
     end
 
-    local callbacks = CoopHUDplus.DATA.CALLBACKS[callbackID]
+    local callbacks = mod.DATA.CALLBACKS[callbackID]
     local index = 1
 
     for i = #callbacks, 1, -1 do
@@ -56,12 +56,12 @@ function CoopHUDplus.Utils.AddPriorityCallback(modID, callbackID, priority, func
 end
 
 
-function CoopHUDplus.Utils.encodeConfigVectors(config)
+function mod.Utils.encodeConfigVectors(config)
     local new_config = {}
     for key, value in pairs(config) do
         if key == nil or value == nil then goto skip_encode end
         if type(value) == 'table' then
-            value = CoopHUDplus.Utils.encodeConfigVectors(value)
+            value = mod.Utils.encodeConfigVectors(value)
         end
         if type(value) == 'userdata' then
             new_config[key..'X'] = value.X
@@ -75,7 +75,7 @@ function CoopHUDplus.Utils.encodeConfigVectors(config)
     return new_config
 end
 
-function CoopHUDplus.Utils.decodeConfigVectors(config)
+function mod.Utils.decodeConfigVectors(config)
     local new_config = {}
     for key, value in pairs(config) do
         local num = tonumber(key)
@@ -86,7 +86,7 @@ function CoopHUDplus.Utils.decodeConfigVectors(config)
         end
 
         if type(value) == 'table' then
-            value = CoopHUDplus.Utils.decodeConfigVectors(value)
+            value = mod.Utils.decodeConfigVectors(value)
         end
 
         if type(key) == 'string' and key:sub(-1) == 'Y' then
@@ -103,7 +103,7 @@ function CoopHUDplus.Utils.decodeConfigVectors(config)
     return new_config
 end
 
-function CoopHUDplus.Utils.ensureCompatibility(table1, table2)
+function mod.Utils.ensureCompatibility(table1, table2)
     local new_config = {}
     for key, value in pairs(table1) do
         local new_value = table2[key]
@@ -113,7 +113,7 @@ function CoopHUDplus.Utils.ensureCompatibility(table1, table2)
         end
 
         if type(value) == 'table' then
-            new_value = CoopHUDplus.Utils.ensureCompatibility(value, new_value)
+            new_value = mod.Utils.ensureCompatibility(value, new_value)
         end
 
         new_config[key] = new_value
@@ -122,13 +122,13 @@ function CoopHUDplus.Utils.ensureCompatibility(table1, table2)
     return new_config
 end
 
-function CoopHUDplus.Utils.createStreak(name, description, display_bottom_paper)
+function mod.Utils.createStreak(name, description, display_bottom_paper)
     local animation = Sprite()
-    animation:Load(CoopHUDplus.PATHS.ANIMATIONS.streak, true)
+    animation:Load(mod.PATHS.ANIMATIONS.streak, true)
     if not display_bottom_paper then animation:ReplaceSpritesheet(1, '') end
     animation:LoadGraphics()
     animation:Play('Text', false)
-    CoopHUDplus.STREAK = {sprite = animation, name = name, description = description, invert_color = display_bottom_paper}
+    mod.STREAK = {sprite = animation, name = name, description = description, invert_color = display_bottom_paper}
 end
 
 local function isTwin(player)
@@ -137,12 +137,12 @@ local function isTwin(player)
     if pType == PlayerType.PLAYER_LAZARUS2_B then return true end
     return false
 end
-function CoopHUDplus.Utils.getPlayerFromEntity(player)
+function mod.Utils.getPlayerFromEntity(player)
     local idx = player.ControllerIndex
-    for i = 0, #CoopHUDplus.players, 1 do
-        if CoopHUDplus.players[i] and CoopHUDplus.players[i].player_entity.ControllerIndex == idx then
+    for i = 0, #mod.DATA.PLAYERS, 1 do
+        if mod.DATA.PLAYERS[i] and mod.DATA.PLAYERS[i].player_entity.ControllerIndex == idx then
             if isTwin(player) then i = i + 1 end
-            return CoopHUDplus.players[i]
+            return mod.DATA.PLAYERS[i]
         end
     end
     return nil
