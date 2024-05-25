@@ -9,20 +9,16 @@ require('scripts.config.mcm.main')
 
 require('scripts.utils')
 
--- require('coopHUDplus_objs.stat')
--- require('coopHUDplus_objs.heart')
--- require('coopHUDplus_objs.item')
--- require('coopHUDplus_objs.misc')
--- require('coopHUDplus_objs.inventory')
--- require('coopHUDplus_objs.player')
--- require('coopHUDplus_objs.hud')
-
+require('scripts.HUD.player.stats')
 require('scripts.HUD.player.health')
+require('scripts.HUD.player.item')
+require('scripts.HUD.player.inventory')
 require('scripts.HUD.player.main')
+require('scripts.HUD.misc')
 require('scripts.HUD.main')
 
 require('scripts.commands')
--- require('coopHUDplus_callbacks')
--- require('scripts.compatabilities.main')
+require('scripts.callbacks')
+require('scripts.compatabilities.main')
 
 print('Co-Op HUD+ loaded v'..CoopHUDplus.version)

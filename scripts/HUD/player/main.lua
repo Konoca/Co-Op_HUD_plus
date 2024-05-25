@@ -1,5 +1,10 @@
 local mod = CoopHUDplus
 
+local Health = mod.Health
+local Stats = mod.Stats
+local Inventory = mod.Inventory
+local Item = mod.Item
+
 function mod.Player.IsReal(player_type)
     if player_type == PlayerType.PLAYER_ESAU then return false end
     if player_type == PlayerType.PLAYER_THESOUL_B then return false end
@@ -16,27 +21,50 @@ function mod.Player.GetItemOpacity(player_entity, player_type)
     return Vector(1, 0.25)
 end
 
-function mod.Player.Render(edge, edge_indexed, edge_multipliers, pColor, player_entity, player_number, pType, is_twin)
+function mod.Player.Render(edge, edge_indexed, edge_multipliers, pColor, player_entity, player_number, pType)
     local opacity = mod.Player.GetItemOpacity(player_entity, pType)
     if player_entity:IsCoopGhost() then goto skip_player end
 
-    -- active item
+    for slot = ActiveSlot.SLOT_PRIMARY, ActiveSlot.SLOT_SECONDARY, 1 do
+        local item_pos = edge_indexed + (mod.config.active_item[slot].pos * edge_multipliers)
 
-    -- trinket
+        local barFlip = 1
+        if not mod.config.active_item[slot].chargebar.stay_on_right then
+            barFlip = barFlip * edge_multipliers.X
+        end
 
-    -- pocket items
+        local bar_pos = edge_indexed + (
+            mod.config.active_item[slot].chargebar.pos * Vector(barFlip, edge_multipliers.Y)
+        )
 
-    -- health
-    mod.Health.Render(edge_indexed, edge_multipliers, player_entity, player_number, is_twin)
+        Item.Active.Render(
+            player_entity, pType,
+            player_entity:GetActiveItem(slot), slot,
+            item_pos, bar_pos,
+            mod.config.active_item[slot].scale,
+            mod.config.active_item[slot].chargebar.display,
+            opacity.X
+        )
+    end
 
-    -- inventory
+    for slot = Item.Trinket.SLOT.PRIMARY, Item.Trinket.SLOT.SECONDARY, 1 do
+        local pos = edge_indexed + (mod.config.trinket[slot].pos * edge_multipliers)
+        Item.Trinket.Render(player_entity:GetTrinket(slot), pos, mod.config.trinket[slot].scale)
+    end
+
+    Item.Pocket.Render(
+        edge_indexed, edge_multipliers,
+        player_entity, player_number, pType,
+        mod.config.pocket.chargebar.display, opacity.Y
+    )
+
+    Health.Render(edge_indexed, edge_multipliers, player_entity, player_number, player_number < 0)
+
+    Inventory.Render(edge_indexed, edge_multipliers, player_entity, player_number, pType)
 
     ::skip_player::
 
-    -- stats
+    Stats.Render(edge, edge_indexed, edge_multipliers, player_entity, player_number, pColor)
 
-    -- misc
-
-    mod.Utils.CreateCallback(mod.Callbacks.POST_PLAYER_RENDER, player_entity, edge_indexed, edge_multipliers)
-
+    mod.Utils.CreateCallback(mod.Callbacks.POST_PLAYER_RENDER, player_entity, player_number, edge_indexed, edge_multipliers)
 end

@@ -1,25 +1,29 @@
 local mod = CoopHUDplus
+local Utils = mod.Utils
+
+local DATA = mod.DATA
+local CALLBACKS = DATA.CALLBACKS
 
 local highestCallbackID = 0
 for _, v in pairs(mod.Callbacks) do
     highestCallbackID = math.max(v, highestCallbackID)
-    mod.DATA.CALLBACKS[v] = mod.DATA.CALLBACKS[v] or {}
+    CALLBACKS[v] = CALLBACKS[v] or {}
 end
 
-function mod.Utils.CreateCallback(callbackID, ...)
-    local callbacks = mod.DATA.CALLBACKS[callbackID]
+function Utils.CreateCallback(callbackID, ...)
+    local callbacks = CALLBACKS[callbackID]
     for _, callback in ipairs(callbacks) do
         callback.Function(...)
     end
 end
 
-function mod.Utils.AddCallback(modID, callbackID, func, ...)
+function Utils.AddCallback(modID, callbackID, func, ...)
     if callbackID < 1 or callbackID > highestCallbackID then
         print(mod.Name..' Error: Invalid Callback ID')
         return
     end
 
-    local callbacks = mod.DATA.CALLBACKS[callbackID]
+    local callbacks = CALLBACKS[callbackID]
     callbacks[#callbacks+1] = {
         ModID = modID,
         CallbackID = callbackID,
@@ -29,13 +33,13 @@ function mod.Utils.AddCallback(modID, callbackID, func, ...)
     }
 end
 
-function mod.Utils.AddPriorityCallback(modID, callbackID, priority, func, ...)
+function Utils.AddPriorityCallback(modID, callbackID, priority, func, ...)
     if callbackID < 1 or callbackID > highestCallbackID then
         print(mod.Name..' Error: Invalid Callback ID')
         return
     end
 
-    local callbacks = mod.DATA.CALLBACKS[callbackID]
+    local callbacks = CALLBACKS[callbackID]
     local index = 1
 
     for i = #callbacks, 1, -1 do
@@ -56,12 +60,12 @@ function mod.Utils.AddPriorityCallback(modID, callbackID, priority, func, ...)
 end
 
 
-function mod.Utils.encodeConfigVectors(config)
+function Utils.encodeConfigVectors(config)
     local new_config = {}
     for key, value in pairs(config) do
         if key == nil or value == nil then goto skip_encode end
         if type(value) == 'table' then
-            value = mod.Utils.encodeConfigVectors(value)
+            value = Utils.encodeConfigVectors(value)
         end
         if type(value) == 'userdata' then
             new_config[key..'X'] = value.X
@@ -75,7 +79,7 @@ function mod.Utils.encodeConfigVectors(config)
     return new_config
 end
 
-function mod.Utils.decodeConfigVectors(config)
+function Utils.decodeConfigVectors(config)
     local new_config = {}
     for key, value in pairs(config) do
         local num = tonumber(key)
@@ -86,7 +90,7 @@ function mod.Utils.decodeConfigVectors(config)
         end
 
         if type(value) == 'table' then
-            value = mod.Utils.decodeConfigVectors(value)
+            value = Utils.decodeConfigVectors(value)
         end
 
         if type(key) == 'string' and key:sub(-1) == 'Y' then
@@ -103,7 +107,7 @@ function mod.Utils.decodeConfigVectors(config)
     return new_config
 end
 
-function mod.Utils.ensureCompatibility(table1, table2)
+function Utils.ensureCompatibility(table1, table2)
     local new_config = {}
     for key, value in pairs(table1) do
         local new_value = table2[key]
@@ -113,7 +117,7 @@ function mod.Utils.ensureCompatibility(table1, table2)
         end
 
         if type(value) == 'table' then
-            new_value = mod.Utils.ensureCompatibility(value, new_value)
+            new_value = Utils.ensureCompatibility(value, new_value)
         end
 
         new_config[key] = new_value
@@ -122,13 +126,13 @@ function mod.Utils.ensureCompatibility(table1, table2)
     return new_config
 end
 
-function mod.Utils.createStreak(name, description, display_bottom_paper)
+function Utils.createStreak(name, description, display_bottom_paper)
     local animation = Sprite()
     animation:Load(mod.PATHS.ANIMATIONS.streak, true)
     if not display_bottom_paper then animation:ReplaceSpritesheet(1, '') end
     animation:LoadGraphics()
     animation:Play('Text', false)
-    mod.STREAK = {sprite = animation, name = name, description = description, invert_color = display_bottom_paper}
+    DATA.STREAK = {sprite = animation, name = name, description = description, invert_color = display_bottom_paper}
 end
 
 local function isTwin(player)
@@ -137,14 +141,32 @@ local function isTwin(player)
     if pType == PlayerType.PLAYER_LAZARUS2_B then return true end
     return false
 end
-function mod.Utils.getPlayerFromEntity(player)
+function Utils.getPlayerFromEntity(player)
     local idx = player.ControllerIndex
-    for i = 0, #mod.DATA.PLAYERS, 1 do
-        if mod.DATA.PLAYERS[i] and mod.DATA.PLAYERS[i].player_entity.ControllerIndex == idx then
-            if isTwin(player) then i = i + 1 end
-            return mod.DATA.PLAYERS[i]
+    for i = #DATA.PLAYERS, 1, -1 do
+        if DATA.PLAYERS[i] and DATA.PLAYERS[i].ControllerIndex == idx then
+            if isTwin(player) then i = i * -1 end
+            return DATA.PLAYERS[i]
         end
     end
     return nil
 end
 
+function Utils.LoadFonts()
+    if DATA.FONTS ~= {} then
+        Utils.UnloadFonts()
+    end
+
+    DATA.FONTS = {}
+
+    for k, v in pairs(mod.config.fonts) do
+        DATA.FONTS[k], _ = Font(mod.PATHS.FONTS[v])
+    end
+end
+
+function Utils.UnloadFonts()
+    for _, v in pairs(DATA.FONTS) do
+        v:Unload()
+        v = nil
+    end
+end

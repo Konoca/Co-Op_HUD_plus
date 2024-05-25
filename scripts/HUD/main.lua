@@ -1,10 +1,21 @@
 local mod = CoopHUDplus
 
+local DATA = mod.DATA
+
+local Player = mod.Player
+local Misc = mod.Misc
+
+local game = Game()
+local hud = game:GetHUD()
+
+local abs = math.abs
+
+
 -- Taken from reHUD, credit to Wofsauge
 local function GetScreenSize()
     -- Credit to _Kilburn
-    local room = Game():GetRoom()
-    local pos = room:WorldToScreenPosition(Vector(0,0)) - room:GetRenderScrollOffset() - Game().ScreenShakeOffset
+    local room = game:GetRoom()
+    local pos = room:WorldToScreenPosition(Vector(0,0)) - room:GetRenderScrollOffset() - game.ScreenShakeOffset
 
     local rx = pos.X + 60 * 26 / 40
     local ry = pos.Y + 140 * (26 / 40)
@@ -25,18 +36,16 @@ end
 --
 
 local function renderTimerText(text)
-    local f, _ = Font(mod.PATHS.FONTS[mod.config.fonts.timer])
-    f:DrawStringScaled(
+    DATA.FONTS.timer:DrawStringScaled(
         text,
         GetScreenCenter().X - (Isaac.GetTextWidth(text)/2), 7,
         1, 1,
         KColor(1, 1, 1, 0.25),
         Isaac.GetTextWidth(text), true
     )
-    f:Unload()
 end
 
-local function renderTimer(game, lastTimeString)
+local function renderTimer(lastTimeString)
     if game:IsPaused() then
         renderTimerText(lastTimeString)
         return lastTimeString
@@ -52,8 +61,7 @@ local function renderTimer(game, lastTimeString)
     return timestring
 end
 
-local function setDefaultHUD(game, bool)
-    local hud = game:GetHUD()
+local function setDefaultHUD(bool)
     if hud:IsVisible() and not bool then
         hud:SetVisible(bool)
     end
@@ -73,72 +81,125 @@ local function minimapConfig(setting, value)
     end
 end
 
-
-local game = Game()
 local hudOff, lastTimeString = false, ''
-
 local function RenderTimer()
     if mod.config.timer.display then
-        lastTimeString = renderTimer(game, lastTimeString)
+        lastTimeString = renderTimer(lastTimeString)
     end
 end
 
 local function RenderPlayers(screen_size, screen_center)
-        local twins, is_twin = 0, false
+        local twins = 0
         local player_entity, pType = nil, nil
         local edge, edge_indexed, edge_multipliers = nil, nil, nil
-        local color, pColor = Color(1, 1, 1, 1, 0, 0, 0), nil
+        local color, pColor = Color(1, 1, 1, 1, 0, 0, 0), {1, 1, 1, 1}
+
         for i = 1, game:GetNumPlayers(), 1 do
             player_entity = Isaac.GetPlayer(i - 1)
             pType = player_entity:GetPlayerType()
 
-            edge, edge_indexed = mod.config.offset, mod.config.offset
+            edge, edge_indexed = mod.config.offset + Vector.Zero, mod.config.offset + Vector.Zero
             edge_multipliers = Vector(1, 1)
-
-            is_twin = mod.Player.IsReal(pType)
-
-            if is_twin then
-                twins = twins + 1
-                edge = edge + mod.config.twin_pos
-                edge_indexed = edge_indexed + mod.config.twin_pos
-            end
 
             local number = i - twins
 
-            if (number % 2) == 0 then
+            if not Player.IsReal(pType) then
+                twins = twins + 1
+                number = (i - twins) * -1
+
+                edge_indexed = edge_indexed + mod.config.twin_pos
+            end
+
+            if (abs(number) % 2) == 0 then
                 edge_indexed.X = screen_size.X - (edge.X + mod.config.mirrored_extra_offset.X)
                 edge_multipliers.X = -1
             end
-            if number > 2 then
+            if abs(number) > 2 then
                 edge_indexed.Y = screen_size.Y - (edge.Y + mod.config.mirrored_extra_offset.Y)
                 edge_multipliers.Y = -1
             end
 
+            pColor = Player.COLORS[abs(number)]
+            color:SetColorize(pColor[1], pColor[2], pColor[3], pColor[4])
             if mod.config.player_colors then
-                pColor = mod.Player.COLORS[number]
-                color:SetColorize(pColor[1], pColor[2], pColor[3], pColor[4])
                 player_entity:SetColor(color, 15, 1, false, true)
             end
 
-            mod.Player.Render(edge, edge_indexed, edge_multipliers, pColor, player_entity, number, pType, is_twin)
+            if not DATA.PLAYERS[number] then
+                DATA.PLAYERS[number] = {
+                    ControllerIndex = player_entity.ControllerIndex,
+                    PlayerType = pType,
+                    Inventory = {},
+                    Items = {},
+                    Stats = {
+                        Old = {},
+                        Updates = {},
+                    },
+                    Pockets = {
+                        Actives = {},
+                    },
+                }
+            end
+
+            Player.Render(edge, edge_indexed, edge_multipliers, pColor, player_entity, number, pType)
+            if i == 1 then Misc.Render(screen_size, screen_center, player_entity) end
         end
 end
 
+local ItemSprite, _ = Sprite(mod.PATHS.ANIMATIONS.item, false)
+local function RenderItems(screen_size)
+    if not mod.config.items.display then return end
+
+    local offset = Vector(0, 0)
+    local anchors = screen_size * mod.config.items.anchors
+    ItemSprite.Scale = mod.config.items.scale
+
+    for i = #DATA.PLAYERS, 1, -1 do
+        for _, v in pairs({-1, 1}) do
+            local p = DATA.PLAYERS[i * v]
+            if not p then goto skip_twin end
+            local items = p.Items
+
+            if mod.config.items.colors then
+                local color = Color(1, 1, 1, 1, 0, 0, 0)
+                local pColor = Player.COLORS[abs(i)]
+                color:SetColorize(pColor[1], pColor[2], pColor[3], pColor[4])
+                ItemSprite.Color = color
+            end
+
+            local pos = mod.config.items.pos + offset + anchors
+            for j = #items - mod.config.items.items_per_player + 1, #items, 1 do
+                if j < 1 then goto skip_item end
+                ItemSprite:ReplaceSpritesheet(1, items[j])
+                ItemSprite:LoadGraphics()
+                ItemSprite:SetFrame('Idle', 0)
+
+                ItemSprite:Render(pos)
+                pos = pos + mod.config.items.offset
+                ::skip_item::
+            end
+            offset = offset + mod.config.items.player_offset
+            ::skip_twin::
+        end
+    end
+
+end
+
 local function RenderStreaks(screen_size, screen_center)
-    if not mod.STREAK then return end
+    if not DATA.STREAK then return end
+
     local pos = Vector(0, 0)
     if mod.config.streak.center_anchor then pos.X = screen_center.X end
     if mod.config.streak.bottom_anchor then pos.Y = screen_size.Y end
     pos = pos + mod.config.streak.pos
 
-    mod.STREAK.sprite:Update()
-    mod.STREAK.sprite:Render(pos, Vector.Zero, Vector.Zero)
+    DATA.STREAK.sprite:Update()
+    DATA.STREAK.sprite:Render(pos, Vector.Zero, Vector.Zero)
 
-    local frame = mod.STREAK.sprite:GetFrame()
+    local frame = DATA.STREAK.sprite:GetFrame()
     if frame > 7 and frame < 60 then
-        local f, _ = Font(mod.PATHS.FONTS[mod.config.fonts.streaks])
-        f:DrawStringScaled(
-            mod.STREAK.name,
+        DATA.FONTS.streaks:DrawStringScaled(
+            DATA.STREAK.name,
             pos.X + mod.config.streak.name.offset.X,
             pos.Y + mod.config.streak.name.offset.Y,
             mod.config.streak.name.scale.X,
@@ -148,10 +209,10 @@ local function RenderStreaks(screen_size, screen_center)
             mod.config.streak.name.box_center
         )
 
-        local conf = mod.STREAK.invert_color and mod.config.streak.curse or mod.config.streak.description
-        local color = mod.STREAK.invert_color and KColor.Black or KColor.White
-        f:DrawStringScaled(
-            mod.STREAK.description,
+        local conf = DATA.STREAK.invert_color and mod.config.streak.curse or mod.config.streak.description
+        local color = DATA.STREAK.invert_color and KColor.Black or KColor.White
+        DATA.FONTS.streaks:DrawStringScaled(
+            DATA.STREAK.description,
             pos.X + conf.offset.X,
             pos.Y + conf.offset.Y,
             conf.scale.X,
@@ -160,24 +221,23 @@ local function RenderStreaks(screen_size, screen_center)
             conf.box_width,
             conf.box_center
         )
-        f:Unload()
     end
 
-    if mod.STREAK.sprite:IsFinished() then
-        mod.STREAK = nil
+    if DATA.STREAK.sprite:IsFinished() then
+        DATA.STREAK = nil
     end
 end
 
-mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
+local function onRender()
     if mod.config.disable then return end
     if game:IsPaused() and not (game:IsPauseMenuOpen() and mod.config.display_during_pause) then return end
 
     -- TODO show character selection for players that are joining
     -- https://repentogon.com/HUD.html#getcoopmenusprite
-    if #mod.DATA.JOINING > 0 then
+    if #DATA.JOINING > 0 then
         -- For now, hide HUD if someone is joining.
         -- This is only a workaround until I can figure out how to determine what characters are unlocked
-        setDefaultHUD(game, true)
+        setDefaultHUD(true)
         mod.IS_HUD_VISIBLE = false
         return
     end
@@ -187,12 +247,15 @@ mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
     if Input.IsButtonTriggered(Keyboard.KEY_H, 0) and not game:IsPaused() and mod.config.enable_toggle_hud then
         hudOff = not hudOff
     end
-    setDefaultHUD(game, hudOff)
+    setDefaultHUD(hudOff)
     mod.IS_HUD_VISIBLE = not hudOff
     if hudOff then return end
 
+    if not DATA.FONTS.timer then return end
+
     RenderTimer()
     RenderPlayers(screen_size, screen_center)
+    RenderItems(screen_size)
     RenderStreaks(screen_size, screen_center)
 
     -- mod overrides
@@ -208,4 +271,6 @@ mod:AddCallback(ModCallbacks.MC_POST_RENDER, function()
         minimapConfig('BorderColorA', 0.5)
     end
 
-end)
+    mod.Utils.CreateCallback(mod.Callbacks.POST_HUD_RENDER, screen_size, screen_center)
+end
+mod:AddCallback(ModCallbacks.MC_POST_RENDER, onRender)

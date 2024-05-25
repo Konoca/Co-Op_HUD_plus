@@ -136,6 +136,9 @@ mod.Item.Pocket = {
         SECONDARY = 1,
         TERTIARY = 2,
         QUATERNARY = 3,
+
+        PERMA = 1,
+        SINGLE = 2,
     },
     TYPE = {
         NONE = 0,
@@ -145,7 +148,7 @@ mod.Item.Pocket = {
     }
 }
 
-mod.Stat = {
+mod.Stats.Stat = {
     SPEED = 0,
     FIRE_DELAY = 1,
     DAMAGE = 2,
