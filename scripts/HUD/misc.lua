@@ -81,7 +81,7 @@ function Misc.GetDifficulty(level, stage)
 end
 
 function Misc.GetGreedJam(player_entity, stage)
-    if not game:IsGreedMode() or stage == LevelStage.STAGE7_GREED then
+    if not game:IsGreedMode() or stage ~= LevelStage.STAGE7_GREED then
         return nil
     end
     return Misc.GetMisc(
@@ -142,9 +142,11 @@ function Misc.Render(screen_size, screen_center, player_entity)
 
     if mod.config.misc.difficulty.display then
         pos = mod.config.misc.difficulty.pos + mod.config.offset
-        sprite.Scale = mod.config.misc.difficulty.scale
-        sprite:SetFrame('Idle', difficulty.Frame)
-        sprite:Render(pos)
+        if difficulty.Frame then
+            sprite.Scale = mod.config.misc.difficulty.scale
+            sprite:SetFrame('Idle', difficulty.Frame)
+            sprite:Render(pos)
+        end
         if difficulty.Value then
             local text_pos = pos + mod.config.misc.text.offset + mod.config.misc.difficulty.greed_wave_offset
             DATA.FONTS.pickups:DrawStringScaled(
