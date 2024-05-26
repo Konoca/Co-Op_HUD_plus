@@ -53,7 +53,7 @@ function Health.Heart.GetHolyMantle(sprite)
 
     sprite.heart = Sprite()
     sprite.heart:Load(anim, true)
-    sprite.overlay:SetFrame('HolyMantle', 0)
+    sprite.heart:SetFrame('HolyMantle', 0)
 
     sprite.golden = nil
     sprite.overlay = nil
