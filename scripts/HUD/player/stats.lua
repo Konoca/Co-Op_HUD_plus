@@ -71,8 +71,9 @@ function Stats.GetDevilAngelChance()
     if disallowed_stages[stage] then return chances end
 
     if stage == LevelStage.STAGE1_1
-        and (curses & LevelCurse.CURSE_OF_LABYRINTH) ~= LevelCurse.CURSE_OF_LABYRINTH
-        and not level:IsAltStage()
+        and (curses & LevelCurse.CURSE_OF_LABYRINTH) == 0
+        and level:GetStageType() ~= StageType.STAGETYPE_REPENTANCE
+        and level:GetStageType() ~= StageType.STAGETYPE_REPENTANCE_B
     then return chances end
 
     chances.deal = room:GetDevilRoomChance()
