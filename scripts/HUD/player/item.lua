@@ -334,7 +334,18 @@ function Pocket.GetItem(player_entity, slot)
         id = player_entity:GetPill(slot)
         type = Pocket.TYPE.PILL
 
-        local effectID = DATA.PILLS.cache[id]
+        -- convert horse pill ID and golden pill ID to match anm2
+        if id > 2048 then
+            id = id - 2048 + 16
+        end
+        if id == 14 then id = 15 end
+
+        -- golden pills should always be ???
+        if id == 15 or id == 30 then
+            return id, type, mod.PILL[PillEffect.PILLEFFECT_NULL]
+        end
+
+        local effectID = DATA.PILLS.cache[id % 16]
         if not effectID then effectID = PillEffect.PILLEFFECT_NULL end
 
         item_config = Isaac.GetItemConfig():GetPillEffect(effectID)
@@ -597,7 +608,7 @@ function Pocket.Render(edge_indexed, edge_multipliers, player_entity, player_num
             ChargeSprite.bg:Render(bar_pos)
 
             if pType == PlayerType.PLAYER_BETHANY_B then
-                ChargeSprite.beth:Render(bar_pos, ChargeBar.GetCharge(order[i].Charge.Blood, order[i].Charge.Max)) 
+                ChargeSprite.beth:Render(bar_pos, ChargeBar.GetCharge(order[i].Charge.Blood, order[i].Charge.Max))
             end
 
             ChargeSprite.charge:Render(bar_pos, ChargeBar.GetCharge(order[i].Charge.Current, order[i].Charge.Max))
