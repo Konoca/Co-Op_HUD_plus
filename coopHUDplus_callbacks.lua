@@ -196,6 +196,7 @@ local function addCollectible(_ ,type, charge, first_time, slot, vardata, player
         [CollectibleType.COLLECTIBLE_KNIFE_PIECE_2] = true,
         [CollectibleType.COLLECTIBLE_DADS_NOTE] = true,
         [CollectibleType.COLLECTIBLE_DAMOCLES_PASSIVE] = true,
+        [CollectibleType.COLLECTIBLE_DOGMA] = true,
     }
     if ignored_ids[item.ID] then return end
 
