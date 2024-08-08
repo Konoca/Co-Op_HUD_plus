@@ -6,6 +6,9 @@ A mod for The Binding of Isaac: Repentence that changes the HUD to better displa
     * Needed to display minimap
 * Enhanced Boss Bars (https://steamcommunity.com/sharedfiles/filedetails/?id=2635267643)
     * Needed to display boss hp
+* Repentogon (https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138)
+    * API extender
+    * Heads up! This mod can not be installed like a normal mod. Please read the mod description for more info.
 
 ## Supported Mods
 * External Item Descriptions (https://steamcommunity.com/sharedfiles/filedetails/?id=836319872)
@@ -28,7 +31,7 @@ The placement of almost everything can be changed within `bch_config.lua`
 
 ## Acknowledgements
 Srokks (https://steamcommunity.com/id/srokks)
-*  coopHUD (https://steamcommunity.com/sharedfiles/filedetails/?id=2731267631) was used to aid in development, specifically
+*  coopHUD (https://steamcommunity.com/sharedfiles/filedetails/?id=2731267631) was used to aid in development, specifically:
     * How to overhaul HUD
     * How to create objects in Lua (I literally have never used Lua outside of CC: Tweaked)
     * Item animation file
@@ -38,7 +41,7 @@ Srokks (https://steamcommunity.com/id/srokks)
 
 wofsauge (https://steamcommunity.com/id/Wofsauge, https://github.com/wofsauge) 
 * TBoI Lua API Documentation (https://wofsauge.github.io/IsaacDocs/rep/index.html)
-* reHUD (https://steamcommunity.com/sharedfiles/filedetails/?id=1906405707) was used to aid in development, specifically
+* reHUD (https://steamcommunity.com/sharedfiles/filedetails/?id=1906405707) was used to aid in development, specifically:
     * Top-Centered Timer
 
 _Kilburn
