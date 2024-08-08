@@ -41,7 +41,6 @@ end
 function Better_Coop_HUD.Miscs.new()
     local self = setmetatable({}, Better_Coop_HUD.Miscs)
 
-    -- TODO have this not print an error to console
     if not Better_Coop_HUD.players[0] then return self end
     local player_entity = Better_Coop_HUD.players[0].player_entity
 

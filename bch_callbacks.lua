@@ -1,6 +1,12 @@
+local function GetPlayerIndex(player)
+    return player:GetCollectibleRNG(1):GetSeed()
+end
+
 local function onGameStart(_, isCont)
     Better_Coop_HUD.players = {}
+    Better_Coop_HUD.players_seeds = {}
     Better_Coop_HUD.player_counter = 0
+    Better_Coop_HUD.twin_counter = 0
 
     Better_Coop_HUD.pills = {}
 
@@ -20,12 +26,12 @@ end
 
 local function onPlayerUpdate(_, player)
     local idx = player.Index
-    local p =  Better_Coop_HUD.players[idx]
+    local p = Better_Coop_HUD.players[idx]
     if p then p:update(player) end
     if not p then onPlayerInit(_, player) end
 end
 -- Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, onPlayerUpdate)
-Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, onPlayerUpdate)
+-- Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, onPlayerUpdate)
 
 
 local function getPill(_, pillEffect, pillColor)
