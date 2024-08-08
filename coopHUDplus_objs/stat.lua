@@ -220,7 +220,7 @@ function CoopHUDplus.Stats:render(edge, edge_indexed, edge_multipliers, addition
     local render_sprite = not is_lower_text and self.player.is_real
     local mirrored = ((self.player.number + 1) % 2) == 0
 
-    local edge_multipliers2 = edge_multipliers
+    local edge_multipliers2 = Vector(edge_multipliers.X, edge_multipliers.Y)
     edge_multipliers2.Y = 1
 
     local edge2 = Vector(edge_indexed.X, edge.Y)
