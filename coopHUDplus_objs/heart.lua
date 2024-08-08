@@ -148,7 +148,7 @@ function CoopHUDplus.Health:getHearts()
     -- red hearts
     local red_hearts_count = (self.red < self.max_red) and math.floor(self.red / 2) or math.floor(self.max_red / 2)
     local red_hearts = self:_getHeartsHelper(red_hearts_count, red, false, false, false, false, nil, '')
-    if self.red % 2 == 1 then
+    if (self.red < self.max_red) and (self.red % 2 == 1) then
         local half_heart = CoopHUDplus.Heart.new(red, true, false, false, false)
         table.insert(red_hearts, half_heart)
     end
