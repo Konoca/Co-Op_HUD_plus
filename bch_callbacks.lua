@@ -109,23 +109,27 @@ end
 local function addCollectible(_ ,type, charge, first_time, slot, vardata, player)
     local item = Isaac.GetItemConfig():GetCollectible(type)
     if item.Type == ItemType.ITEM_ACTIVE or item.Type == ItemType.ITEM_TRINKET then return end
-    if item.ID == CollectibleType.COLLECTIBLE_BIRTHRIGHT then return end
+
+    local ignored_ids = {
+        [CollectibleType.COLLECTIBLE_BIRTHRIGHT] = true,
+        [CollectibleType.COLLECTIBLE_POLAROID] = true,
+        [CollectibleType.COLLECTIBLE_NEGATIVE] = true,
+    }
+    if ignored_ids[item.ID] then return end
 
     local p = getPlayerFromEntity(player)
     if not p then return end
 
     p.inventory:addCollectible(item)
 end
-local function shiftCollectibles(_)
+local function shiftCollectibles(_, entityPlayer, _)
     if Game():IsPaused() then return end
 
-    for i = 0, 4 +1, 1 do
-        if Input.IsActionTriggered(ButtonAction.ACTION_DROP, i) then
-            local p = getPlayerFromEntity(Isaac.GetPlayer(i))
-            if p then p.inventory:shiftCollectibles() end
-        end
+    if Input.IsActionTriggered(ButtonAction.ACTION_DROP, entityPlayer.ControllerIndex) then
+        local p = getPlayerFromEntity(entityPlayer)
+        if p then p.inventory:shiftCollectibles() end
     end
 end
 Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, addCollectible)
-Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, shiftCollectibles)
+Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, shiftCollectibles, 0)
 
