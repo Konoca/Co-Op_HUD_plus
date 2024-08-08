@@ -1,6 +1,7 @@
 local mod = CoopHUDplus
+local Health = mod.Health
 
-function mod.Health.CHAPI.GetHeart(spriteFile, spriteAnim, spriteColor,
+function Health.CHAPI.GetHeart(spriteFile, spriteAnim, spriteColor,
     goldenFile, goldenAnim, goldenColor, eternalFile, eternalAnim, eternalColor
 )
 
@@ -31,7 +32,7 @@ function mod.Health.CHAPI.GetHeart(spriteFile, spriteAnim, spriteColor,
     return sprite
 end
 
-function mod.Health.CHAPI.GetHealth(player_entity, hasHoly)
+function Health.CHAPI.GetHealth(player_entity, hasHoly)
     local hearts = {}
 
     -- Code taken directly from https://github.com/TaigaTreant/isaac-chapi/blob/main/customhealthapi/reimpl/renderhealthbar.lua#L387
@@ -59,8 +60,8 @@ function mod.Health.CHAPI.GetHealth(player_entity, hasHoly)
         local redHealth = nil
         local updateRedHealthIndex = nil
 
-        animationFile, animationName, updateRedHealthIndex, hasRedHealth, redKey, redHealth = mod.Health.CHAPI.IfContainer(
-            health, healthDefinition
+        animationFile, animationName, updateRedHealthIndex, hasRedHealth, redKey, redHealth = Health.CHAPI.IfContainer(
+            chapi, health, healthDefinition
         )
 
         local spriteFile, spriteAnim, spriteColor = nil, nil, nil
@@ -68,7 +69,7 @@ function mod.Health.CHAPI.GetHealth(player_entity, hasHoly)
         local goldenFile, goldenAnim, goldenColor = nil, nil, nil
 
         if animationName ~= nil then
-            spriteFile, spriteAnim, spriteColor = mod.Health.CHAPI.GetSprite(
+            spriteFile, spriteAnim, spriteColor = Health.CHAPI.GetSprite(
                 chapi, player_entity,
                 animationName, animationFile,
                 healthDefinition, hasRedHealth,
@@ -81,7 +82,7 @@ function mod.Health.CHAPI.GetHealth(player_entity, hasHoly)
             local eternalDefinition = CustomHealthAPI.PersistentData.HealthDefinitions["ETERNAL_HEART"]
 			animationFile = eternalDefinition.AnimationFilename
 			animationName = eternalDefinition.AnimationName
-            eternalFile, eternalAnim, eternalColor = mod.Health.CHAPI.GetSprite(
+            eternalFile, eternalAnim, eternalColor = Health.CHAPI.GetSprite(
                 chapi, player_entity,
                 animationName, animationFile,
                 healthDefinition, hasRedHealth,
@@ -94,7 +95,7 @@ function mod.Health.CHAPI.GetHealth(player_entity, hasHoly)
             local goldenDefinition = CustomHealthAPI.PersistentData.HealthDefinitions["GOLDEN_HEART"]
 			animationFile = goldenDefinition.AnimationFilename
 			animationName = goldenDefinition.AnimationName
-            goldenFile, goldenAnim, goldenColor = mod.Health.CHAPI.GetSprite(
+            goldenFile, goldenAnim, goldenColor = Health.CHAPI.GetSprite(
                 chapi, player_entity,
                 animationName, animationFile,
                 healthDefinition, hasRedHealth,
@@ -104,7 +105,7 @@ function mod.Health.CHAPI.GetHealth(player_entity, hasHoly)
             )
         end
 
-        table.insert(hearts, mod.Health.CHAPI.GetHeart(
+        table.insert(hearts, Health.CHAPI.GetHeart(
             spriteFile, spriteAnim, spriteColor,
             goldenFile, goldenAnim, goldenColor,
             eternalFile, eternalAnim, eternalColor
@@ -115,13 +116,13 @@ function mod.Health.CHAPI.GetHealth(player_entity, hasHoly)
     end
 
     if hasHoly then
-        hearts[#hearts]:setHolyMantle() -- TODO fix this
+        Health.Heart.GetHolyMantle(hearts[#hearts])
     end
 
     return hearts
 end
 
-function mod.Health.CHAPI.IfContainer(chapi, health, healthDefinition)
+function Health.CHAPI.IfContainer(chapi, health, healthDefinition)
     local hasRedHealth = false
     local redKey = nil
     local redHealth = nil
@@ -187,7 +188,7 @@ function mod.Health.CHAPI.IfContainer(chapi, health, healthDefinition)
     return animationFile, animationName, updateRedHealthIndex, hasRedHealth, redKey, redHealth
 end
 
-function mod.Health.CHAPI.GetSprite(chapi, player_entity,
+function Health.CHAPI.GetSprite(chapi, player_entity,
         animationName, animationFile, healthDefinition,
         hasRedHealth, redKey, redHealth, health, color
     )

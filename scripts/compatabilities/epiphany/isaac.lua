@@ -1,4 +1,5 @@
 local M = {}
+local mod = CoopHUDplus
 
 local function renderGlowSprite(player_save, inventory, renderPos, i)
     local glowSprite = Sprite()
@@ -43,11 +44,10 @@ local function renderBlightSprite(pEntity, player_save, inventory, renderPos, i)
 end
 
 
-function M.EpiphanyIsaacFunc(player, edge_indexed, edge_multipliers)
-    if player.player_type ~= Epiphany.PlayerType.ISAAC then return end
+function M.EpiphanyIsaacFunc(pEntity, _, edge_indexed, edge_multipliers)
+    if pEntity:GetPlayerType() ~= Epiphany.PlayerType.ISAAC then return end
 
-    local position = edge_indexed + (CoopHUDplus.config.inventory.pos * edge_multipliers)
-    local pEntity = player.player_entity
+    local position = edge_indexed + (mod.config.inventory.pos * edge_multipliers)
 
     -- Code taken from Epiphany, modified to work with render and config system
     Epiphany.Character.ISAAC:HandleInventoryRotation(pEntity)
@@ -57,7 +57,7 @@ function M.EpiphanyIsaacFunc(player, edge_indexed, edge_multipliers)
     local inventory, inventorySprites = Epiphany.Character.ISAAC:GetInventory(pEntity)
 
     for i = 0, inventory.cap - 1 do
-        local renderPos = position + (CoopHUDplus.config.inventory.spacing * Vector(i % numColumns, i // numColumns))
+        local renderPos = position + (mod.config.inventory.spacing * Vector(i % numColumns, i // numColumns))
 
         renderGlowSprite(player_save, inventory, renderPos, i)
 
@@ -68,7 +68,7 @@ function M.EpiphanyIsaacFunc(player, edge_indexed, edge_multipliers)
 
     local selected = inventory.selected - 1
     Epiphany.Character.ISAAC.SpriteFrame:Render(
-        position + (CoopHUDplus.config.inventory.spacing * Vector(selected % numColumns, selected // numColumns))
+        position + (mod.config.inventory.spacing * Vector(selected % numColumns, selected // numColumns))
     )
 end
 

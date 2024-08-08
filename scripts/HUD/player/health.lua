@@ -1,4 +1,5 @@
 local mod = CoopHUDplus
+local Health = mod.Health
 
 local heartAnim = mod.PATHS.ANIMATIONS.hearts
 
@@ -8,7 +9,7 @@ local hud = game:GetHUD()
 require('scripts.compatabilities.CHAPI.main')
 
 
-function mod.Health.Heart.GetSpriteBasic(heartSprite, goldenSprite, overlaySprite)
+function Health.Heart.GetSpriteBasic(heartSprite, goldenSprite, overlaySprite)
     return {
         heart = heartSprite,
         golden = goldenSprite,
@@ -16,7 +17,7 @@ function mod.Health.Heart.GetSpriteBasic(heartSprite, goldenSprite, overlaySprit
     }
 end
 
-function mod.Health.Heart.GetSprite(anim, isGolden, overlay)
+function Health.Heart.GetSprite(anim, isGolden, overlay)
     local sprite = {
         heart = nil,
         golden = nil,
@@ -43,7 +44,7 @@ function mod.Health.Heart.GetSprite(anim, isGolden, overlay)
     return sprite
 end
 
-function mod.Health.Heart.GetHolyMantle(sprite)
+function Health.Heart.GetHolyMantle(sprite)
     local anim = heartAnim
 
     if CustomHealthAPI ~= nil then 
@@ -60,7 +61,7 @@ function mod.Health.Heart.GetHolyMantle(sprite)
     return sprite
 end
 
-function mod.Health.Heart.GetEternal(sprite)
+function Health.Heart.GetEternal(sprite)
     sprite.overlay = Sprite()
     sprite.overlay:Load(heartAnim, true)
     sprite.overlay:SetFrame('WhiteHeartOverlay', 0)
@@ -68,7 +69,7 @@ function mod.Health.Heart.GetEternal(sprite)
     return sprite
 end
 
-function mod.Health.Heart.Render(sprite, pos, flip)
+function Health.Heart.Render(sprite, pos, flip)
     if sprite.heart then
         sprite.heart.FlipX = flip
         sprite.heart:Render(pos)
@@ -87,14 +88,14 @@ end
 
 
 
-function mod.Health.GetHealth(player_entity, player_number, is_twin)
+function Health.GetHealth(player_entity, player_number, is_twin)
     local hearts = {}
 
     local level = game:GetLevel()
     local curses = level:GetCurses()
 
     if (curses & 8) == 8 and not mod.config.health.ignore_curse then
-        return {mod.Health.Heart.GetSprite('CurseHeart', false, nil)}
+        return {Health.Heart.GetSprite('CurseHeart', false, nil)}
     end
 
     local pType = player_entity:GetPlayerType()
@@ -105,7 +106,7 @@ function mod.Health.GetHealth(player_entity, player_number, is_twin)
         and pType ~= PlayerType.PLAYER_THELOST and pType ~= PlayerType.PLAYER_THELOST_B
         and pType ~= PlayerType.PLAYER_KEEPER and pType ~= PlayerType.PLAYER_KEEPER_B
     then
-        return mod.Health.CHAPI.GetHealth(player_entity, hasHoly)
+        return Health.CHAPI.GetHealth(player_entity, hasHoly)
     end
 
     if CustomHealthAPI ~= nil then heartAnim = mod.PATHS.ANIMATIONS.hearts_copy end
@@ -118,15 +119,14 @@ function mod.Health.GetHealth(player_entity, player_number, is_twin)
     end
 
     local number = player_number
-    if is_twin or number < 0 then number = math.abs(number) + 3 end
-    if number >= 8 then number = 7 end
-    local heartsHUD = hud:GetPlayerHUD(number):GetHearts()
+    if is_twin or number < 0 then number = math.abs(number) + 4 end
+    local heartsHUD = hud:GetPlayerHUD(number - 1):GetHearts()
 
     local lastHeart, lastEternal = 1, -1
     local heartsSkipped = false
     for k, v in pairs(heartsHUD) do
         if not v:IsVisible() then
-            table.insert(hearts, mod.Health.Heart.GetSprite(nil, nil, nil))
+            table.insert(hearts, Health.Heart.GetSprite(nil, nil, nil))
             heartsSkipped = true
             goto skip_heart
         end
@@ -135,7 +135,7 @@ function mod.Health.GetHealth(player_entity, player_number, is_twin)
         local golden = v:IsGoldenHeartOverlayVisible()
         local overlay = v:GetHeartOverlayAnim()
 
-        table.insert(hearts, mod.Health.Heart.GetSprite(anim, golden, nil))
+        table.insert(hearts, Health.Heart.GetSprite(anim, golden, nil))
         if not heartsSkipped then
             lastHeart = k
             if overlay ~= '' then lastEternal = k end
@@ -144,22 +144,22 @@ function mod.Health.GetHealth(player_entity, player_number, is_twin)
     end
 
     if player_entity:GetEternalHearts() > 0 then
-        mod.Health.Heart.GetEternal(hearts[lastEternal])
+        Health.Heart.GetEternal(hearts[lastEternal])
     end
 
     if hasHoly then
-        mod.Health.Heart.GetHolyMantle(hearts[lastHeart])
+        Health.Heart.GetHolyMantle(hearts[lastHeart])
     end
 
     return hearts
 end
 
-function mod.Health.Render(edge_indexed, edge_multipliers, player_entity, player_number, is_twin)
+function Health.Render(edge_indexed, edge_multipliers, player_entity, player_number, is_twin)
     local pos = Vector(0, 0)
     local offset = Vector(0, 0)
     local edge = edge_indexed + (mod.config.health.pos * edge_multipliers)
 
-    local hearts = mod.Health.GetHealth(player_entity, player_number, is_twin)
+    local hearts = Health.GetHealth(player_entity, player_number, is_twin)
 
     mod.Utils.CreateCallback(mod.Callbacks.PRE_HEALTH_RENDER, hearts, player_entity, player_number)
 
@@ -173,8 +173,7 @@ function mod.Health.Render(edge_indexed, edge_multipliers, player_entity, player
 
         pos = edge + (offset * edge_multipliers)
 
-        mod.Health.Heart.Render(hearts[i+1], pos, edge_multipliers.X == -1)
-        print(i+1, hearts[i+1].heart, pos)
+        Health.Heart.Render(hearts[i+1], pos, edge_multipliers.X == -1)
 
         offset.X = offset.X + mod.config.health.space_between_hearts
     end
@@ -186,8 +185,7 @@ function mod.Health.Render(edge_indexed, edge_multipliers, player_entity, player
     local tmp = mod.config.health.space_between_hearts / 2
     pos.X = edge_multipliers.X == 1 and pos.X - tmp or pos.X + (tmp / 3)
 
-    local f, _ = Font(mod.PATHS.FONTS[mod.config.fonts.extra_lives])
-    f:DrawStringScaled(
+    mod.DATA.FONTS.extra_lives:DrawStringScaled(
         'x'..extra_lives,
         pos.X, pos.Y,
         mod.config.stats.text.scale.X,
@@ -195,5 +193,4 @@ function mod.Health.Render(edge_indexed, edge_multipliers, player_entity, player
         KColor(1, 1, 1, 0.5),
         0, true
     )
-    f:Unload()
 end

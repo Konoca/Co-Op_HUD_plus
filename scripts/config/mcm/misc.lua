@@ -1,177 +1,179 @@
-ModConfigMenu.AddTitle(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.misc, 'Pickups')
+local mod = CoopHUDplus
+
+ModConfigMenu.AddTitle(mod.MCM.title, mod.MCM.categories.misc, 'Pickups')
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
-        CurrentSetting = function() return CoopHUDplus.config.misc.pickups.pos.X end,
-        Display = function() return 'Pos (X): ' .. CoopHUDplus.config.misc.pickups.pos.X end,
-        OnChange = function(n) CoopHUDplus.config.misc.pickups.pos.X = n end,
+        CurrentSetting = function() return mod.config.misc.pickups.pos.X end,
+        Display = function() return 'Pos (X): ' .. mod.config.misc.pickups.pos.X end,
+        OnChange = function(n) mod.config.misc.pickups.pos.X = n end,
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
-        CurrentSetting = function() return CoopHUDplus.config.misc.pickups.pos.Y end,
-        Display = function() return 'Pos (Y): ' .. CoopHUDplus.config.misc.pickups.pos.Y end,
-        OnChange = function(n) CoopHUDplus.config.misc.pickups.pos.Y = n end,
+        CurrentSetting = function() return mod.config.misc.pickups.pos.Y end,
+        Display = function() return 'Pos (Y): ' .. mod.config.misc.pickups.pos.Y end,
+        OnChange = function(n) mod.config.misc.pickups.pos.Y = n end,
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
-        CurrentSetting = function() return CoopHUDplus.config.misc.pickups.offset.X end,
-        Display = function() return 'Offset (X): ' .. CoopHUDplus.config.misc.pickups.offset.X end,
-        OnChange = function(n) CoopHUDplus.config.misc.pickups.offset.X = n end,
+        CurrentSetting = function() return mod.config.misc.pickups.offset.X end,
+        Display = function() return 'Offset (X): ' .. mod.config.misc.pickups.offset.X end,
+        OnChange = function(n) mod.config.misc.pickups.offset.X = n end,
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
-        CurrentSetting = function() return CoopHUDplus.config.misc.pickups.offset.Y end,
-        Display = function() return 'Offset (Y): ' .. CoopHUDplus.config.misc.pickups.offset.Y end,
-        OnChange = function(n) CoopHUDplus.config.misc.pickups.offset.Y = n end,
+        CurrentSetting = function() return mod.config.misc.pickups.offset.Y end,
+        Display = function() return 'Offset (Y): ' .. mod.config.misc.pickups.offset.Y end,
+        OnChange = function(n) mod.config.misc.pickups.offset.Y = n end,
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
-        CurrentSetting = function() return CoopHUDplus.config.misc.text.offset.X end,
-        Display = function() return 'Text Offset (X): ' .. CoopHUDplus.config.misc.text.offset.X end,
-        OnChange = function(n) CoopHUDplus.config.misc.text.offset.X = n end,
+        CurrentSetting = function() return mod.config.misc.text.offset.X end,
+        Display = function() return 'Text Offset (X): ' .. mod.config.misc.text.offset.X end,
+        OnChange = function(n) mod.config.misc.text.offset.X = n end,
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
-        CurrentSetting = function() return CoopHUDplus.config.misc.text.offset.Y end,
-        Display = function() return 'Text Offset (Y): ' .. CoopHUDplus.config.misc.text.offset.Y end,
-        OnChange = function(n) CoopHUDplus.config.misc.text.offset.Y = n end,
+        CurrentSetting = function() return mod.config.misc.text.offset.Y end,
+        Display = function() return 'Text Offset (Y): ' .. mod.config.misc.text.offset.Y end,
+        OnChange = function(n) mod.config.misc.text.offset.Y = n end,
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
         Minimum = 0.0,
         -- Maximum = 100.0,
-        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.misc.text.scale.X * 100)) end,
-        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.misc.text.scale.X * 100) .. '%' end,
-        OnChange = function(n) CoopHUDplus.config.misc.text.scale = Vector(n/100, n/100) end,
+        CurrentSetting = function() return tonumber(string.format('%.0f', mod.config.misc.text.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', mod.config.misc.text.scale.X * 100) .. '%' end,
+        OnChange = function(n) mod.config.misc.text.scale = Vector(n/100, n/100) end,
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.BOOLEAN,
-        CurrentSetting = function() return CoopHUDplus.config.misc.pickups.bottom_anchor end,
-        Display = function() return 'Bottom Anchor: ' .. (CoopHUDplus.config.misc.pickups.bottom_anchor and 'on' or 'off') end,
-        OnChange = function(b) CoopHUDplus.config.misc.pickups.bottom_anchor = b end,
+        CurrentSetting = function() return mod.config.misc.pickups.bottom_anchor end,
+        Display = function() return 'Bottom Anchor: ' .. (mod.config.misc.pickups.bottom_anchor and 'on' or 'off') end,
+        OnChange = function(b) mod.config.misc.pickups.bottom_anchor = b end,
         Info = {'Anchor Pickups to the bottom of the screen, Pickup Pos will use bottom of screen as origin'},
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.BOOLEAN,
-        CurrentSetting = function() return CoopHUDplus.config.misc.pickups.center_anchor end,
-        Display = function() return 'Center Anchor: ' .. (CoopHUDplus.config.misc.pickups.center_anchor and 'on' or 'off') end,
-        OnChange = function(b) CoopHUDplus.config.misc.pickups.center_anchor = b end,
+        CurrentSetting = function() return mod.config.misc.pickups.center_anchor end,
+        Display = function() return 'Center Anchor: ' .. (mod.config.misc.pickups.center_anchor and 'on' or 'off') end,
+        OnChange = function(b) mod.config.misc.pickups.center_anchor = b end,
         Info = {'Anchor Pickups to the center of the screen, Pickup Pos will use center of screen as origin'},
     }
 )
 
-ModConfigMenu.AddSpace(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.misc)
-ModConfigMenu.AddTitle(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.misc, 'Difficulty')
+ModConfigMenu.AddSpace(mod.MCM.title, mod.MCM.categories.misc)
+ModConfigMenu.AddTitle(mod.MCM.title, mod.MCM.categories.misc, 'Difficulty')
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.BOOLEAN,
-        CurrentSetting = function() return CoopHUDplus.config.misc.difficulty.display end,
-        Display = function() return 'Display: ' .. (CoopHUDplus.config.misc.difficulty.display and 'on' or 'off') end,
-        OnChange = function(b) CoopHUDplus.config.misc.difficulty.display = b end,
+        CurrentSetting = function() return mod.config.misc.difficulty.display end,
+        Display = function() return 'Display: ' .. (mod.config.misc.difficulty.display and 'on' or 'off') end,
+        OnChange = function(b) mod.config.misc.difficulty.display = b end,
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
-        CurrentSetting = function() return CoopHUDplus.config.misc.difficulty.pos.X end,
-        Display = function() return 'Pos (X): ' .. CoopHUDplus.config.misc.difficulty.pos.X end,
+        CurrentSetting = function() return mod.config.misc.difficulty.pos.X end,
+        Display = function() return 'Pos (X): ' .. mod.config.misc.difficulty.pos.X end,
         OnChange = function(n)
-            CoopHUDplus.config.misc.difficulty.pos.X = n
-            CoopHUDplus.config.misc.greed_machine.pos.X = n
+            mod.config.misc.difficulty.pos.X = n
+            mod.config.misc.greed_machine.pos.X = n
         end,
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
-        CurrentSetting = function() return CoopHUDplus.config.misc.difficulty.pos.Y end,
-        Display = function() return 'Pos (Y): ' .. CoopHUDplus.config.misc.difficulty.pos.Y end,
+        CurrentSetting = function() return mod.config.misc.difficulty.pos.Y end,
+        Display = function() return 'Pos (Y): ' .. mod.config.misc.difficulty.pos.Y end,
         OnChange = function(n)
-            CoopHUDplus.config.misc.difficulty.pos.Y = n
-            CoopHUDplus.config.misc.greed_machine.pos.Y = n
+            mod.config.misc.difficulty.pos.Y = n
+            mod.config.misc.greed_machine.pos.Y = n
         end,
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
         Minimum = 0.0,
         -- Maximum = 100.0,
-        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.misc.difficulty.scale.X * 100)) end,
-        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.misc.difficulty.scale.X * 100) .. '%' end,
+        CurrentSetting = function() return tonumber(string.format('%.0f', mod.config.misc.difficulty.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', mod.config.misc.difficulty.scale.X * 100) .. '%' end,
         OnChange = function(n)
-            CoopHUDplus.config.misc.difficulty.scale = Vector(n/100, n/100)
-            CoopHUDplus.config.misc.greed_machine.scale = Vector(n/100, n/100)
+            mod.config.misc.difficulty.scale = Vector(n/100, n/100)
+            mod.config.misc.greed_machine.scale = Vector(n/100, n/100)
         end,
     }
 )
 
-ModConfigMenu.AddText(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.misc, 'Greed')
+ModConfigMenu.AddText(mod.MCM.title, mod.MCM.categories.misc, 'Greed')
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
-        CurrentSetting = function() return CoopHUDplus.config.misc.difficulty.greed_wave_offset.X end,
-        Display = function() return 'Text Offset (X): ' .. CoopHUDplus.config.misc.difficulty.greed_wave_offset.X end,
+        CurrentSetting = function() return mod.config.misc.difficulty.greed_wave_offset.X end,
+        Display = function() return 'Text Offset (X): ' .. mod.config.misc.difficulty.greed_wave_offset.X end,
         OnChange = function(n)
-            CoopHUDplus.config.misc.difficulty.greed_wave_offset.X = n
-            CoopHUDplus.config.misc.greed_machine.text_offset.X = n
+            mod.config.misc.difficulty.greed_wave_offset.X = n
+            mod.config.misc.greed_machine.text_offset.X = n
         end,
     }
 )
 ModConfigMenu.AddSetting(
-    CoopHUDplus.MCM.title,
-    CoopHUDplus.MCM.categories.misc,
+    mod.MCM.title,
+    mod.MCM.categories.misc,
     {
         Type = ModConfigMenu.OptionType.NUMBER,
-        CurrentSetting = function() return CoopHUDplus.config.misc.difficulty.greed_wave_offset.Y end,
-        Display = function() return 'Text Offset (Y): ' .. CoopHUDplus.config.misc.difficulty.greed_wave_offset.Y end,
+        CurrentSetting = function() return mod.config.misc.difficulty.greed_wave_offset.Y end,
+        Display = function() return 'Text Offset (Y): ' .. mod.config.misc.difficulty.greed_wave_offset.Y end,
         OnChange = function(n)
-            CoopHUDplus.config.misc.difficulty.greed_wave_offset.Y = n
-            CoopHUDplus.config.misc.greed_machine.text_offset.Y = n
+            mod.config.misc.difficulty.greed_wave_offset.Y = n
+            mod.config.misc.greed_machine.text_offset.Y = n
         end,
     }
 )

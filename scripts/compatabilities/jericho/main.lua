@@ -1,19 +1,22 @@
-local BlessingSprite, _ = Sprite(CoopHUDplus.PATHS.ANIMATIONS.stats, false)
+local mod = CoopHUDplus
+
+local game = Game()
+
+local BlessingSprite, _ = Sprite(mod.PATHS.ANIMATIONS.stats, false)
 BlessingSprite:ReplaceSpritesheet(0, 'gfx/ui/hudstats3.png')
 BlessingSprite:SetFrame('Idle', 0)
 BlessingSprite:LoadGraphics()
 
-local function JerichoBlessingStat(stats)
-    if stats.player.number ~= 0 then return end
+local function JerichoBlessingStat(stats, _, player_number)
+    if player_number ~= 1 then return end
     if not PlayerManager.AnyoneIsPlayerType(_JERICHO_MOD.Character.JERICHO) then return end
 
     if Game():GetLevel():GetCurses() == LevelCurse.CURSE_NONE then return end
 
-    local stat = CoopHUDplus.Stat.new(stats.player.player_entity, 0, true)
-    stat.sprite = BlessingSprite
-    stat.value = _JERICHO_MOD.GetBlessingChance() * 100
+    local stat = mod.Stats.Stat.GetStat(_JERICHO_MOD.GetBlessingChance() * 100, 0, true)
+    stat.Sprite = BlessingSprite
 
-    table.insert(stats.stats, stat)
+    table.insert(stats, stat)
 end
 
 
@@ -21,7 +24,7 @@ local iconSprite = Sprite("gfx/ui/mapitemicons2.anm2", true)
 local function JerichoCurseIcon(screen_size, _)
     if not PlayerManager.AnyoneIsPlayerType(_JERICHO_MOD.Character.JERICHO) then return end
 
-    local level = Game():GetLevel()
+    local level = game:GetLevel()
     local curse = level:GetCurses()
     if curse == LevelCurse.CURSE_NONE then return end
 
@@ -38,7 +41,7 @@ end
 
 local function AddCallbacks()
     local modID = _JERICHO_MOD.Name
-    CoopHUDplus.Utils.AddCallback(modID, CoopHUDplus.Callbacks.PRE_STATS_RENDER, JerichoBlessingStat)
-    CoopHUDplus.Utils.AddCallback(modID, CoopHUDplus.Callbacks.POST_HUD_RENDER, JerichoCurseIcon)
+    mod.Utils.AddCallback(modID, mod.Callbacks.PRE_STATS_RENDER, JerichoBlessingStat)
+    mod.Utils.AddCallback(modID, mod.Callbacks.POST_HUD_RENDER, JerichoCurseIcon)
 end
 return AddCallbacks

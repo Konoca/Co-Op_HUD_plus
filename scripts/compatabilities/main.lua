@@ -1,10 +1,10 @@
 local mods = {
     {
-        file = require('coopHUDplus_compatabilities.epiphany.main'),
+        file = require('scripts.compatabilities.epiphany.main'),
         condition = function() return Epiphany ~= nil end,
     },
     {
-        file = require('coopHUDplus_compatabilities.jericho.main'),
+        file = require('scripts.compatabilities.jericho.main'),
         condition = function() return _JERICHO_MOD ~= nil end,
     }
 }
