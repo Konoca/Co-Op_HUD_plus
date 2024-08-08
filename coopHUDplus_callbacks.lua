@@ -241,11 +241,12 @@ CoopHUDplus:AddCallback(ModCallbacks.MC_POST_TRIGGER_TRINKET_ADDED, pickupTrinke
 
 
 
-local function addCollectibleToItems(_ ,type, charge, first_time, slot, vardata, player)
+local function addCollectibleToItems(_ ,type, _, _, _, _, player)
     local p = CoopHUDplus.Utils.getPlayerFromEntity(player)
     if not p then return end
 
     local item = Isaac.GetItemConfig():GetCollectible(type)
+    if item.Type == ItemType.ITEM_ACTIVE or item.Type == ItemType.ITEM_TRINKET then return end
     table.insert(p.items, item.GfxFileName)
 end
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, addCollectibleToItems)
