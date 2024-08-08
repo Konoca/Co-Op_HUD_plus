@@ -52,8 +52,8 @@ Inventory.SpriteInfo = {
 }
 
 Inventory.ExtraFunctions = {
-    [PlayerType.PLAYER_CAIN_B] = function(edge_indexed, edge_multipliers, player_entity, player_number, _)
-        local function GetResult(inventory)
+    [PlayerType.PLAYER_CAIN_B] = function(edge_indexed, edge_multipliers, player_entity, _, inventory)
+        local function GetResult()
             if #inventory ~= 8 then return nil end
             local itemconfig = Isaac:GetItemConfig()
 
@@ -71,7 +71,7 @@ Inventory.ExtraFunctions = {
         InvSprite.FlipX = edge_multipliers.X == -1
         InvSprite.Color = Color(1, 1, 1, 0.5)
 
-        local result = GetResult(DATA.PLAYERS[player_number])
+        local result = GetResult()
 
         if result then
             InvSprite:ReplaceSpritesheet(1, result)
@@ -119,7 +119,7 @@ function Inventory.Render(edge_indexed, edge_multipliers, player_entity, player_
         offset.X = offset.X + mod.config.inventory.spacing.X
     end
 
-    if extra_func then extra_func(edge_indexed, edge_multipliers, player_entity, player_number, pType) end
+    if extra_func then extra_func(edge_indexed, edge_multipliers, player_entity, player_number, inventory) end
 end
 
 function Inventory.Add(player_entity, player, item)
