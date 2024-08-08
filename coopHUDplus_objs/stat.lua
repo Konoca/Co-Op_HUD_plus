@@ -168,7 +168,7 @@ function CoopHUDplus.Stat:getSprite()
 end
 
 
-function CoopHUDplus.Stat:render(pos_vector, text_pos_vector, render_icon)
+function CoopHUDplus.Stat:render(pos_vector, text_pos_vector, render_icon, pColor)
     if self.value == nil then return end
 
     if render_icon then
@@ -182,7 +182,7 @@ function CoopHUDplus.Stat:render(pos_vector, text_pos_vector, render_icon)
         text_pos_vector.X, text_pos_vector.Y,
         CoopHUDplus.config.stats.text.scale.X,
         CoopHUDplus.config.stats.text.scale.Y,
-        1, 1, 1, 0.5
+        pColor[1], pColor[2], pColor[3], 0.5
     )
 end
 
@@ -215,7 +215,7 @@ function CoopHUDplus.Stats.new(player_entity, player)
     return self
 end
 
-function CoopHUDplus.Stats:render(edge, edge_indexed, edge_multipliers, additional_offset)
+function CoopHUDplus.Stats:render(edge, edge_indexed, edge_multipliers, additional_offset, pColor)
     local is_lower_text = self.player.number > 1
     local render_sprite = not is_lower_text and self.player.is_real
     local mirrored = ((self.player.number + 1) % 2) == 0
@@ -238,11 +238,14 @@ function CoopHUDplus.Stats:render(edge, edge_indexed, edge_multipliers, addition
         text_pos = text_pos + CoopHUDplus.config.stats.text.lowered_offset
     end
 
+    if not CoopHUDplus.config.stats.text.colors then pColor = {1, 1, 1, 0.5} end
+
     for i = 0, #self.stats - 1, 1 do
         self.stats[i + 1]:render(
             pos + (CoopHUDplus.config.stats.offset * i),
             text_pos + (CoopHUDplus.config.stats.text.offset * i),
-            render_sprite
+            render_sprite,
+            pColor
         )
     end
 
