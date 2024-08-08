@@ -74,7 +74,7 @@ function CoopHUDplus.Heart:getSprite()
         sprite.golden:SetFrame('GoldHeartOverlay', 0)
     end
 
-    if self.overlay_anim then
+    if self.overlay_anim and self.overlay_anim ~= '' then
         sprite.eternal = Sprite()
         sprite.eternal:Load(heartAnim, true)
         sprite.eternal:SetFrame(self.overlay_anim, 0)
@@ -141,7 +141,7 @@ function CoopHUDplus.Health:getHearts()
     local hearts = {}
 
     if (Game():GetLevel():GetCurses() & 8) == 8 and not CoopHUDplus.config.health.ignore_curse then
-        local curse_heart = CoopHUDplus.Heart.new('curse', false, nil)
+        local curse_heart = CoopHUDplus.Heart.new('CurseHeart', false, nil)
         table.insert(hearts, curse_heart)
         return hearts
     end
