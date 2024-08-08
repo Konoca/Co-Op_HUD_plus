@@ -234,7 +234,8 @@ function CoopHUDplus.Stats:render(edge, edge_indexed, edge_multipliers, addition
     end
 
     if is_lower_text then
-        text_pos = text_pos + (CoopHUDplus.config.stats.text.offset / 2)
+        -- text_pos = text_pos + (CoopHUDplus.config.stats.text.offset / 2)
+        text_pos = text_pos + CoopHUDplus.config.stats.text.lowered_offset
     end
 
     for i = 0, #self.stats - 1, 1 do
