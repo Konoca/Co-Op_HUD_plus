@@ -96,7 +96,7 @@ function CoopHUDplus.Inventory:getResult()
 
     -- local id = EID:calculateBagOfCrafting(self.inv)
     local id = self.player_entity:GetBagOfCraftingOutput()
-    return itemconfig:GetCollectible(id).GfxFileName
+    return id ~= 0 and itemconfig:GetCollectible(id).GfxFileName or ''
 end
 
 function CoopHUDplus.Inventory:render(edge_indexed, edge_multipliers)
