@@ -91,7 +91,7 @@ function CoopHUDplus.Inventory:getResult()
     local itemconfig = Isaac:GetItemConfig()
 
     if (Game():GetLevel():GetCurses() & 64) == 64 and not CoopHUDplus.config.inventory.ignore_curse then
-        return itemconfig:GetCollectible(0).GfxFileName
+        return ''
     end
 
     -- local id = EID:calculateBagOfCrafting(self.inv)

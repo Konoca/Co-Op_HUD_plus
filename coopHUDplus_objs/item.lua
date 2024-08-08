@@ -212,7 +212,6 @@ function CoopHUDplus.ActiveItem:render(item_pos_vec, bar_pos_vec, scale, display
             item_pos_vec.X + CoopHUDplus.config.active_item.book_correction_offset.X,
             item_pos_vec.Y + CoopHUDplus.config.active_item.book_correction_offset.Y
         )
-        -- bar_pos_vec = Vector(bar_pos_vec.X, bar_pos_vec.Y)
     end
     self.sprite:Render(item_pos_vec)
 
@@ -263,7 +262,7 @@ function CoopHUDplus.Trinket:render(pos_vector, scale)
 end
 
 -- Pocket Item (pill, card, rune)
-local function stripPocketItemName(item_config)
+local function getPocketItemName(item_config)
     if not item_config then return '???' end
 
     local name = item_config.Name
@@ -273,6 +272,7 @@ local function stripPocketItemName(item_config)
     name = name:gsub('_', ' ')
     name = name:lower():gsub('%f[%a].', string.upper)
     return name
+    -- return XMLData.GetEntryById(XMLNode.ITEM, item_config.ID).name
 end
 
 function CoopHUDplus.PocketItem.new(entity, slot)
@@ -289,7 +289,7 @@ function CoopHUDplus.PocketItem.new(entity, slot)
         self.type = CoopHUDplus.PocketItem.TYPE_CARD
         self.item_config = Isaac.GetItemConfig():GetCard(self.id)
 
-        self.name = stripPocketItemName(self.item_config)
+        self.name = getPocketItemName(self.item_config)
     end
 
     -- Is item a pill?
@@ -353,7 +353,7 @@ function CoopHUDplus.PocketActiveItem.new(entity, slot)
         self.type = CoopHUDplus.PocketItem.TYPE_ACTIVE
         self.item_config = Isaac.GetItemConfig():GetCollectible(self.id)
 
-        self.name = stripPocketItemName(self.item_config)
+        self.name = getPocketItemName(self.item_config)
 
         self.current_charge = entity:GetActiveCharge(slot)
         -- self.max_charge = Isaac.GetItemConfig():GetCollectible(self.id).MaxCharges
