@@ -1,6 +1,7 @@
 Better_Coop_HUD.players = {}
 Better_Coop_HUD.joining = {}
 Better_Coop_HUD.pills = {}
+Better_Coop_HUD.SAVED_PLAYER_DATA = {}
 
 Better_Coop_HUD.Player = {}
 Better_Coop_HUD.Player.__index = Better_Coop_HUD.Player
