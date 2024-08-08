@@ -12,7 +12,7 @@ This mod is currently a work-in-progress, please report all issues under "Issues
 * Tainted Isaac Inventory correctly displayed for all players
 * Tainted ??? Poop Spells correctly displayed for all players
 * Tainted Cain Bag of Crafting correctly displayed for all players
-* Entirely customizable! (MCM still WIP, but config file can be edited)
+* Entirely customizable!
 
 ## Required Mods
 * MinimapAPI (https://steamcommunity.com/sharedfiles/filedetails/?id=1978904635)
