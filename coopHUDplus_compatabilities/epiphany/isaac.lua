@@ -1,17 +1,12 @@
-local blightSprite = Sprite()
-blightSprite:Load("gfx/ui/tarnished_isaac_hud.anm2", true)
-blightSprite:ReplaceSpritesheet(1, "gfx/items/collectibles/blight.png")
-blightSprite:LoadGraphics()
-blightSprite:SetFrame("Icon", 0)
-
-local glowSprite = Sprite()
-glowSprite:Load("gfx/ui/tarnished_isaac_hud.anm2", true)
-glowSprite:ReplaceSpritesheet(1, "gfx/ui/generic_glow_32.png")
-glowSprite:LoadGraphics()
-glowSprite:SetFrame("Icon", 0)
-
+local M = {}
 
 local function renderGlowSprite(player_save, inventory, renderPos, i)
+    local glowSprite = Sprite()
+    glowSprite:Load("gfx/ui/tarnished_isaac_hud.anm2", true)
+    glowSprite:ReplaceSpritesheet(1, "gfx/ui/generic_glow_32.png")
+    glowSprite:LoadGraphics()
+    glowSprite:SetFrame("Icon", 0)
+
     if (player_save.BD_BONUS_BLIGHT and player_save.BD_BONUS_BLIGHT >= 1 and inventory.items[i+1] ~= nil)
     or inventory.items[i+1] == Epiphany.Item.BLIGHTED_DICE.BLIGHT then
         glowSprite.Color = Color(1, .8, .6, -- Set transparency and colour
@@ -24,6 +19,12 @@ end
 local function renderBlightSprite(pEntity, player_save, inventory, renderPos, i)
     local rotTarget = Epiphany.Character.ISAAC:FindRotTarget(pEntity)
     local rotTargetFound = false
+
+    local blightSprite = Sprite()
+    blightSprite:Load("gfx/ui/tarnished_isaac_hud.anm2", true)
+    blightSprite:ReplaceSpritesheet(1, "gfx/items/collectibles/blight.png")
+    blightSprite:LoadGraphics()
+    blightSprite:SetFrame("Icon", 0)
 
     if (not rotTargetFound) and rotTarget and inventory.items[i+1] == rotTarget then
         player_save.BD_ROT_BUILDUP = player_save.BD_ROT_BUILDUP or 0
@@ -42,7 +43,7 @@ local function renderBlightSprite(pEntity, player_save, inventory, renderPos, i)
 end
 
 
-local function EpiphanyIsaacFunc(player, edge_indexed, edge_multipliers)
+function M.EpiphanyIsaacFunc(player, edge_indexed, edge_multipliers)
     if player.player_type ~= Epiphany.PlayerType.ISAAC then return end
 
     local position = edge_indexed + (CoopHUDplus.config.inventory.pos * edge_multipliers)
@@ -70,4 +71,5 @@ local function EpiphanyIsaacFunc(player, edge_indexed, edge_multipliers)
         position + (CoopHUDplus.config.inventory.spacing * Vector(selected % numColumns, selected // numColumns))
     )
 end
-CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.POST_PLAYER_RENDER, EpiphanyIsaacFunc)
+
+return M
