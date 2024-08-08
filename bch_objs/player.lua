@@ -33,6 +33,9 @@ function Better_Coop_HUD.Player.new(player_entity, player_num)
     self.stats = Better_Coop_HUD.Stats.new(player_entity, self)
 
     self.inventory = Better_Coop_HUD.Inventory.new(player_entity, nil)
+    if Better_Coop_HUD.SAVED_PLAYER_DATA[tostring(self.player_entity.ControllerIndex)] then
+        self.inventory.inv = Better_Coop_HUD.SAVED_PLAYER_DATA[tostring(self.player_entity.ControllerIndex)]
+    end
 
     return self
 end

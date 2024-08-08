@@ -67,6 +67,11 @@ function Better_Coop_HUD.Inventory.new(player_entity, previous_player)
     return self
 end
 
+function Better_Coop_HUD.Inventory:setInventory(inventory)
+    self.inv = inventory
+    self.sprites = self:getSprites()
+end
+
 function Better_Coop_HUD.Inventory:getSprites()
     if not self.display then return end
     if not self.sprite_func then return end

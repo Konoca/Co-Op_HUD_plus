@@ -1,3 +1,5 @@
+local json = require('json')
+
 local function onGameStart(_, isCont)
     Better_Coop_HUD.players = {}
     Better_Coop_HUD.joining = {}
@@ -7,10 +9,33 @@ local function onGameStart(_, isCont)
     }
 
     -- TODO save and load data for continued games (specifically pills)
-    if isCont then
+    if isCont and Better_Coop_HUD:HasData() then
+        local data = json.decode(Better_Coop_HUD:LoadData())
+        Better_Coop_HUD.SAVED_PLAYER_DATA = data.player_invs
+        Better_Coop_HUD.pills = data.pills
     end
 end
 Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, onGameStart)
+
+local function onGameExit(_, shouldSave)
+    if not shouldSave then return end
+
+    local data = {
+        player_invs = {},
+        pills = Better_Coop_HUD.pills,
+    }
+
+    for i = 0, #Better_Coop_HUD.players, 1 do
+        local p = Better_Coop_HUD.players[i]
+        if p then
+            data.player_invs[p.player_entity.ControllerIndex] = p.inventory.inv
+        end
+    end
+
+    local jsonString = json.encode(data)
+    Better_Coop_HUD:SaveData(jsonString)
+end
+Better_Coop_HUD:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, onGameExit)
 
 
 local function getPill(_, pillEffect, pillColor)
