@@ -124,6 +124,7 @@ function CoopHUDplus.ActiveItem.new(entity, slot)
     self.entity = entity
 
     self.id = entity:GetActiveItem(slot)
+    self.desc = entity:GetActiveItemDesc()
     self.current_charge = entity:GetActiveCharge(slot)
 
     if Isaac.GetItemConfig():GetCollectible(self.id) == nil then
@@ -145,11 +146,33 @@ end
 function CoopHUDplus.ActiveItem:getSprite()
     if self.id == 0 then return nil end
 
-    -- TODO dInfinity
-    -- TODO other special case active items
+    local animation = 'Idle'
+    local frame = 0
+    if self.current_charge + self.soul_charge >= self.max_charge and self.max_charge > 0 then frame = 1 end
 
     local sprite = Sprite()
     local path = Isaac.GetItemConfig():GetCollectible(self.id).GfxFileName
+
+    -- TODO other special case active items
+    if self.id == CollectibleType.COLLECTIBLE_D_INFINITY then
+        animation = 'DInfinity'
+        path = CoopHUDplus.PATHS.IMAGES.d_infinity
+
+        local varData = self.desc.VarData
+        local tmpFrame = 0
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D4 == CoopHUDplus.ActiveItem.D_INFINITY.D4 then tmpFrame = 2 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D6 == CoopHUDplus.ActiveItem.D_INFINITY.D6 then tmpFrame = 4 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.E6 == CoopHUDplus.ActiveItem.D_INFINITY.E6 then tmpFrame = 6 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D7 == CoopHUDplus.ActiveItem.D_INFINITY.D7 then tmpFrame = 8 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D8 == CoopHUDplus.ActiveItem.D_INFINITY.D8 then tmpFrame = 10 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D10 == CoopHUDplus.ActiveItem.D_INFINITY.D10 then tmpFrame = 12 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D12 == CoopHUDplus.ActiveItem.D_INFINITY.D12 then tmpFrame = 14 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D20 == CoopHUDplus.ActiveItem.D_INFINITY.D20 then tmpFrame = 16 end
+        if varData & CoopHUDplus.ActiveItem.D_INFINITY.D100 == CoopHUDplus.ActiveItem.D_INFINITY.D100 then tmpFrame = 18 end
+
+        frame = tmpFrame + frame
+    end
+
     sprite:Load(CoopHUDplus.PATHS.ANIMATIONS.active_item, false)
     sprite:ReplaceSpritesheet(0, path)
     sprite:ReplaceSpritesheet(1, path)
@@ -162,10 +185,7 @@ function CoopHUDplus.ActiveItem:getSprite()
         if CoopHUDplus.config.active_item.book_charge_outline then sprite:ReplaceSpritesheet(5, bookpath) end
     end
 
-    local frame = 0
-    if self.current_charge + self.soul_charge >= self.max_charge and self.max_charge > 0 then frame = 1 end
-
-    sprite:SetFrame('Idle', frame)
+    sprite:SetFrame(animation, frame)
     sprite:LoadGraphics()
     return sprite
 end
@@ -193,9 +213,9 @@ function CoopHUDplus.ActiveItem:getBookPath()
     local hasVirtues = self.entity:HasCollectible(bov) and self.id ~= bov
     local hasBelial = self.entity:HasCollectible(bob) and self.id ~= bob
 
-    if hasVirtues and hasBelial then return 'gfx/ui/hud_bookofvirtueswithbelial.png' end
-    if hasVirtues then return 'gfx/ui/hud_bookofvirtues.png' end
-    if hasBelial then return 'gfx/ui/hud_bookofbelial.png' end
+    if hasVirtues and hasBelial then return CoopHUDplus.PATHS.IMAGES.virtues_belial end
+    if hasVirtues then return CoopHUDplus.PATHS.IMAGES.virtues end
+    if hasBelial then return CoopHUDplus.PATHS.IMAGES.belial end
     return nil
 end
 
