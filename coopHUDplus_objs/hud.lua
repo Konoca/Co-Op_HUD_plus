@@ -76,7 +76,9 @@ local function onRender()
     local screen_center = GetScreenCenter()
 
     -- toggle between HUD and default HUD
-    if Input.IsButtonTriggered(Keyboard.KEY_H, 0) and not game:IsPaused() and CoopHUDplus.config.enable_toggle_hud then hudOff = not hudOff end
+    if Input.IsButtonTriggered(Keyboard.KEY_H, 0) and not game:IsPaused() and CoopHUDplus.config.enable_toggle_hud then
+        hudOff = not hudOff
+    end
     setDefaultHUD(game, hudOff)
     if hudOff then return end
 
@@ -113,7 +115,7 @@ local function onRender()
     CoopHUDplus.Miscs.new():render(screen_size, screen_center)
 
     -- mod overrides
-    if MinimapAPI then
+    if MinimapAPI and CoopHUDplus.config.mods.mAPI.override then
         -- https://github.com/TazTxUK/MinimapAPI/blob/master/scripts/minimapapi/config.lua
         minimapConfig('DisplayOnNoHUD', true)
         minimapConfig('DisplayMode', 2)
@@ -124,7 +126,7 @@ local function onRender()
         minimapConfig('DisplayLevelFlags', 2)
         minimapConfig('BorderColorA', 0.5)
     end
-    if EID and EID.UserConfig then
+    if EID and EID.UserConfig and CoopHUDplus.config.mods.EID.override then
         -- https://github.com/wofsauge/External-Item-Descriptions/blob/master/eid_config.lua
         EID.UserConfig.YPosition = CoopHUDplus.config.mods.EID.YPosition
         EID.UserConfig.XPosition = CoopHUDplus.config.mods.EID.XPosition

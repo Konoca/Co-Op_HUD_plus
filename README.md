@@ -34,8 +34,6 @@ This mod is currently a work-in-progress, please report all issues under "Issues
     * Displays wave counter for boss rush, similar to Greed mode
 * Unintrusive Pause Menu (https://steamcommunity.com/sharedfiles/filedetails/?id=2769063897)
     * Replaces pause menu to allow the level to still be seen 
-<!-- * Better Health (https://steamcommunity.com/sharedfiles/filedetails/?id=834199494) -->
-<!-- * Improves the look of heart icons -->
 * Encyclopedia (https://steamcommunity.com/sharedfiles/filedetails/?id=2376005362)
     * Allows players to check their current items and what they do
 
