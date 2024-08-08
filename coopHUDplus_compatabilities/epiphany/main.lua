@@ -93,11 +93,12 @@ end
 local isaac = require('coopHUDplus_compatabilities.epiphany.isaac')
 local chargebars = require('coopHUDplus_compatabilities.epiphany.chargebars')
 local function AddCallbacks()
-    CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.POST_PLAYER_RENDER, EpiphanyHudHelper)
-    CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.PRE_HEALTH_RENDER, EpiphanyLostHealth)
-    CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.PRE_HEALTH_RENDER, EpiphanyKeeperHealth)
+    local modID = Epiphany.Name
+    CoopHUDplus.Utils.AddCallback(modID, CoopHUDplus.Callbacks.POST_PLAYER_RENDER, EpiphanyHudHelper)
+    CoopHUDplus.Utils.AddCallback(modID, CoopHUDplus.Callbacks.PRE_HEALTH_RENDER, EpiphanyLostHealth)
+    CoopHUDplus.Utils.AddCallback(modID, CoopHUDplus.Callbacks.PRE_HEALTH_RENDER, EpiphanyKeeperHealth)
 
-    CoopHUDplus.Utils.AddCallback(0, CoopHUDplus.Callbacks.POST_PLAYER_RENDER, isaac.EpiphanyIsaacFunc)
+    CoopHUDplus.Utils.AddCallback(modID, CoopHUDplus.Callbacks.POST_PLAYER_RENDER, isaac.EpiphanyIsaacFunc)
     CoopHUDplus:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, chargebars.EpiphanySamsonCharge, 0)
     CoopHUDplus:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, chargebars.EpiphanyCainCharge, 0)
 end
