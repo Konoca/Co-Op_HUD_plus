@@ -16,9 +16,6 @@ local function onGameStart(_, isCont)
         local savedData = CoopHUDplus.Utils.decodeConfigVectors(data.config)
         if savedData.version ~= nil then
             CoopHUDplus.config = CoopHUDplus.Utils.ensureCompatibility(CoopHUDplus.config, savedData)
-        end
-
-        if not tonumber(CoopHUDplus.config.version) then
             CoopHUDplus.config.version = CoopHUDplus.version
         end
     end
@@ -150,7 +147,9 @@ local function newLevel(_)
     CoopHUDplus.Utils.createStreak(name, curse, curse ~= '')
 
 
-    saveGame(true)
+    if level:GetStage() ~= LevelStage.STAGE1_1 then
+        saveGame(true)
+    end
 end
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newLevel)
 

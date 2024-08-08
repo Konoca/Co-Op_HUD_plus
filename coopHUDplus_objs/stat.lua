@@ -176,7 +176,6 @@ function CoopHUDplus.Stat:render(pos_vector, text_pos_vector, render_icon, pColo
         self.sprite:Render(pos_vector)
     end
 
-    -- TODO visual difference if stat changed
     local f, _ = Font(CoopHUDplus.PATHS.FONTS[CoopHUDplus.config.fonts.stats])
     f:DrawStringScaled(
         string.format(self.is_percent and '%.1f%%' or '%.2f', self.value),
@@ -186,6 +185,31 @@ function CoopHUDplus.Stat:render(pos_vector, text_pos_vector, render_icon, pColo
         KColor(pColor[1], pColor[2], pColor[3], 0.5),
         0, true
     )
+
+    if self.update then
+        local color = KColor(1, 0, 0, 0.5)
+        local value = self.update.value
+        local prefix = ''
+
+        if value > 0 then
+            color = KColor(0, 1, 0, 0.5)
+            prefix = '+'
+        end
+
+        local pos = text_pos_vector + CoopHUDplus.config.stats.text.update.offset
+        f:DrawStringScaled(
+            prefix..string.format(self.is_percent and '%.1f%%' or '%.2f', value),
+            pos.X, pos.Y,
+            CoopHUDplus.config.stats.text.scale.X,
+            CoopHUDplus.config.stats.text.scale.Y,
+            color, 0, true
+        )
+
+        self.update.frames = self.update.frames - 1
+        if self.update.frames < 1 then self.update = nil end
+    end
+
+    f:Unload()
 end
 
 function CoopHUDplus.Stats.new(player_entity, player)
@@ -202,6 +226,21 @@ function CoopHUDplus.Stats.new(player_entity, player)
     self.luck = CoopHUDplus.Stat.new(player_entity, CoopHUDplus.Stat.LUCK)
 
     self.stats = {self.speed, self.fire_delay, self.damage, self.range, self.shot_speed, self.luck}
+
+    if player and player.stats then
+        for k, stat in pairs(self.stats) do
+            local stat2 = player.stats.stats[k]
+            if stat2 and stat.value ~= stat2.value then
+                stat.update = {
+                    value = stat.value - stat2.value,
+                    frames = CoopHUDplus.config.stats.text.update.frames,
+                }
+            end
+            if stat2.update then
+                stat.update = stat2.update
+            end
+        end
+    end
 
     if self.player.number == 0 and self.player.is_real then
         local duality = CoopHUDplus.Stat.new(player_entity, CoopHUDplus.Stat.DUALITY, true)
