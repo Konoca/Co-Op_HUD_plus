@@ -423,7 +423,7 @@ function CoopHUDplus.Health:render(edge_indexed, edge_multipliers)
         end
 
         pos = edge + (offset * edge_multipliers)
---
+
         self.hearts[i+1]:render(pos, edge_multipliers.X == -1)
 
         offset.X = offset.X + CoopHUDplus.config.health.space_between_hearts

@@ -2,23 +2,27 @@ CoopHUDplus = RegisterMod('Co-Op HUD+', 1)
 CoopHUDplus.version = 0.80
 
 
-require('coopHUDplus_objs.inits')
-require('coopHUDplus_enums')
-require('coopHUDplus_config')
-require('coopHUDplus_mcm.mcm')
+require('scripts.inits')
+require('scripts.enums')
+require('scripts.config.main')
+require('scripts.config.mcm.main')
 
-require('coopHUDplus_utils')
+require('scripts.utils')
 
-require('coopHUDplus_objs.stat')
-require('coopHUDplus_objs.heart')
-require('coopHUDplus_objs.item')
-require('coopHUDplus_objs.misc')
-require('coopHUDplus_objs.inventory')
-require('coopHUDplus_objs.player')
-require('coopHUDplus_objs.hud')
+-- require('coopHUDplus_objs.stat')
+-- require('coopHUDplus_objs.heart')
+-- require('coopHUDplus_objs.item')
+-- require('coopHUDplus_objs.misc')
+-- require('coopHUDplus_objs.inventory')
+-- require('coopHUDplus_objs.player')
+-- require('coopHUDplus_objs.hud')
 
-require('coopHUDplus_commands')
-require('coopHUDplus_callbacks')
-require('coopHUDplus_compatabilities.main')
+require('scripts.HUD.player.health')
+require('scripts.HUD.player.main')
+require('scripts.HUD.main')
+
+require('scripts.commands')
+-- require('coopHUDplus_callbacks')
+-- require('scripts.compatabilities.main')
 
 print('Co-Op HUD+ loaded v'..CoopHUDplus.version)

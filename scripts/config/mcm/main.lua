@@ -1,9 +1,11 @@
 if ModConfigMenu == nil then return end
 -- https://github.com/Zamiell/isaac-mod-config-menu/tree/main
 
-CoopHUDplus.MCM = {}
-CoopHUDplus.MCM.title = 'Co-Op HUD+'
-CoopHUDplus.MCM.categories = {
+local mod = CoopHUDplus
+
+mod.MCM = {}
+mod.MCM.title = mod.Name
+mod.MCM.categories = {
     general = 'General',
     mods = 'Mods',
     misc = 'Misc.',
@@ -18,7 +20,7 @@ CoopHUDplus.MCM.categories = {
     fonts = 'Fonts',
 }
 
-local dir = 'coopHUDplus_mcm/'
+local dir = 'scripts.config.mcm.'
 require(dir..'general')
 require(dir..'mods')
 require(dir..'stats')

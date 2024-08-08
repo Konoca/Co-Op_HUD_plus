@@ -1,4 +1,6 @@
-CoopHUDplus.PATHS = {
+local mod = CoopHUDplus
+
+mod.PATHS = {
     ANIMATIONS = {
         active_item = 'gfx/ui/items_coop.anm2', -- taken from coopHUD (Srokks), edited
         chargebar = 'gfx/ui/ui_chargebar.anm2',
@@ -54,7 +56,7 @@ CoopHUDplus.PATHS = {
     }
 }
 
-CoopHUDplus.PILL = {
+mod.PILL = {
     [PillEffect.PILLEFFECT_NULL] = '???',
     [PillEffect.PILLEFFECT_BAD_GAS] = 'Bad Gas',
     [PillEffect.PILLEFFECT_BAD_TRIP] = 'Bad Trip',
@@ -108,7 +110,7 @@ CoopHUDplus.PILL = {
     [PillEffect.PILLEFFECT_EXPERIMENTAL] = 'Experimental Pill',
 }
 
-CoopHUDplus.ActiveItem.D_INFINITY = {
+mod.Item.Active.D_INFINITY = {
     D1 = 0,
     D4 = 65536,
     D6 = 131072,
@@ -121,54 +123,67 @@ CoopHUDplus.ActiveItem.D_INFINITY = {
     D100 = 589824,
 }
 
-CoopHUDplus.Trinket.SLOT_PRIMARY = 0
-CoopHUDplus.Trinket.SLOT_SECONDARY = 1
+mod.Item.Trinket = {
+    SLOT = {
+        PRIMARY = 0,
+        SECONDARY = 1,
+    },
+}
 
-CoopHUDplus.PocketItem.SLOT_PRIMARY = 0
-CoopHUDplus.PocketItem.SLOT_SECONDARY = 1
-CoopHUDplus.PocketItem.SLOT_TERTIARY = 2
-CoopHUDplus.PocketItem.SLOT_QUATERNARY = 3
+mod.Item.Pocket = {
+    SLOT = {
+        PRIMARY = 0,
+        SECONDARY = 1,
+        TERTIARY = 2,
+        QUATERNARY = 3,
+    },
+    TYPE = {
+        NONE = 0,
+        CARD = 1,
+        PILL = 2,
+        ACTIVE = 3,
+    }
+}
 
-CoopHUDplus.PocketItem.TYPE_NONE = 0
-CoopHUDplus.PocketItem.TYPE_CARD = 1
-CoopHUDplus.PocketItem.TYPE_PILL = 2
-CoopHUDplus.PocketItem.TYPE_ACTIVE = 3
+mod.Stat = {
+    SPEED = 0,
+    FIRE_DELAY = 1,
+    DAMAGE = 2,
+    RANGE = 3,
+    SHOT_SPEED = 4,
+    LUCK = 5,
+    DEVIL = 6,
+    ANGEL = 7,
+    PLANETARIUM = 8,
+    DUALITY = 10,
+}
 
-CoopHUDplus.Stat.SPEED = 0
-CoopHUDplus.Stat.FIRE_DELAY = 1
-CoopHUDplus.Stat.DAMAGE = 2
-CoopHUDplus.Stat.RANGE = 3
-CoopHUDplus.Stat.SHOT_SPEED = 4
-CoopHUDplus.Stat.LUCK = 5
-CoopHUDplus.Stat.DEVIL = 6
-CoopHUDplus.Stat.ANGEL = 7
-CoopHUDplus.Stat.PLANETARIUM = 8
-CoopHUDplus.Stat.DUALITY = 10
+mod.Misc = {
+    COIN = 0,
+    KEY = 1,
+    BOMB = 2,
+    GOLDEN_KEY = 3,
+    HARD = 4,
+    NO_ACHIEVEMENTS = 5,
+    GOLDEN_BOMB = 6,
+    GREED = 7,
+    GREED_MACHINE = 9,
+    GREEDIER = 11,
+    SOUL_HEART = 12,
+    BLACK_HEART = 13,
+    GIGA_BOMB = 14,
+    RED_HEART = 15,
+    POOP = 16,
+}
 
-CoopHUDplus.Misc.COIN = 0
-CoopHUDplus.Misc.KEY = 1
-CoopHUDplus.Misc.BOMB = 2
-CoopHUDplus.Misc.GOLDEN_KEY = 3
-CoopHUDplus.Misc.HARD = 4
-CoopHUDplus.Misc.NO_ACHIEVEMENTS = 5
-CoopHUDplus.Misc.GOLDEN_BOMB = 6
-CoopHUDplus.Misc.GREED = 7
-CoopHUDplus.Misc.GREED_MACHINE = 9
-CoopHUDplus.Misc.GREEDIER = 11
-CoopHUDplus.Misc.SOUL_HEART = 12
-CoopHUDplus.Misc.BLACK_HEART = 13
-CoopHUDplus.Misc.GIGA_BOMB = 14
-CoopHUDplus.Misc.RED_HEART = 15
-CoopHUDplus.Misc.POOP = 16
-
-CoopHUDplus.Player.COLORS = {
+mod.Player.COLORS = {
     [1] = {0.8, 0.9, 1.8, 0.25},
     [2] = {1, 0.2, 0.2, 0.25},
     [3] = {0.2, 1, 0.2, 0.25},
     [4] = {1, 1, 0, 0.25},
 }
 
-CoopHUDplus.Callbacks = {
+mod.Callbacks = {
     POST_PLAYER_RENDER = 1,
     PRE_HEALTH_RENDER = 2,
     PRE_MISC_RENDER = 3,
