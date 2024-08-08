@@ -133,6 +133,8 @@ function CoopHUDplus.Inventory:renderResult(edge_indexed, edge_multipliers)
     sprite:Load(CoopHUDplus.PATHS.ANIMATIONS.crafting, false)
     sprite:SetFrame('Result', 0)
 
+    sprite.FlipX = edge_multipliers.X == -1
+
     if self.result then
         sprite:ReplaceSpritesheet(1, self.result)
     end
