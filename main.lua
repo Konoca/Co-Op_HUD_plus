@@ -1,5 +1,5 @@
 CoopHUDplus = RegisterMod('Co-Op HUD+', 1)
-CoopHUDplus.version = 0.83
+CoopHUDplus.version = 0.84
 
 require('scripts.inits')
 require('scripts.enums')

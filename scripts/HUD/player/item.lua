@@ -143,6 +143,8 @@ function ChargeBar.GetCharge(current_charge, max_charge, partial_charge)
 end
 
 function ChargeBar.Render(pos, pType, current_charge, max_charge, partial_charge, soul_charge, extra_charge)
+    if max_charge == 0 then return end
+
     ChargeSprite.bg:Render(pos)
     if pType == PlayerType.PLAYER_BETHANY then
         ChargeSprite.beth:Render(pos, ChargeBar.GetCharge(soul_charge + current_charge, max_charge))
@@ -152,12 +154,14 @@ function ChargeBar.Render(pos, pType, current_charge, max_charge, partial_charge
     if ChargeBar.Map[max_charge] ~= nil then ChargeSprite.overlay:Render(pos) end
 end
 
-function ChargeBar.RenderPocket(pos, pType, current_charge, max_charge, partial_charge, soul_charge, extra_charge)
+function ChargeBar.RenderPocket(pos, pType, current_charge, max_charge, blood_charge, extra_charge)
+    if max_charge == 0 then return end
+
     ChargeSprite.bg:Render(pos)
-    if pType == PlayerType.PLAYER_BETHANY then
-        ChargeSprite.beth:Render(pos, ChargeBar.GetCharge(soul_charge + current_charge, max_charge))
+    if pType == PlayerType.PLAYER_BETHANY_B then
+        ChargeSprite.beth:Render(pos, ChargeBar.GetCharge(blood_charge, max_charge))
     end
-    ChargeSprite.charge:Render(pos, ChargeBar.GetCharge(current_charge, max_charge, partial_charge))
+    ChargeSprite.charge:Render(pos, ChargeBar.GetCharge(current_charge, max_charge))
     ChargeSprite.extra:Render(pos, ChargeBar.GetCharge(extra_charge, max_charge))
     if ChargeBar.Map[max_charge] ~= nil then ChargeSprite.overlay:Render(pos) end
 end
@@ -605,15 +609,14 @@ function Pocket.Render(edge_indexed, edge_multipliers, player_entity, player_num
         if order[i].Charge.Current and order[i].Charge.Max and order[i].Charge.Max > 0 then
             ChargeBar.GetSprite(pType, order[i].ID, order[i].Charge.Max, mod.config.pocket.chargebar.scale)
 
-            ChargeSprite.bg:Render(bar_pos)
-
-            if pType == PlayerType.PLAYER_BETHANY_B then
-                ChargeSprite.beth:Render(bar_pos, ChargeBar.GetCharge(order[i].Charge.Blood, order[i].Charge.Max))
-            end
-
-            ChargeSprite.charge:Render(bar_pos, ChargeBar.GetCharge(order[i].Charge.Current, order[i].Charge.Max))
-            ChargeSprite.extra:Render(bar_pos, ChargeBar.GetCharge(order[i].Charge.Extra, order[i].Charge.Max))
-            ChargeSprite.overlay:Render(bar_pos)
+            ChargeBar.RenderPocket(
+                bar_pos,
+                pType,
+                order[i].Charge.Current,
+                order[i].Charge.Max,
+                order[i].Charge.Blood,
+                order[i].Charge.Extra
+            )
         end
 
         ::skip_pocket::
