@@ -97,8 +97,6 @@ function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror
     local doRender = true
     if self.player_entity:IsCoopGhost() then doRender = false end
 
-    -- TODO active/pocket item highlighting for Jacob & Esau
-
     local edge = CoopHUDplus.config.offset + offset
     local edge_multipliers = Vector(1, 1)
     local edge_indexed = CoopHUDplus.config.offset + offset
