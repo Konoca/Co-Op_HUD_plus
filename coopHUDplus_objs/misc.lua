@@ -78,14 +78,17 @@ function CoopHUDplus.Miscs.new()
     }
     self.difficulty = CoopHUDplus.Misc.new(nil, diffMap[gameDiff])
 
-    if game:IsGreedMode() then
+    local level = game:GetLevel()
+    local stage = level:GetStage()
+
+    if game:IsGreedMode() and stage ~= LevelStage.STAGE7_GREED then
         local maxWaves = game:GetGreedWavesNum() - 1
-        local currWave = game:GetLevel().GreedModeWave
+        local currWave = level.GreedModeWave
         self.difficulty = CoopHUDplus.Misc.new(string.format('%d/%d', currWave, maxWaves), diffMap[gameDiff])
     end
 
     -- greed donation machine jam percentage
-    if game:IsGreedMode() and game:GetLevel():GetStage() == LevelStage.STAGE7_GREED then
+    if game:IsGreedMode() and stage == LevelStage.STAGE7_GREED then
         self.jam_perc = CoopHUDplus.Misc.new(
             player_entity:GetGreedDonationBreakChance(),
             CoopHUDplus.Misc.GREED_MACHINE
