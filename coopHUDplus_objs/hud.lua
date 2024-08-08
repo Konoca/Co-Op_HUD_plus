@@ -99,7 +99,9 @@ local function onRender()
     if hudOff then return end
 
     -- timer
-    lastTimeString = renderTimer(game, lastTimeString)
+    if CoopHUDplus.config.timer.display then
+        lastTimeString = renderTimer(game, lastTimeString)
+    end
 
     -- players
     local twins = 0
