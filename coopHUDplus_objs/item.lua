@@ -5,6 +5,117 @@ end
 function CoopHUDplus.Item:getSprite()
 end
 
+local function getChargeBar(pType, id, max_charge, scale)
+    if id == 0 then return nil end
+
+    local sprite = {
+        overlay = Sprite(),
+        charge = Sprite(),
+        bg = Sprite(),
+        extra = Sprite(),
+        beth = Sprite(),
+    }
+
+    sprite.overlay:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
+    sprite.overlay:SetFrame('BarOverlay'..max_charge, 0)
+    sprite.overlay.Scale = scale
+
+    sprite.charge:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
+    sprite.charge:SetFrame('BarFull', 0)
+    sprite.charge.Scale = scale
+
+    sprite.bg:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
+    sprite.bg:SetFrame('BarEmpty', 0)
+    sprite.bg.Scale = scale
+
+    local extra_color = Color(1, 1, 1, 1, 0, 0, 0)
+    local beth_color = Color(1, 1, 1, 1, 0, 0, 0)
+
+    extra_color:SetColorize(1.8, 1.8, 0, 1)
+
+    -- Colors taken from coopHUD, credit to Srokks
+    beth_color:SetColorize(0.8, 0.9, 1.8, 1)
+    if pType == PlayerType.PLAYER_BETHANY_B then
+        beth_color:SetColorize(1, 0.2, 0.2, 1)
+    end
+
+    sprite.extra:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
+    sprite.extra:SetFrame('BarFull', 0)
+    sprite.extra.Color = extra_color
+    sprite.extra.Scale = scale
+
+    sprite.beth:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
+    sprite.beth:SetFrame('BarFull', 0)
+    sprite.beth.Color = beth_color
+    sprite.beth.Scale = scale
+
+    return sprite
+end
+
+local function getChargeBarCharge(current_charge, max_charge)
+    if not current_charge then return Vector(1,1) end
+
+    -- 22 = 1/6
+    -- 10 = 4/6
+    -- 7 = 5/6
+    -- 3 = full bar
+    -- 26 = empty bar
+    if current_charge <= 0 then
+        return Vector(1, 26)
+    end
+
+    if current_charge >= max_charge then
+        return Vector(1, 3)
+    end
+
+    local chargeMap = {
+        [2] = {
+            [1] = 14,   -- 1/2
+        },
+        [3] = {
+            [1] = 19,   -- 1/3
+            [2] = 10,   -- 2/3
+        },
+        [4] = {
+            [1] = 20,   -- 1/4
+            [2] = 14,   -- 1/2
+            [3] = 8,    -- 3/4
+        },
+        [5] = {
+            -- TODO ..? The sprite exists but I can't find any items that use it. Might need to do for mod compatibility
+        },
+        [6] = {
+            [1] = 22,   -- 1/6
+            [2] = 19,   -- 1/3
+            [3] = 14,   -- 1/2
+            [4] = 10,   -- 2/3
+            [5] = 7,    -- 5/6
+        },
+        [8] = {
+            -- TODO ..? Same as 5-room
+        },
+        [12] = {
+            [1] = 24,   -- 1/12
+            [2] = 22,   -- 1/6
+            [3] = 20,   -- 1/4
+            [4] = 18,   -- 1/3
+            [5] = 16,
+            [6] = 14,   -- 1/2
+            [7] = 12,
+            [8] = 10,   -- 2/3
+            [9] = 8,    -- 3/4
+            [10] = 6,
+            [11] = 4,
+        },
+    }
+
+    if chargeMap[max_charge] == nil then
+        return Vector(1, 28 - (current_charge * (24 / max_charge)))
+    end
+
+    return Vector(1, chargeMap[max_charge][current_charge])
+end
+
 -- Active Item
 function CoopHUDplus.ActiveItem.new(entity, slot)
     local self = setmetatable({}, CoopHUDplus.ActiveItem)
@@ -19,13 +130,15 @@ function CoopHUDplus.ActiveItem.new(entity, slot)
         return nil
     end
 
-    self.max_charge = Isaac.GetItemConfig():GetCollectible(self.id).MaxCharges
+    -- self.max_charge = Isaac.GetItemConfig():GetCollectible(self.id).MaxCharges
+    self.max_charge = entity:GetActiveMaxCharge(slot)
     self.extra_charge = entity:GetBatteryCharge(slot)
     self.soul_charge = entity:GetSoulCharge()
-    self.blood_charge = entity:GetBloodCharge()
+    -- self.blood_charge = entity:GetBloodCharge()
 
     self.sprite = self:getSprite()
-    self.chargeBar = self:getChargeBar()
+    -- self.chargeBar = self:getChargeBar()
+    self.chargeBar = getChargeBar(self.entity:GetPlayerType(), self.id, self.max_charge, CoopHUDplus.config.active_item[slot].scale)
     return self
 end
 
@@ -50,54 +163,10 @@ function CoopHUDplus.ActiveItem:getSprite()
     end
 
     local frame = 0
-    if self.current_charge + self.soul_charge + self.blood_charge >= self.max_charge and self.max_charge > 0 then frame = 1 end
+    if self.current_charge + self.soul_charge >= self.max_charge and self.max_charge > 0 then frame = 1 end
 
     sprite:SetFrame('Idle', frame)
     sprite:LoadGraphics()
-    return sprite
-end
-
-function CoopHUDplus.ActiveItem:getChargeBar()
-    if self.id == 0 then return nil end
-
-    -- TODO 4.5volt
-
-    local sprite = {
-        overlay = Sprite(),
-        charge = Sprite(),
-        bg = Sprite(),
-        extra = Sprite(),
-        beth = Sprite(),
-    }
-
-    sprite.overlay:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
-    sprite.overlay:SetFrame('BarOverlay'..self.max_charge, 0)
-
-    sprite.charge:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
-    sprite.charge:SetFrame('BarFull', 0)
-
-    sprite.bg:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
-    sprite.bg:SetFrame('BarEmpty', 0)
-
-    local extra_color = Color(1, 1, 1, 1, 0, 0, 0)
-    local beth_color = Color(1, 1, 1, 1, 0, 0, 0)
-
-    extra_color:SetColorize(1.8, 1.8, 0, 1)
-
-    -- Colors taken from coopHUD, credit to Srokks
-    beth_color:SetColorize(0.8, 0.9, 1.8, 1)
-    if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY_B then
-        beth_color:SetColorize(1, 0.2, 0.2, 1)
-    end
-
-    sprite.extra:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
-    sprite.extra:SetFrame('BarFull', 0)
-    sprite.extra.Color = extra_color
-
-    sprite.beth:Load(CoopHUDplus.PATHS.ANIMATIONS.chargebar, true)
-    sprite.beth:SetFrame('BarFull', 0)
-    sprite.beth.Color = beth_color
-
     return sprite
 end
 
@@ -149,71 +218,13 @@ function CoopHUDplus.ActiveItem:render(item_pos_vec, bar_pos_vec, scale, display
 
     if self.current_charge and self.max_charge and self.max_charge > 0 and display_charge then
         self.chargeBar.bg:Render(bar_pos_vec)
-        if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY then self.chargeBar.beth:Render(bar_pos_vec, self:getChargeBarCharge(self.soul_charge + self.current_charge)) end
-        if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY_B then self.chargeBar.beth:Render(bar_pos_vec, self:getChargeBarCharge(self.blood_charge + self.current_charge)) end
-        self.chargeBar.charge:Render(bar_pos_vec, self:getChargeBarCharge(self.current_charge))
-        self.chargeBar.extra:Render(bar_pos_vec, self:getChargeBarCharge(self.extra_charge))
+        if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY then
+            self.chargeBar.beth:Render(bar_pos_vec, getChargeBarCharge(self.soul_charge + self.current_charge, self.max_charge))
+        end
+        self.chargeBar.charge:Render(bar_pos_vec, getChargeBarCharge(self.current_charge, self.max_charge))
+        self.chargeBar.extra:Render(bar_pos_vec, getChargeBarCharge(self.extra_charge, self.max_charge))
         self.chargeBar.overlay:Render(bar_pos_vec)
     end
-end
-
-function CoopHUDplus.ActiveItem:getChargeBarCharge(current_charge)
-    if not current_charge then return Vector(1,1) end
-
-    -- 22 = 1/6
-    -- 10 = 4/6
-    -- 7 = 5/6
-    -- 3 = full bar
-    -- 26 = empty bar
-    if current_charge <= 0 then
-        return Vector(1, 26)
-    end
-
-    if current_charge >= self.max_charge then
-        return Vector(1, 3)
-    end
-
-    local chargeMap = {
-        [2] = {
-            [1] = 14,   -- 1/2
-        },
-        [3] = {
-            [1] = 19,   -- 1/3
-            [2] = 10,   -- 2/3
-        },
-        [4] = {
-            [1] = 20,   -- 1/4
-            [2] = 14,   -- 1/2
-            [3] = 8,    -- 3/4
-        },
-        [5] = {
-            -- TODO ..? The sprite exists but I can't find any items that use it. Might need to do for mod compatibility
-        },
-        [6] = {
-            [1] = 22,   -- 1/6
-            [2] = 19,   -- 1/3
-            [3] = 14,   -- 1/2
-            [4] = 10,   -- 2/3
-            [5] = 7,    -- 5/6
-        },
-        [8] = {
-            -- TODO ..? Same as 5-room
-        },
-        [12] = {
-            [1] = 24,   -- 1/12
-            [2] = 22,   -- 1/6
-            [3] = 20,   -- 1/4
-            [4] = 18,   -- 1/3
-            [5] = 16,
-            [6] = 14,   -- 1/2
-            [7] = 12,
-            [8] = 10,   -- 2/3
-            [9] = 8,    -- 3/4
-            [10] = 6,
-            [11] = 4,
-        },
-    }
-    return Vector(1, chargeMap[self.max_charge][current_charge])
 end
 
 -- Trinket
@@ -252,6 +263,18 @@ function CoopHUDplus.Trinket:render(pos_vector, scale)
 end
 
 -- Pocket Item (pill, card, rune)
+local function stripPocketItemName(item_config)
+    if not item_config then return '???' end
+
+    local name = item_config.Name
+    if name:sub(1, 1) ~= '#' then return name end
+
+    name = name:sub(2, -5)
+    name = name:gsub('_', ' ')
+    name = name:lower():gsub('%f[%a].', string.upper)
+    return name
+end
+
 function CoopHUDplus.PocketItem.new(entity, slot)
     local self = setmetatable({}, CoopHUDplus.PocketItem)
 
@@ -266,17 +289,7 @@ function CoopHUDplus.PocketItem.new(entity, slot)
         self.type = CoopHUDplus.PocketItem.TYPE_CARD
         self.item_config = Isaac.GetItemConfig():GetCard(self.id)
 
-        self.name = '???'
-
-        if self.item_config then
-            -- TODO add ID to name as roman numeral
-            local name = self.item_config.Name
-            name = name:sub(2, -5)
-            name = name:gsub('_', ' ')
-            name = name:lower():gsub('%f[%a].', string.upper)
-            self.name = name
-        end
-
+        self.name = stripPocketItemName(self.item_config)
     end
 
     -- Is item a pill?
@@ -288,16 +301,6 @@ function CoopHUDplus.PocketItem.new(entity, slot)
         if not effectID then effectID = PillEffect.PILLEFFECT_NULL end
 
         self.item_config = Isaac.GetItemConfig():GetPillEffect(effectID)
-
-        -- self.name = '???'
-        --
-        -- if self.item_config then
-        --     local name = self.item_config.Name
-        --     name = name:sub(2, -5)
-        --     name = name:gsub('_', ' ')
-        --     name = name:lower():gsub('%f[%a].', string.upper)
-        --     self.name2 = name
-        -- end
 
         local isPillKnown = CoopHUDplus.pills.known[effectID]
         local pillName = CoopHUDplus.PILL[effectID]
@@ -330,7 +333,7 @@ function CoopHUDplus.PocketItem:getSprite()
     return sprite
 end
 
-function CoopHUDplus.PocketItem:render(pos_vector, scale)
+function CoopHUDplus.PocketItem:render(pos_vector, _, scale)
     if not self.sprite then return end
 
     self.sprite.Scale = scale
@@ -343,25 +346,23 @@ function CoopHUDplus.PocketActiveItem.new(entity, slot)
     self.id = 0
     self.slot = slot
     self.type = CoopHUDplus.PocketItem.TYPE_NONE
+    self.pType = entity:GetPlayerType()
 
     if entity:GetActiveItem(slot) > 0 then
         self.id = entity:GetActiveItem(slot)
         self.type = CoopHUDplus.PocketItem.TYPE_ACTIVE
         self.item_config = Isaac.GetItemConfig():GetCollectible(self.id)
 
-        self.name = '???'
-
-        if self.item_config then
-            local name = self.item_config.Name
-            name = name:sub(2, -5)
-            name = name:gsub('_', ' ')
-            name = name:lower():gsub('%f[%a].', string.upper)
-            self.name = name
-        end
+        self.name = stripPocketItemName(self.item_config)
 
         self.current_charge = entity:GetActiveCharge(slot)
-        self.max_charge = Isaac.GetItemConfig():GetCollectible(self.id).MaxCharges
+        -- self.max_charge = Isaac.GetItemConfig():GetCollectible(self.id).MaxCharges
+        self.max_charge = entity:GetActiveMaxCharge(slot)
+        self.blood_charge = entity:GetBloodCharge() + self.current_charge
+        self.extra_charge = entity:GetBatteryCharge(slot)
+
         self.sprite = self:getSprite()
+        self.chargeBar = getChargeBar(self.pType, self.id, self.max_charge, CoopHUDplus.config.pocket.chargebar.scale)
     end
 
     return self
@@ -386,11 +387,21 @@ function CoopHUDplus.PocketActiveItem:getSprite()
     return sprite
 end
 
-function CoopHUDplus.PocketActiveItem:render(pos_vector, scale)
+function CoopHUDplus.PocketActiveItem:render(pos_vector, bar_pos_vec, scale)
     if not self.sprite then return end
 
     self.sprite.Scale = scale
     self.sprite:Render(pos_vector)
+
+    if self.current_charge and self.max_charge and self.max_charge > 0 and CoopHUDplus.config.pocket.chargebar.display and self.slot == CoopHUDplus.PocketItem.SLOT_PRIMARY then
+        self.chargeBar.bg:Render(bar_pos_vec)
+
+        if self.pType == PlayerType.PLAYER_BETHANY_B then self.chargeBar.beth:Render(bar_pos_vec, getChargeBarCharge(self.blood_charge, self.max_charge)) end
+
+        self.chargeBar.charge:Render(bar_pos_vec, getChargeBarCharge(self.current_charge, self.max_charge))
+        self.chargeBar.extra:Render(bar_pos_vec, getChargeBarCharge(self.extra_charge, self.max_charge))
+        self.chargeBar.overlay:Render(bar_pos_vec)
+    end
 end
 
 function CoopHUDplus.Pockets.new(player_entity, previous_player)
@@ -577,7 +588,13 @@ function CoopHUDplus.Pockets:render(edge_indexed, edge_multipliers)
 
         local item_pos = edge_indexed + (CoopHUDplus.config.pocket[i].pos * edge_multipliers)
 
-        self.order[i]:render(item_pos, CoopHUDplus.config.pocket[i].scale)
+        local bar_flip = 1
+        if not CoopHUDplus.config.pocket.chargebar.stay_on_right then
+            bar_flip = bar_flip * edge_multipliers.X
+        end
+        local bar_pos = item_pos + (CoopHUDplus.config.pocket.chargebar.pos * Vector(bar_flip, edge_multipliers.Y))
+
+        self.order[i]:render(item_pos, bar_pos, CoopHUDplus.config.pocket[i].scale)
         ::skip_pocket::
     end
 
