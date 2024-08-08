@@ -75,7 +75,8 @@ function CoopHUDplus.Player:getIsReal()
 end
 
 function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror, vertical_mirror, offset, pColor)
-    if self.player_entity:IsCoopGhost() then return end
+    local doRender = true
+    if self.player_entity:IsCoopGhost() then doRender = false end
 
     -- TODO active/pocket item highlighting for Jacob & Esau
 
@@ -94,7 +95,7 @@ function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror
 
     -- active item
     for i = 0, #self.active_items, 1 do
-        if not self.active_items[i] then goto skip_active_item end
+        if not self.active_items[i] or not doRender then goto skip_active_item end
 
         local item_pos = edge_indexed + (CoopHUDplus.config.active_item[i].pos * edge_multipliers)
 
@@ -117,7 +118,7 @@ function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror
 
     -- trinket
     for i = 0, #self.trinkets, 1 do
-        if not self.trinkets[i] then goto skip_trinket end
+        if not self.trinkets[i] or not doRender then goto skip_trinket end
 
         local item_pos = edge_indexed + (CoopHUDplus.config.trinket[i].pos * edge_multipliers)
 
@@ -126,13 +127,13 @@ function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror
     end
 
     -- pocket items
-    self.pockets:render(edge_indexed, edge_multipliers)
+    if doRender then self.pockets:render(edge_indexed, edge_multipliers) end
 
     -- health
-    self.health:render(edge_indexed, edge_multipliers)
+    if doRender then self.health:render(edge_indexed, edge_multipliers) end
 
     -- inventory
-    self.inventory:render(edge_indexed, edge_multipliers)
+    if doRender then self.inventory:render(edge_indexed, edge_multipliers) end
 
     -- stats & misc
     if self.is_real then
