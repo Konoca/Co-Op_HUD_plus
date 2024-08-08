@@ -11,6 +11,17 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
 
     player_colors = false,
 
+    items = {
+        display = true,
+        pos = Vector(-10, 195),
+        anchors = Vector(1, 0),
+        offset = Vector(0, 10),
+        player_offset = Vector(-10, 0),
+        scale = Vector(0.4, 0.4),
+        items_per_player = 6,
+        colors = true,
+    },
+
     active_item = {
         book_correction_offset = Vector(0, -5),
         book_charge_outline = true,
@@ -164,14 +175,14 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
             frame = Vector(55, 55),
             override = true,
         },
-        EID = {
-            XPosition = 135,
-            YPosition = 5,
-            DisplayMode = 'local',
-            HUDOffset = 10,
-            enable = true,
-            override = false,
-        },
+        -- EID = {
+        --     XPosition = 135,
+        --     YPosition = 5,
+        --     DisplayMode = 'local',
+        --     HUDOffset = 10,
+        --     enable = true,
+        --     override = false,
+        -- },
         EPIPHANY = {
             hud_element_pos = Vector(50, 42),
         }

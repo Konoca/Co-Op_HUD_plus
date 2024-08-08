@@ -15,6 +15,9 @@ function CoopHUDplus.Player.new(player_entity, player_num)
         self.twin = CoopHUDplus.Player.new(twin_entity, player_num)
         self.twin.number = self.number
     end
+    if not self.is_real then
+        self.number = self.number * -1
+    end
 
     self.health = CoopHUDplus.Health.new(player_entity, self.number)
 
@@ -33,8 +36,12 @@ function CoopHUDplus.Player.new(player_entity, player_num)
     self.stats = CoopHUDplus.Stats.new(player_entity, self)
 
     self.inventory = CoopHUDplus.Inventory.new(player_entity, nil)
-    if CoopHUDplus.SAVED_PLAYER_DATA[tostring(self.player_entity.ControllerIndex)] then
-        self.inventory.inv = CoopHUDplus.SAVED_PLAYER_DATA[tostring(self.player_entity.ControllerIndex)]
+    self.items = {}
+
+    if CoopHUDplus.SAVED_PLAYER_DATA then
+        local saveData = CoopHUDplus.SAVED_PLAYER_DATA[tostring(self.number)]
+        self.inventory.inv = saveData and saveData.inv or {}
+        self.items = saveData and saveData.items or {}
     end
 
     return self
