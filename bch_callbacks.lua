@@ -15,7 +15,7 @@ local function onPlayerInit(_, player)
     local p = Better_Coop_HUD.Player.new(player)
     Better_Coop_HUD.players[p.player_entity.Index] = p
 end
-Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, onPlayerInit)
+-- Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, onPlayerInit)
 
 
 local function onPlayerUpdate(_, player)
@@ -24,7 +24,8 @@ local function onPlayerUpdate(_, player)
     if p then p:update(player) end
     if not p then onPlayerInit(_, player) end
 end
-Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, onPlayerUpdate)
+-- Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, onPlayerUpdate)
+Better_Coop_HUD:AddCallback(ModCallbacks.MC_POST_PEFFECT_UPDATE, onPlayerUpdate)
 
 
 local function getPill(_, pillEffect, pillColor)
