@@ -10,10 +10,6 @@ function Better_Coop_HUD.Player.new(player_entity, player_num)
 
     self.number = player_num
 
-    if not self.is_real then
-        self.number = self.number - 1
-    end
-
     local twin_entity = self.player_entity:GetOtherTwin()
     if twin_entity ~= nil and self.is_real then
         self.twin = Better_Coop_HUD.Player.new(twin_entity, player_num)
@@ -148,6 +144,8 @@ function Better_Coop_HUD.Player:render(screen_size, screen_center, horizontal_mi
             vertical_mirror,
             Better_Coop_HUD.config.twin_pos
         )
+
+        -- TODO does not render correctly for P3 & P4
         self.twin.stats:render(edge, edge_indexed, edge_multipliers, Better_Coop_HUD.config.stats.text.twin_offset)
     end
 end
