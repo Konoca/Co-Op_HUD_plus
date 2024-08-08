@@ -284,7 +284,7 @@ function Better_Coop_HUD.PocketItem.new(entity, slot)
         self.id = self.player_entity:GetPill(slot)
         self.type = Better_Coop_HUD.PocketItem.TYPE_PILL
 
-        local effectID = Better_Coop_HUD.pills[self.id]
+        local effectID = Better_Coop_HUD.pills.cache[self.id]
         if not effectID then effectID = PillEffect.PILLEFFECT_NULL end
 
         self.item_config = Isaac.GetItemConfig():GetPillEffect(effectID)
@@ -299,8 +299,7 @@ function Better_Coop_HUD.PocketItem.new(entity, slot)
         --     self.name2 = name
         -- end
 
-        -- TODO do not display name if pill hasn't been used in run yet
-        self.name = Better_Coop_HUD.PILL[effectID]
+        self.name = Better_Coop_HUD.pills.known[effectID] and Better_Coop_HUD.PILL[effectID] or Better_Coop_HUD.PILL[PillEffect.PILLEFFECT_NULL]
     end
 
     self.sprite = self:getSprite()
