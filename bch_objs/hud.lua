@@ -64,6 +64,14 @@ local function onRender()
     local game = Game()
     if Better_Coop_HUD.config.disable or game:IsPaused() then return end -- TODO HUD disappears when paused
 
+    -- TODO show character selection for players that are joining
+    -- For now, hide HUD if someone is joining.
+    -- This is only a workaround until I can figure out how to determine what characters are unlocked
+    if #Better_Coop_HUD.joining > 0 then
+        setDefaultHUD(game, true)
+        return
+    end
+
     local screen_size = GetScreenSize()
     local screen_center = GetScreenCenter()
 
@@ -97,8 +105,6 @@ local function onRender()
 
     -- bombs, keys, coins, etc.
     Better_Coop_HUD.Miscs.new():render(screen_center)
-
-    -- TODO show character selection for players that are joining
 
     -- mod overrides
     if MinimapAPI then
