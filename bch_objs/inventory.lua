@@ -1,3 +1,51 @@
+Better_Coop_HUD.Inventory.handle_player = {
+    [PlayerType.PLAYER_ISAAC_B] = function (self)
+        if self.player_entity:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+            self.max_slots = 12
+            self.row_size = 6
+        end
+        self.display = true
+
+        self.sprite_func = function (s, i)
+            s:Load(Better_Coop_HUD.PATHS.ANIMATIONS.inv, false)
+            s:SetFrame('Idle', i - 1)
+            if self.inv[i] then s:ReplaceSpritesheet(2, self.inv[i]) end
+            s:LoadGraphics()
+        end
+    end,
+
+    [PlayerType.PLAYER_CAIN_B] = function (self)
+        self.inv = EID.BoC.BagItems
+        self.display = true
+        self.result = self:getResult()
+
+        self.sprite_func = function (s, i)
+            s:Load(Better_Coop_HUD.PATHS.ANIMATIONS.crafting, true)
+            s:SetFrame('Idle', self.inv[i] and self.inv[i] or 0)
+        end
+    end,
+
+    [PlayerType.PLAYER_XXX_B] = function (self)
+        self.inv = {}
+
+        self.max_slots = 6
+        self.row_size = 6
+        self.display = true
+
+
+        for i = 0, self.max_slots, 1 do
+            table.insert(self.inv, self.player_entity:GetPoopSpell(i))
+        end
+
+        self.sprite_func = function (s, i)
+            s:Load(Better_Coop_HUD.PATHS.ANIMATIONS.poops, false)
+            local anim = i == 1 and 'Idle' or 'IdleSmall'
+            s:SetFrame(anim, self.inv[i])
+            s:LoadGraphics()
+        end
+    end,
+}
+
 function Better_Coop_HUD.Inventory.new(player_entity, previous_player)
     local self = setmetatable({}, Better_Coop_HUD.Inventory)
 
@@ -7,20 +55,12 @@ function Better_Coop_HUD.Inventory.new(player_entity, previous_player)
     self.display = false
 
     self.max_slots = 8
+    self.row_size = 4
 
-    self.ptype = player_entity:GetPlayerType()
-    if self.ptype == PlayerType.PLAYER_CAIN_B then
-        self.inv = EID.BoC.BagItems
-        self.anim = Better_Coop_HUD.PATHS.ANIMATIONS.crafting
-        self.display = true
-        self.result = self:getResult()
-    end
+    self.sprite_func = nil
 
-    if self.ptype == PlayerType.PLAYER_ISAAC_B then
-        if player_entity:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then self.max_slots = 12 end
-        self.anim = Better_Coop_HUD.PATHS.ANIMATIONS.inv
-        self.display = true
-    end
+    local func = Better_Coop_HUD.Inventory.handle_player[player_entity:GetPlayerType()]
+    if func then func(self) end
 
     self.sprites = self:getSprites()
 
@@ -29,22 +69,12 @@ end
 
 function Better_Coop_HUD.Inventory:getSprites()
     if not self.display then return end
+    if not self.sprite_func then return end
+
     local sprites = {}
     for i = 1, self.max_slots, 1 do
         local s = Sprite()
-
-        if self.ptype == PlayerType.PLAYER_CAIN_B then
-            s:Load(self.anim, true)
-            s:SetFrame('Idle', self.inv[i] and self.inv[i] or 0)
-        end
-
-        if self.ptype == PlayerType.PLAYER_ISAAC_B then
-            s:Load(self.anim, false)
-            s:SetFrame('Idle', i - 1)
-            if self.inv[i] then s:ReplaceSpritesheet(2, self.inv[i]) end
-            s:LoadGraphics()
-        end
-
+        self.sprite_func(s, i)
         table.insert(sprites, s)
     end
 
@@ -72,7 +102,7 @@ function Better_Coop_HUD.Inventory:render(edge_indexed, edge_multipliers)
 
     local row = 0
     for i = 1, self.max_slots, 1 do
-        if i % ((self.max_slots / 2) + 1) == 0 and i ~= 1 then
+        if i % (self.row_size + 1) == 0 and i ~= 1 then
             row = row + 1
             offset.X = 0
             offset.Y = offset.Y + Better_Coop_HUD.config.inventory.spacing.Y
