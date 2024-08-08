@@ -153,7 +153,26 @@ function CoopHUDplus.ActiveItem:getSprite()
     local sprite = Sprite()
     local path = Isaac.GetItemConfig():GetCollectible(self.id).GfxFileName
 
-    -- TODO other special case active items
+    animation, path, frame = self:getSpecialActives(animation, path, frame)
+
+    sprite:Load(CoopHUDplus.PATHS.ANIMATIONS.active_item, false)
+    sprite:ReplaceSpritesheet(0, path)
+    sprite:ReplaceSpritesheet(1, path)
+    sprite:ReplaceSpritesheet(2, path)
+
+    local bookpath = self:getBookPath()
+    if bookpath and self.slot == ActiveSlot.SLOT_PRIMARY then
+        sprite:ReplaceSpritesheet(3, bookpath)
+        sprite:ReplaceSpritesheet(4, bookpath)
+        if CoopHUDplus.config.active_item.book_charge_outline then sprite:ReplaceSpritesheet(5, bookpath) end
+    end
+
+    sprite:SetFrame(animation, frame)
+    sprite:LoadGraphics()
+    return sprite
+end
+
+function CoopHUDplus.ActiveItem:getSpecialActives(animation, path, frame)
     if self.id == CollectibleType.COLLECTIBLE_D_INFINITY then
         animation = 'DInfinity'
         path = CoopHUDplus.PATHS.IMAGES.d_infinity
@@ -173,21 +192,55 @@ function CoopHUDplus.ActiveItem:getSprite()
         frame = tmpFrame + frame
     end
 
-    sprite:Load(CoopHUDplus.PATHS.ANIMATIONS.active_item, false)
-    sprite:ReplaceSpritesheet(0, path)
-    sprite:ReplaceSpritesheet(1, path)
-    sprite:ReplaceSpritesheet(2, path)
-
-    local bookpath = self:getBookPath()
-    if bookpath and self.slot == ActiveSlot.SLOT_PRIMARY then
-        sprite:ReplaceSpritesheet(3, bookpath)
-        sprite:ReplaceSpritesheet(4, bookpath)
-        if CoopHUDplus.config.active_item.book_charge_outline then sprite:ReplaceSpritesheet(5, bookpath) end
+    if self.id == CollectibleType.COLLECTIBLE_THE_JAR then
+        path = CoopHUDplus.PATHS.IMAGES.jar
+        animation = 'Jar'
+        frame = math.ceil(self.entity:GetJarHearts() / 2)
     end
 
-    sprite:SetFrame(animation, frame)
-    sprite:LoadGraphics()
-    return sprite
+    if self.id == CollectibleType.COLLECTIBLE_JAR_OF_FLIES then
+        path = CoopHUDplus.PATHS.IMAGES.jar_of_flies
+        animation = 'Jar'
+        frame = self.entity:GetJarFlies()
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_JAR_OF_WISPS then
+        path = CoopHUDplus.PATHS.IMAGES.jar_of_wisps
+        animation = 'WispJar'
+        frame = (self.desc.VarData - 1) + (15 * frame)
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_EVERYTHING_JAR then
+        path = CoopHUDplus.PATHS.IMAGES.everything_jar
+        animation = 'EverythingJar'
+        frame = self.current_charge + 1
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_MAMA_MEGA then
+        path = CoopHUDplus.PATHS.IMAGES.mama_mega
+        animation = 'EverythingJar'
+        if self.entity:HasGoldenBomb() then frame = 1 + frame end
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_SMELTER then
+        path = CoopHUDplus.PATHS.IMAGES.smelter
+        animation = 'DInfinity'
+        frame = 3 * frame
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_GLOWING_HOUR_GLASS then
+        path = CoopHUDplus.PATHS.IMAGES.glowing_hour_glass
+        animation = 'SoulUrn'
+        frame = (3 - self.desc.VarData) + 1
+    end
+
+    if self.id == CollectibleType.COLLECTIBLE_URN_OF_SOULS then
+        path = CoopHUDplus.PATHS.IMAGES.urn_of_souls
+        animation = 'SoulUrn'
+        frame = (21 * self.entity:GetEffects():GetCollectibleEffectNum(640)) + self.entity:GetUrnSouls() + 1
+    end
+
+    return animation, path, frame
 end
 
 function CoopHUDplus.ActiveItem:getBookSprite()
@@ -395,6 +448,11 @@ function CoopHUDplus.PocketActiveItem:getSprite()
     local path = Isaac.GetItemConfig():GetCollectible(self.id).GfxFileName
 
     sprite:Load(CoopHUDplus.PATHS.ANIMATIONS.active_item, false)
+
+    if self.id == CollectibleType.COLLECTIBLE_FLIP and self.pType == PlayerType.PLAYER_LAZARUS2_B then
+        path = CoopHUDplus.PATHS.IMAGES.flip
+    end
+
     sprite:ReplaceSpritesheet(0, path)
     sprite:ReplaceSpritesheet(1, path)
     sprite:ReplaceSpritesheet(2, path)

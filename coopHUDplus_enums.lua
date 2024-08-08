@@ -1,6 +1,6 @@
 CoopHUDplus.PATHS = {
     ANIMATIONS = {
-        active_item = 'gfx/ui/items_coop.anm2', -- taken from coopHUD (Srokks). I custom made the book border and D Infinity
+        active_item = 'gfx/ui/items_coop.anm2', -- taken from coopHUD (Srokks), edited
         chargebar = 'gfx/ui/ui_chargebar.anm2',
         book = 'gfx/005.100_collectible.anm2',
         trinket = 'gfx/005.100_collectible.anm2',
@@ -21,7 +21,16 @@ CoopHUDplus.PATHS = {
         d_infinity = 'gfx/characters/costumes/costume_489_dinfinity.png',
         virtues_belial = 'gfx/ui/hud_bookofvirtueswithbelial.png',
         virtues = 'gfx/ui/hud_bookofvirtues.png',
-        belial = 'gfx/ui/hud_bookofbelial.png'
+        belial = 'gfx/ui/hud_bookofbelial.png',
+        jar = 'gfx/characters/costumes/costume_rebirth_90_thejar.png',
+        jar_of_flies = 'gfx/characters/costumes/costume_434_jarofflies.png',
+        jar_of_wisps = 'gfx/ui/hud_jarofwisps.png',
+        everything_jar = 'gfx/ui/hud_everythingjar.png',
+        flip = 'gfx/ui/ui_flip_coop.png', -- taken from coopHUD (Srokks)
+        mama_mega = 'gfx/ui/hud_mamamega.png',
+        smelter = 'gfx/ui/hud_smelter.png',
+        glowing_hour_glass = 'gfx/ui/hud_glowinghourglass.png',
+        urn_of_souls = 'gfx/ui/hud_urnofsouls.png'
     }
 }
 
