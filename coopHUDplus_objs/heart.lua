@@ -94,7 +94,6 @@ function CoopHUDplus.Health.new(player_entity)
     self.rotten = self.player_entity:GetRottenHearts()
     self.broken = self.player_entity:GetBrokenHearts()
 
-    -- TODO give to last red heart not last heart, if no red give to first heart
     self.eternal = self.player_entity:GetEternalHearts()
 
     -- not a heart sprite
@@ -102,6 +101,7 @@ function CoopHUDplus.Health.new(player_entity)
 
     self.total_hearts = math.ceil((self.max_red + self.soul) / 2)
     self.hearts = self:getHearts()
+
     return self
 end
 
@@ -243,5 +243,15 @@ function CoopHUDplus.Health:render(edge_indexed, edge_multipliers)
         offset.X = offset.X + CoopHUDplus.config.health.space_between_hearts
     end
 
-    -- TODO extra lives
+
+    if self.extra_lives == 0 then return end
+
+    pos = edge + (offset * edge_multipliers)
+    Isaac.RenderScaledText(
+        'x'..self.extra_lives,
+        pos.X - (CoopHUDplus.config.health.space_between_hearts / 2), pos.Y,
+        CoopHUDplus.config.stats.text.scale.X,
+        CoopHUDplus.config.stats.text.scale.Y,
+        1, 1, 1, 0.5
+    )
 end
