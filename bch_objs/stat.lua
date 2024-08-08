@@ -19,13 +19,17 @@ function Better_Coop_HUD.Stat:getValue()
     if self.stat == Better_Coop_HUD.Stat.SHOT_SPEED then return self.player_entity.ShotSpeed end
     if self.stat == Better_Coop_HUD.Stat.LUCK then return self.player_entity.Luck end
 
-    -- TODO devil chance starts at 135%, angel chance also stored in devil chance. if can be either, need to split devil in half
-    if self.stat == Better_Coop_HUD.Stat.DEVIL then return self:getAngelDevilChance().devil * 100 end
-    if self.stat == Better_Coop_HUD.Stat.ANGEL then return self:getAngelDevilChance().angel * 100 end
     if self.stat == Better_Coop_HUD.Stat.PLANETARIUM then return Game():GetLevel():GetPlanetariumChance() * 100 end
+
+    local chances = self:getAngelDevilChance()
+    if chances.duality and self.stat == Better_Coop_HUD.Stat.DUALITY then return chances.devil * 100 end
+
+    if not chances.duality and self.stat == Better_Coop_HUD.Stat.DEVIL then return chances.devil * 100 end
+    if not chances.duality and self.stat == Better_Coop_HUD.Stat.ANGEL then return chances.angel * 100 end
+
+    return nil
 end
 
--- TODO this only works for angel modifications, needs to take into account angel/devil only and splits
 function Better_Coop_HUD.Stat:getAngelDevilChance()
     local game = Game()
     local level = game:GetLevel()
@@ -34,20 +38,23 @@ function Better_Coop_HUD.Stat:getAngelDevilChance()
 
     -- stages where you cant get a deal
     local disallowed_stages = {
-        [1] = true,
-        [9] = true,
-        [10] = true,
-        [11] = true,
-        [12] = true,
+        [LevelStage.STAGE1_1] = true,
+        [LevelStage.STAGE4_3] = true,
+        [LevelStage.STAGE5] = true,
+        [LevelStage.STAGE6] = true,
+        [LevelStage.STAGE7] = true,
+        [LevelStage.STAGE8] = true,
     }
 
     local chances = {
         deal = 0.0,
+        calc = 0.0,
         angel = 0.0,
         devil = 0.0,
-        -- duality = 0.0,
+        duality = false,
     }
 
+    if level:IsPreAscent() then return chances end
     if disallowed_stages[stage] then return chances end
 
     chances.deal = room:GetDevilRoomChance()
@@ -76,6 +83,7 @@ function Better_Coop_HUD.Stat:getAngelDevilChance()
     -- check items
     -- local duality = false
     local eucharist = false
+    local book_of_virtues = false
     for i = 0, game:GetNumPlayers() - 1, 1 do
         local p = Isaac.GetPlayer(i)
 
@@ -91,7 +99,9 @@ function Better_Coop_HUD.Stat:getAngelDevilChance()
         end
 
         if p:HasCollectible(CollectibleType.COLLECTIBLE_EUCHARIST) then eucharist = true end
+        if p:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then book_of_virtues = true end
         -- if p:HasCollectible(CollectibleType.COLLECTIBLE_DUALITY) then duality = true end
+        if p:HasCollectible(CollectibleType.COLLECTIBLE_DUALITY) then chances.duality = true end
     end
     if eucharist then
         -- https://bindingofisaacrebirth.fandom.com/wiki/Eucharist
@@ -113,16 +123,39 @@ function Better_Coop_HUD.Stat:getAngelDevilChance()
     end
 
     -- calculation
-    if game:GetStateFlag(GameStateFlag.STATE_DEVILROOM_VISITED) then
-        chances.angel = 0.5
+    local devil_spawned = game:GetStateFlag(GameStateFlag.STATE_DEVILROOM_SPAWNED)
+    local devil_visited = game:GetStateFlag(GameStateFlag.STATE_DEVILROOM_VISITED)
+    local devil_item_taken = game:GetDevilRoomDeals() > 0
+    local angel_spawned = game:GetStateFlag(GameStateFlag.STATE_FAMINE_SPAWNED) -- repurposed state in Rep
+    if devil_visited and not devil_item_taken then
+        chances.calc = 0.5
         for i = 1, #mods, 1 do
-            chances.angel = chances.angel * mods[i]
+            chances.calc = chances.calc * mods[i]
         end
-        chances.angel = 1.0 - (chances.angel * (1.0 - level:GetAngelRoomChance()))
+
+        chances.calc = 1.0 - (chances.calc * (1.0 - level:GetAngelRoomChance()))
     end
 
-    chances.devil = chances.deal * (1.0 - chances.angel)
-    chances.angel = chances.deal * chances.angel
+    chances.devil = chances.deal * (1.0 - chances.calc)
+    chances.angel = chances.deal * chances.calc
+
+    if (devil_spawned and not devil_visited) or book_of_virtues then
+        local tmp = chances.devil
+        chances.devil = chances.angel
+        chances.angel = tmp
+
+        if book_of_virtues and angel_spawned then
+            chances.devil = chances.angel * .375
+            chances.angel = chances.angel - chances.devil
+            return chances
+        end
+    end
+
+    if devil_spawned and angel_spawned and not devil_item_taken then
+        local tmp = chances.devil + chances.angel
+        chances.devil = tmp / 2.0
+        chances.angel = tmp / 2.0
+    end
 
     return chances
 end
@@ -136,6 +169,8 @@ end
 
 
 function Better_Coop_HUD.Stat:render(pos_vector, text_pos_vector, render_icon)
+    if self.value == nil then return end
+
     if render_icon then
         self.sprite.Scale = Better_Coop_HUD.config.stats.scale
         self.sprite:Render(pos_vector)
@@ -168,8 +203,13 @@ function Better_Coop_HUD.Stats.new(player_entity, player)
 
     -- TODO handle duality
     if self.player.number == 0 and self.player.is_real then
-        table.insert(self.stats, Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.DEVIL, true))
-        table.insert(self.stats, Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.ANGEL, true))
+        local duality = Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.DUALITY, true)
+        if duality.value == nil then
+            table.insert(self.stats, Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.DEVIL, true))
+            table.insert(self.stats, Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.ANGEL, true))
+        else
+            table.insert(self.stats, duality)
+        end
         table.insert(self.stats, Better_Coop_HUD.Stat.new(player_entity, Better_Coop_HUD.Stat.PLANETARIUM, true))
     end
 
