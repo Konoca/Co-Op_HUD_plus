@@ -91,3 +91,15 @@ ModConfigMenu.AddSetting(
     }
 )
 
+ModConfigMenu.AddSpace(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.general)
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.general,
+    {
+        Type = ModConfigMenu.OptionType.BOOLEAN,
+        CurrentSetting = function() return true end,
+        Display = function() return 'Reset settings' end,
+        OnChange = function(_) CoopHUDplus.ResetConfig() end,
+    }
+)
+
