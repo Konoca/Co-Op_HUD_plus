@@ -24,11 +24,11 @@ local function onGameStart(_, isCont)
 end
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, onGameStart)
 
-local function onGameExit(_, shouldSave)
+local function saveGame(saveGameData)
     local data = {}
     data.config = CoopHUDplus.Utils.encodeConfigVectors(CoopHUDplus.config)
 
-    if shouldSave then
+    if saveGameData then
         data.pills = CoopHUDplus.pills
         data.players = {}
         for i = 0, #CoopHUDplus.players, 1 do
@@ -45,8 +45,11 @@ local function onGameExit(_, shouldSave)
     local jsonString = json.encode(data)
     CoopHUDplus:SaveData(jsonString)
 end
-CoopHUDplus:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, onGameExit)
 
+local function onGameExit(_, shouldSave)
+    saveGame(shouldSave)
+end
+CoopHUDplus:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, onGameExit)
 
 local function getPill(_, pillEffect, pillColor)
     CoopHUDplus.pills.cache[pillColor] = pillEffect
@@ -130,6 +133,9 @@ local function newLevel(_)
     local name = level:GetName()
     local curse = level:GetCurseName()
     CoopHUDplus.Utils.createStreak(name, curse, curse ~= '')
+
+
+    saveGame(true)
 end
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, newLevel)
 
