@@ -299,6 +299,10 @@ function Trinket.Render(id, pos, scale)
 
     local path = Isaac.GetItemConfig():GetTrinket(id).GfxFileName
 
+    if id & TrinketType.TRINKET_GOLDEN_FLAG > 0 then
+        ItemSprite:SetRenderFlags(AnimRenderFlags.GOLDEN)
+    end
+
     ItemSprite:Load(mod.PATHS.ANIMATIONS.trinket, false)
     ItemSprite:ReplaceSpritesheet(1, path)
     ItemSprite:LoadGraphics()
@@ -306,6 +310,8 @@ function Trinket.Render(id, pos, scale)
 
     ItemSprite.Scale = scale
     ItemSprite:Render(pos)
+
+    ItemSprite:SetRenderFlags(0)
 end
 
 

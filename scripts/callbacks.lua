@@ -221,6 +221,10 @@ end
 mod:AddCallback(ModCallbacks.MC_USE_CARD, useCard)
 
 local function pickupTrinket(_, entityPlayer, trinketType, firstTime)
+    if trinketType & TrinketType.TRINKET_GOLDEN_FLAG > 0 then
+        trinketType = trinketType & TrinketType.TRINKET_ID_MASK
+    end
+
     local xmldata = XMLData.GetEntryById(XMLNode.TRINKET, trinketType)
     local name = xmldata.name
     local description = xmldata.description
