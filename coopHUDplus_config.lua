@@ -116,10 +116,12 @@ CoopHUDplus.config = {
 
     misc = {
         pickups = {
-            pos = Vector(0, 137),
+            -- pos = Vector(0, 137),
+            pos = Vector(0, -10),
             scale = Vector(1, 1),
             offset = Vector(25, 0),
             center_anchor = true,
+            bottom_anchor = true,
         },
         difficulty = {
             pos = Vector(0, 75),
