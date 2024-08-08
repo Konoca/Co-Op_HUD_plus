@@ -1,19 +1,19 @@
-Better_Coop_HUD = RegisterMod('Better Coop HUD', 1)
-local version = '1.0'
+CoopHUDplus = RegisterMod('Co-Op HUD+', 1)
+local version = '0.1'
 
-require('bch_objs/inits')
-require('bch_enums')
-require('bch_config')
-require('bch_mcm')
+require('coopHUDplus_objs/inits')
+require('coopHUDplus_enums')
+require('coopHUDplus_config')
+require('coopHUDplus_mcm')
 
-require('bch_objs/stat')
-require('bch_objs/heart')
-require('bch_objs/item')
-require('bch_objs/misc')
-require('bch_objs/inventory')
-require('bch_objs/player')
-require('bch_objs/hud')
+require('coopHUDplus_objs/stat')
+require('coopHUDplus_objs/heart')
+require('coopHUDplus_objs/item')
+require('coopHUDplus_objs/misc')
+require('coopHUDplus_objs/inventory')
+require('coopHUDplus_objs/player')
+require('coopHUDplus_objs/hud')
 
-require('bch_callbacks')
+require('coopHUDplus_callbacks')
 
-print('Better Coop HUD loaded v'..version)
+print('Co-Op HUD+ loaded v'..version)
