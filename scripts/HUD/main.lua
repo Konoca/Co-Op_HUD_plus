@@ -9,6 +9,7 @@ local game = Game()
 local hud = game:GetHUD()
 
 local abs = math.abs
+local floor = math.floor
 
 
 -- Taken from reHUD, credit to Wofsauge
@@ -52,9 +53,9 @@ local function renderTimer(lastTimeString)
     end
 
     local time = game.TimeCounter
-    local secs = math.floor(time/30)%60
-    local mins = math.floor(time/30/60)%60
-    local hours = math.floor(time/30/60/60)%24
+    local secs = floor(time/30)%60
+    local mins = floor(time/30/60)%60
+    local hours = floor(time/30/60/60)%24
     local timestring = leadingZero(hours)..':'..leadingZero(mins)..':'..leadingZero(secs)
 
     renderTimerText(timestring)
