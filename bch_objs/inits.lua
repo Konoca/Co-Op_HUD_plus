@@ -1,5 +1,5 @@
 Better_Coop_HUD.players = {}
-
+Better_Coop_HUD.joining = {}
 Better_Coop_HUD.pills = {}
 
 Better_Coop_HUD.Player = {}
