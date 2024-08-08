@@ -19,7 +19,7 @@ function CoopHUDplus.Misc:getSprite()
     return sprite
 end
 
-function CoopHUDplus.Misc:render(pos, scale, text_format)
+function CoopHUDplus.Misc:render(pos, scale, text_format, additional_text_offset)
     if not self.sprite then return end
 
     self.sprite.Scale = scale
@@ -27,7 +27,7 @@ function CoopHUDplus.Misc:render(pos, scale, text_format)
 
     if self.value and text_format then
         -- TODO handle case when player can have more than 99 items
-        local text_pos = pos + CoopHUDplus.config.misc.text.offset
+        local text_pos = pos + CoopHUDplus.config.misc.text.offset + additional_text_offset
         Isaac.RenderScaledText(
             string.format(text_format, self.value),
             text_pos.X, text_pos.Y,
@@ -40,6 +40,7 @@ end
 
 function CoopHUDplus.Miscs.new()
     local self = setmetatable({}, CoopHUDplus.Miscs)
+    local game = Game()
 
     if not CoopHUDplus.players[0] then return self end
     local player_entity = CoopHUDplus.players[0].player_entity
@@ -68,7 +69,7 @@ function CoopHUDplus.Miscs.new()
     self.blood_charge = CoopHUDplus.Misc.new(player_entity:GetBloodCharge(), CoopHUDplus.Misc.RED_HEART)
 
     -- indicators
-    local gameDiff = Game().Difficulty
+    local gameDiff = game.Difficulty
     local diffMap = {
         [Difficulty.DIFFICULTY_NORMAL] = nil,
         [Difficulty.DIFFICULTY_HARD] = CoopHUDplus.Misc.HARD,
@@ -78,9 +79,9 @@ function CoopHUDplus.Miscs.new()
     self.difficulty = CoopHUDplus.Misc.new(nil, diffMap[gameDiff])
 
     -- greed donation machine jam percentage
-    if Game():IsGreedMode() then
+    if game:IsGreedMode() and game:GetLevel():GetStage() == LevelStage.STAGE7_GREED then
         self.jam_perc = CoopHUDplus.Misc.new(
-            player_entity:GetGreedDonationBreakChange(),
+            player_entity:GetGreedDonationBreakChance(),
             CoopHUDplus.Misc.GREED_MACHINE
         )
     end
@@ -129,7 +130,7 @@ function CoopHUDplus.Miscs:render(screen_center)
 
     for i = 1, #map, 1 do
         if map[i][2] then
-            map[i][1]:render(pos, scale, '%02d')
+            map[i][1]:render(pos, scale, '%02d', Vector(0, 0))
             pos = pos + offset
         end
     end
@@ -137,13 +138,13 @@ function CoopHUDplus.Miscs:render(screen_center)
     if CoopHUDplus.config.misc.difficulty.display then
         pos = CoopHUDplus.config.misc.difficulty.pos + CoopHUDplus.config.offset
         scale = CoopHUDplus.config.misc.difficulty.scale
-        self.difficulty:render(pos, scale, nil)
+        self.difficulty:render(pos, scale, nil, Vector(0, 0))
     end
 
     if self.jam_perc then
-        pos = CoopHUDplus.config.misc.greed_machine.pos
+        pos = CoopHUDplus.config.misc.greed_machine.pos + CoopHUDplus.config.offset
         scale = CoopHUDplus.config.misc.greed_machine.scale
-        self.jam_perc:render(pos, scale, '%d%%')
+        self.jam_perc:render(pos, scale, '%d%%', CoopHUDplus.config.misc.greed_machine.text_offset)
     end
 
 end
