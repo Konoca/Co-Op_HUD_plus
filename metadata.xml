@@ -10,27 +10,27 @@ This mod is currently a work-in-progress, all issues should be reported [url=htt
 
 [h3] Features [/h3]
 [list]
-[*] Renders active items, hearts, pocket items, and trinkets in a readable position for all four players
-[*] Stats for all four players displayed relative to their character info (P1 and P3 on left, P2 and P4 on right)
-[*] Press H to switch between Co-Op HUD+ and the default HUD
-[*] Timer always shown at the top of the screen
-[*] Configurable using MCM (still a WIP)
-[*] Tainted Isaac Inventory correctly displayed for all players
-[*] Tainted ??? Poop Spells correctly displayed for all players
-[*] Tainted Cain Bag of Crafting correctly displayed for all players
+    [*] Renders active items, hearts, pocket items, and trinkets in a readable position for all four players
+    [*] Stats for all four players displayed relative to their character info (P1 and P3 on left, P2 and P4 on right)
+    [*] Player color coding (P1 Blue, P2 Red, P3 Green, P4 Yellow)
+    [*] Press H to switch between Co-Op HUD+ and the default HUD
+    [*] Timer always shown at the top of the screen
+    [*] Tainted Isaac Inventory correctly displayed for all players
+    [*] Tainted ??? Poop Spells correctly displayed for all players
+    [*] Tainted Cain Bag of Crafting correctly displayed for all players
+    [*] Entirely customizable! (MCM still WIP, but config file can be edited)
 [/list]
 
 [h3] Supported Mods [/h3]
 [list]
-[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2681875787] Mod Config Menu [/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2681875787] Mod Config Menu [/url]
 [/list]
 
 [h3] Recommended Mods to Enhance HUD [/h3]
 [list]
-[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2492654252] Boss Rush Wave Counter [/url]
-[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2769063897] Unintrusive Pause Menu [/url]
-[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=834199494] Better Health [/url]
-[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2376005362] Encyclopedia [/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2492654252] Boss Rush Wave Counter [/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2769063897] Unintrusive Pause Menu [/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2376005362] Encyclopedia [/url]
 [/list]
 
 [h3] Acknowledgements [/h3]

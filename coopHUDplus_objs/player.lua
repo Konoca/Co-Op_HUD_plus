@@ -148,7 +148,6 @@ function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror
             CoopHUDplus.config.twin_pos
         )
 
-        -- TODO does not render correctly for P3 & P4
         self.twin.stats:render(edge, edge_indexed, edge_multipliers, CoopHUDplus.config.stats.text.twin_offset, pColor)
     end
 end
