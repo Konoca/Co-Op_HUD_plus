@@ -135,9 +135,27 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
     },
 
     streak = {
-        pos = Vector(0, -50),
+        pos = Vector(0, 50),
         center_anchor = true,
         bottom_anchor = false,
+        name = {
+            offset = Vector(0, -10),
+            scale = Vector(1, 1),
+            box_width = 10,
+            box_center = true,
+        },
+        description = {
+            offset = Vector(0, 10),
+            scale = Vector(0.5, 0.5),
+            box_width = 10,
+            box_center = true,
+        },
+        curse = {
+            offset = Vector(0, 21),
+            scale = Vector(0.5, 0.5),
+            box_width = 10,
+            box_center = true,
+        }
     },
 
     mods = {

@@ -2,7 +2,6 @@ CoopHUDplus.players = {}
 CoopHUDplus.joining = {}
 CoopHUDplus.pills = {}
 CoopHUDplus.SAVED_PLAYER_DATA = {}
-CoopHUDplus.ANIMATIONS = {}
 
 CoopHUDplus.Player = {}
 CoopHUDplus.Player.__index = CoopHUDplus.Player

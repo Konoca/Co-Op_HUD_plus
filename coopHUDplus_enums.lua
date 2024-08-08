@@ -14,6 +14,9 @@ CoopHUDplus.PATHS = {
         poops = 'gfx/ui/ui_poops.anm2',
         streak = 'gfx/ui/ui_streak.anm2',
     },
+    FONTS = {
+        streak = 'font/upheaval.fnt',
+    }
 }
 
 CoopHUDplus.PILL = {
