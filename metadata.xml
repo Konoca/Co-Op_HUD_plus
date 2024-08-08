@@ -11,6 +11,7 @@
     [h3] Features [/h3]
     [list]
         [*] Renders active items, hearts, pocket items, and trinkets in a readable position for all four players
+        [*] Renders picked up collectables for all players!
         [*] Stats for all four players displayed relative to their character info (P1 and P3 on left, P2 and P4 on right)
         [*] Player color coding (P1 Blue, P2 Red, P3 Green, P4 Yellow)
         [*] Press H to switch between Co-Op HUD+ and the default HUD
@@ -19,14 +20,25 @@
         [*] Tainted ??? Poop Spells correctly displayed for all players
         [*] Tainted Cain Bag of Crafting correctly displayed for all players
         [*] Entirely customizable!
-        [*] Custom Health API Compatible
-        [*] Custom callbacks
-        [*] Renders picked up collectables for all players!
+    [/list]
+
+    [h3] Compatability [/h3]
+    The following mods are officially compatible with Co-Op HUD+:
+    [list]
+        [*] Any mod that uses Custom Health API, which includes:
+        [list]
+            [*] Fiend Folio
+            [*] Repentance Plus
+            [*] Immortal Hearts
+            [*] Sun Hearts
+        [/list]
+        [*] Epiphany
+        [*] Jericho
     [/list]
 
     [h3] Customization [/h3]
     [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2681875787] Mod Config Menu [/url] recommended, but not required.
-        The placement of literally everything can be changed, so please feel free to make the HUD unique to you! Everything can be configured through MCM. You can also modify the config file directly, instructions can be found [url=https://github.com/Konoca/Co-Op_HUD_plus/wiki/Customization] here [/url]
+    The placement of literally everything can be changed, so please feel free to make the HUD unique to you! Everything can be configured through MCM. You can also modify the config file directly, instructions can be found [url=https://github.com/Konoca/Co-Op_HUD_plus/wiki/Customization] here [/url]
 
     [h3] Want to add support for your mod? [/h3]
     Check out the [url=https://github.com/Konoca/Co-Op_HUD_plus/wiki/Callbacks] wiki [/url] to see how to make use of the custom callbacks! Don't see a callback that fits your needs? Feel free to request one
@@ -53,7 +65,7 @@
 
     [b] The Modding of Isaac Discord server ( https://discord.gg/KbevtvgD4z ) [/b]
     </description>
-    <version>0.7.8</version>
+    <version>0.80</version>
     <visibility>Public</visibility>
     <tag id="Tweaks"/>
     <tag id="Graphics"/>
