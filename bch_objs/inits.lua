@@ -1,5 +1,4 @@
 Better_Coop_HUD.players = {}
-Better_Coop_HUD.player_counter = 0
 
 Better_Coop_HUD.pills = {}
 

@@ -94,11 +94,20 @@ Better_Coop_HUD.config = {
     },
 
     stats = {
-        space_between_icon_text = 10,
-        space_between_icons = 12,
         pos = Vector(0, 90),
+        offset = Vector(0, 12),
+
         scale = Vector(1, 1),
         mirrored_offset = Vector(60, 0),
+
+        text = {
+            pos = Vector(10, 84),
+            offset = Vector(0, 12),
+            mirrored_offset = Vector(45, 0),
+            scale = Vector(0.5, 0.5),
+
+            twin_offset = Vector(20, 0)
+        }
     },
 
     misc = {
