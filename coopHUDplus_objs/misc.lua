@@ -132,6 +132,8 @@ function CoopHUDplus.Miscs:render(screen_size, screen_center)
         {self.blood_charge, self.display_blood_charge},
     }
 
+    CoopHUDplus.Utils.CreateCallback(CoopHUDplus.Callbacks.PRE_MISC_RENDER, self, map)
+
     local total = 0
     for i = 1, #map, 1 do
         if map[i][2] then total = total + 1 end

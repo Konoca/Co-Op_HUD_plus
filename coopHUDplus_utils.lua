@@ -131,10 +131,17 @@ function CoopHUDplus.Utils.createStreak(name, description, display_bottom_paper)
     CoopHUDplus.STREAK = {sprite = animation, name = name, description = description, invert_color = display_bottom_paper}
 end
 
+local function isTwin(player)
+    local pType = player:GetPlayerType()
+    if pType == PlayerType.PLAYER_ESAU then return true end
+    if pType == PlayerType.PLAYER_LAZARUS2_B then return true end
+    return false
+end
 function CoopHUDplus.Utils.getPlayerFromEntity(player)
     local idx = player.ControllerIndex
     for i = 0, #CoopHUDplus.players, 1 do
         if CoopHUDplus.players[i] and CoopHUDplus.players[i].player_entity.ControllerIndex == idx then
+            if isTwin(player) then i = i + 1 end
             return CoopHUDplus.players[i]
         end
     end

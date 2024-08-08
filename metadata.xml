@@ -6,12 +6,6 @@
     <description>
     [h1] THIS MOD REQUIRES REPENTOGON WHICH CAN NOT BE INSTALLED LIKE A NORMAL MOD, READ MORE [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3127536138]HERE[/url] [/h1]
 
-    [h2] NOW COMPATIBLE WITH FIEND FOLIO AND REPENTENCE PLUS! [/h2]
-    This list also includes any other mods using the Custom Health API
-
-    [h2] EPIPHANY IS CURRENTLY [u]MOSTLY[/u] SUPPORTED [/h2]
-    There should be no issues with any of the tarnished characters additional HUD elements or most items. The Multitool at the moment does not replace the Key icon when picked up.
-
     Co-Op HUD+ is a mod that completely overhauls the in-game HUD to better display information when playing with multiple people. This mod is based on coopHUD by Srokks, which is no longer being updated.
 
     [h3] Features [/h3]
@@ -27,6 +21,7 @@
         [*] Entirely customizable!
         [*] Custom Health API Compatible
         [*] Custom callbacks
+        [*] Renders picked up collectables for all players!
     [/list]
 
     [h3] Customization [/h3]
@@ -58,7 +53,7 @@
 
     [b] The Modding of Isaac Discord server ( https://discord.gg/KbevtvgD4z ) [/b]
     </description>
-    <version>0.7.4</version>
+    <version>0.7.5</version>
     <visibility>Public</visibility>
     <tag id="Tweaks"/>
     <tag id="Graphics"/>

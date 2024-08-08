@@ -1,11 +1,17 @@
 CoopHUDplus.players = {}
 CoopHUDplus.joining = {}
 CoopHUDplus.pills = {}
-CoopHUDplus.SAVED_PLAYER_DATA = {}
 
-CoopHUDplus.DATA = {}
-CoopHUDplus.DATA.CALLBACKS = {}
+CoopHUDplus.SAVED_PLAYER_DATA = {
+    inv = {},
+    items = {},
+}
+CoopHUDplus.DATA = {
+    CALLBACKS = {},
+}
 
+
+---------------------------------------------------------------
 CoopHUDplus.Player = {}
 CoopHUDplus.Player.__index = CoopHUDplus.Player
 setmetatable(CoopHUDplus.Player, {
@@ -25,14 +31,6 @@ setmetatable(CoopHUDplus.Heart, {
 CoopHUDplus.Health = {}
 CoopHUDplus.Health.__index = CoopHUDplus.Health
 setmetatable(CoopHUDplus.Heart, {
-	__call = function(cls, ...)
-		return cls.new(...)
-	end,
-})
-
-CoopHUDplus.Item = {}
-CoopHUDplus.Item.__index = CoopHUDplus.Item
-setmetatable(CoopHUDplus.Item, {
 	__call = function(cls, ...)
 		return cls.new(...)
 	end,

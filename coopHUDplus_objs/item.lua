@@ -1,10 +1,3 @@
--- Item
-function CoopHUDplus.Item.new(entity, slot, item_id)
-end
-
-function CoopHUDplus.Item:getSprite()
-end
-
 local function getChargeBar(pType, id, max_charge, scale)
     if id == 0 then return nil end
 
