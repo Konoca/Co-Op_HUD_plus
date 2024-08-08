@@ -84,6 +84,15 @@ function CoopHUDplus.Player:getIsReal()
     return true
 end
 
+function CoopHUDplus.Player:JacobEsauOpacity()
+    -- Vector(ACTIVE, POCKET)
+    if self.player_type ~= PlayerType.PLAYER_JACOB and self.player_type ~= PlayerType.PLAYER_ESAU then return Vector(1, 1) end
+    if Input.IsActionPressed(ButtonAction.ACTION_DROP, self.player_entity.ControllerIndex) then
+        return Vector(0.25, 1)
+    end
+    return Vector(1, 0.25)
+end
+
 function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror, vertical_mirror, offset, pColor)
     local doRender = true
     if self.player_entity:IsCoopGhost() then doRender = false end
@@ -103,6 +112,8 @@ function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror
         edge_multipliers.Y = -1
     end
 
+    local opacity = self:JacobEsauOpacity()
+
     -- active item
     for i = 0, #self.active_items, 1 do
         if not self.active_items[i] or not doRender then goto skip_active_item end
@@ -121,7 +132,8 @@ function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror
         self.active_items[i]:render(
             item_pos, bar_pos,
             CoopHUDplus.config.active_item[i].scale,
-            CoopHUDplus.config.active_item[i].chargebar.display
+            CoopHUDplus.config.active_item[i].chargebar.display,
+            opacity.X
         )
         ::skip_active_item::
     end
@@ -137,7 +149,7 @@ function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror
     end
 
     -- pocket items
-    if doRender then self.pockets:render(edge_indexed, edge_multipliers) end
+    if doRender then self.pockets:render(edge_indexed, edge_multipliers, opacity.Y) end
 
     -- health
     if doRender then self.health:render(edge_indexed, edge_multipliers) end

@@ -284,13 +284,21 @@ function CoopHUDplus.ActiveItem:getBookPath()
     return nil
 end
 
-function CoopHUDplus.ActiveItem:render(item_pos_vec, bar_pos_vec, scale, display_charge)
+function CoopHUDplus.ActiveItem:render(item_pos_vec, bar_pos_vec, scale, display_charge, opacity)
     self.sprite.Scale = scale
     self.chargeBar.bg.Scale = scale
     self.chargeBar.beth.Scale = scale
     self.chargeBar.charge.Scale = scale
     self.chargeBar.extra.Scale = scale
     self.chargeBar.overlay.Scale = scale
+
+    local color = Color(1, 1, 1, opacity)
+    self.sprite.Color = color
+    self.chargeBar.bg.Color = color
+    self.chargeBar.beth.Color = color
+    self.chargeBar.charge.Color = color
+    self.chargeBar.extra.Color = color
+    self.chargeBar.overlay.Color = color
 
     if self:getBookPath() and self.slot == ActiveSlot.SLOT_PRIMARY then
         item_pos_vec = Vector(
@@ -419,10 +427,11 @@ function CoopHUDplus.PocketItem:getSprite()
     return sprite
 end
 
-function CoopHUDplus.PocketItem:render(pos_vector, _, scale)
+function CoopHUDplus.PocketItem:render(pos_vector, _, scale, opacity)
     if not self.sprite then return end
 
     self.sprite.Scale = scale
+    self.sprite.Color = Color(1, 1, 1, opacity)
     self.sprite:Render(pos_vector)
 end
 
@@ -478,10 +487,11 @@ function CoopHUDplus.PocketActiveItem:getSprite()
     return sprite
 end
 
-function CoopHUDplus.PocketActiveItem:render(pos_vector, bar_pos_vec, scale)
+function CoopHUDplus.PocketActiveItem:render(pos_vector, bar_pos_vec, scale, opacity)
     if not self.sprite then return end
 
     self.sprite.Scale = scale
+    self.sprite.Color = Color(1, 1, 1, opacity)
     self.sprite:Render(pos_vector)
 
     if self.current_charge and self.max_charge and self.max_charge > 0 and CoopHUDplus.config.pocket.chargebar.display and self.slot == CoopHUDplus.PocketItem.SLOT_PRIMARY then
@@ -673,7 +683,7 @@ function CoopHUDplus.Pockets:determineOrder()
     return order
 end
 
-function CoopHUDplus.Pockets:render(edge_indexed, edge_multipliers)
+function CoopHUDplus.Pockets:render(edge_indexed, edge_multipliers, opacity)
     for i = 0, #self.order, 1 do
         if not self.order[i] then goto skip_pocket end
 
@@ -685,7 +695,7 @@ function CoopHUDplus.Pockets:render(edge_indexed, edge_multipliers)
         end
         local bar_pos = item_pos + (CoopHUDplus.config.pocket.chargebar.pos * Vector(bar_flip, edge_multipliers.Y))
 
-        self.order[i]:render(item_pos, bar_pos, CoopHUDplus.config.pocket[i].scale)
+        self.order[i]:render(item_pos, bar_pos, CoopHUDplus.config.pocket[i].scale, opacity)
         ::skip_pocket::
     end
 
@@ -700,7 +710,7 @@ function CoopHUDplus.Pockets:render(edge_indexed, edge_multipliers)
             self.order[0].name,
             text_pos.X, text_pos.Y,
             text_scale.X, text_scale.Y,
-            KColor(1, 1, 1, 0.5),
+            KColor(1, 1, 1, 0.5 * opacity),
             0, true
         )
     end
