@@ -2,14 +2,20 @@ local mod = CoopHUDplus
 
 mod.config = {}
 
-mod.SAVED_PLAYER_DATA = {
-    Inventory = {},
-    items = {},
-}
 mod.DATA = {
     CALLBACKS = {},
 
-    PLAYERS = {}, -- [number] = {Inventory = {}, Items = {}, Stats = {Old = {}, Updates = {}}, Pockets = {}}
+    PLAYERS = {
+        -- [number] = {
+            -- Inventory = {},
+            -- Items = {},
+            -- Stats = {
+                -- Old = {},
+                -- Updates = {}
+            -- },
+            -- Pockets = {}
+        -- }
+    },
     JOINING = {},
 
     PILLS = {},
