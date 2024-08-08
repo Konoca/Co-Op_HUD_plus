@@ -42,6 +42,7 @@ function Better_Coop_HUD.Miscs.new()
     local self = setmetatable({}, Better_Coop_HUD.Miscs)
 
     -- TODO have this not print an error to console
+    if not Better_Coop_HUD.players[0] then return self end
     local player_entity = Better_Coop_HUD.players[0].player_entity
 
     -- pickups
@@ -104,6 +105,8 @@ function Better_Coop_HUD.Miscs.new()
 end
 
 function Better_Coop_HUD.Miscs:render(screen_center)
+    if not Better_Coop_HUD.players[0] then return end
+
     local offset = Better_Coop_HUD.config.misc.pickups.offset
     local pos = Better_Coop_HUD.config.misc.pickups.pos
     if Better_Coop_HUD.config.misc.pickups.center_anchor then pos = pos + screen_center end
