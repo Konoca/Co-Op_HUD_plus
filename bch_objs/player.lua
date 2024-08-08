@@ -82,42 +82,28 @@ function Better_Coop_HUD.Player:render(screen_size, screen_center, horizontal_mi
     local edge_multipliers = Vector(1, 1)
     local edge_indexed = Better_Coop_HUD.config.offset + offset
 
-    local horizontal_edge = Better_Coop_HUD.config.offset.X + offset.X
-    local horizontal_multiplier = 1
-
-    local vertical_edge = Better_Coop_HUD.config.offset.Y + offset.Y
-    local vertical_multiplier = 1
-
     if horizontal_mirror then
-        horizontal_edge = screen_size.X - (horizontal_edge + Better_Coop_HUD.config.mirrored_extra_offset.X)
-        horizontal_multiplier = -1
+        edge_indexed.X = screen_size.X - (edge.X + Better_Coop_HUD.config.mirrored_extra_offset.X)
         edge_multipliers.X = -1
-        edge_indexed.X = horizontal_edge
     end
     if vertical_mirror then
-        vertical_edge = screen_size.Y - (vertical_edge + Better_Coop_HUD.config.mirrored_extra_offset.Y)
-        vertical_multiplier = -1
+        edge_indexed.Y = screen_size.Y - (edge.Y + Better_Coop_HUD.config.mirrored_extra_offset.Y)
         edge_multipliers.Y = -1
-        edge_indexed.Y = vertical_edge
     end
 
     -- active item
     for i = 0, #self.active_items, 1 do
         if not self.active_items[i] then goto skip_active_item end
 
-        local item_pos = Vector(
-            horizontal_edge + (Better_Coop_HUD.config.active_item[i].pos.X * horizontal_multiplier),
-            vertical_edge + (Better_Coop_HUD.config.active_item[i].pos.Y * vertical_multiplier)
-        )
+        local item_pos = edge_indexed + (Better_Coop_HUD.config.active_item[i].pos * edge_multipliers)
 
         local barFlip = 1
         if not Better_Coop_HUD.config.active_item[i].chargebar.stay_on_right then
-            barFlip = barFlip * horizontal_multiplier
+            barFlip = barFlip * edge_multipliers.X
         end
 
-        local bar_pos = Vector(
-            horizontal_edge + (Better_Coop_HUD.config.active_item[i].chargebar.pos.X * barFlip),
-            vertical_edge + (Better_Coop_HUD.config.active_item[i].chargebar.pos.Y * vertical_multiplier)
+        local bar_pos = edge_indexed + (
+            Better_Coop_HUD.config.active_item[i].chargebar.pos * Vector(barFlip, edge_multipliers.Y)
         )
 
         self.active_items[i]:render(
@@ -132,25 +118,17 @@ function Better_Coop_HUD.Player:render(screen_size, screen_center, horizontal_mi
     for i = 0, #self.trinkets, 1 do
         if not self.trinkets[i] then goto skip_trinket end
 
-        local item_pos = Vector(
-            horizontal_edge + (Better_Coop_HUD.config.trinket[i].pos.X * horizontal_multiplier),
-            vertical_edge + (Better_Coop_HUD.config.trinket[i].pos.Y * vertical_multiplier)
-        )
+        local item_pos = edge_indexed + (Better_Coop_HUD.config.trinket[i].pos * edge_multipliers)
 
         self.trinkets[i]:render(item_pos, Better_Coop_HUD.config.trinket[i].scale)
         ::skip_trinket::
     end
 
     -- pocket items
-    self.pockets:render(horizontal_edge, horizontal_multiplier, vertical_edge, vertical_multiplier)
+    self.pockets:render(edge_indexed, edge_multipliers)
 
     -- health
-    self.health:render(
-        horizontal_edge + (Better_Coop_HUD.config.health.pos.X * horizontal_multiplier),
-        horizontal_multiplier,
-        vertical_edge + (Better_Coop_HUD.config.health.pos.Y * vertical_multiplier),
-        vertical_multiplier
-    )
+    self.health:render(edge_indexed, edge_multipliers)
 
     -- stats & misc
     if self.is_real then

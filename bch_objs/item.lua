@@ -569,24 +569,21 @@ function Better_Coop_HUD.Pockets:determineOrder()
     return order
 end
 
-function Better_Coop_HUD.Pockets:render(horizontal_edge, horizontal_multiplier, vertical_edge, vertical_multiplier)
+function Better_Coop_HUD.Pockets:render(edge_indexed, edge_multipliers)
     for i = 0, #self.order, 1 do
         if not self.order[i] then goto skip_pocket end
 
-        local item_pos = Vector(
-            horizontal_edge + (Better_Coop_HUD.config.pocket[i].pos.X * horizontal_multiplier),
-            vertical_edge + (Better_Coop_HUD.config.pocket[i].pos.Y * vertical_multiplier)
-        )
+        local item_pos = edge_indexed + (Better_Coop_HUD.config.pocket[i].pos * edge_multipliers)
 
         self.order[i]:render(item_pos, Better_Coop_HUD.config.pocket[i].scale)
         ::skip_pocket::
     end
 
     if self.order[0].type ~= Better_Coop_HUD.PocketItem.TYPE_NONE then
+        local text_pos = edge_indexed + (Better_Coop_HUD.config.pocket.text.pos * edge_multipliers)
         Isaac.RenderScaledText(
             self.order[0].name,
-            horizontal_edge + (Better_Coop_HUD.config.pocket.text.pos.X * horizontal_multiplier),
-            vertical_edge + (Better_Coop_HUD.config.pocket.text.pos.Y * vertical_multiplier),
+            text_pos.X, text_pos.Y,
             1, 1,
             1, 1, 1, 0.5
         )
