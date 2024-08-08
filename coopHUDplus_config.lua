@@ -173,6 +173,15 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
             override = false,
         },
     },
+
+    test2 = {
+        test1 = 5,
+        testT = {
+            test = 1,
+            test123 = 123,
+            test321 = 321,
+        }
+    }
 }
 end
 
