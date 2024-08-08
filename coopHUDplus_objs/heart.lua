@@ -253,7 +253,7 @@ function CoopHUDplus.Health:getHearts()
         soul_hearts[#soul_hearts]:updateSprite()
     end
 
-    -- broken hearts
+    -- broken hearts, TODO fix bc it broken?
     local broken_hearts = self:_getHeartsHelper(self.broken, broken, false, false, false, false, nil, '')
 
     -- bone hearts
