@@ -50,7 +50,7 @@ function CoopHUDplus.ActiveItem:getSprite()
     end
 
     local frame = 0
-    if self.current_charge >= self.max_charge and self.max_charge > 0 then frame = 1 end
+    if self.current_charge + self.soul_charge + self.blood_charge >= self.max_charge and self.max_charge > 0 then frame = 1 end
 
     sprite:SetFrame('Idle', frame)
     sprite:LoadGraphics()
@@ -149,8 +149,8 @@ function CoopHUDplus.ActiveItem:render(item_pos_vec, bar_pos_vec, scale, display
 
     if self.current_charge and self.max_charge and self.max_charge > 0 and display_charge then
         self.chargeBar.bg:Render(bar_pos_vec)
-        if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY then self.chargeBar.beth:Render(bar_pos_vec, self:getChargeBarCharge(self.soul_charge)) end
-        if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY_B then self.chargeBar.beth:Render(bar_pos_vec, self:getChargeBarCharge(self.blood_charge)) end
+        if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY then self.chargeBar.beth:Render(bar_pos_vec, self:getChargeBarCharge(self.soul_charge + self.current_charge)) end
+        if self.entity:GetPlayerType() == PlayerType.PLAYER_BETHANY_B then self.chargeBar.beth:Render(bar_pos_vec, self:getChargeBarCharge(self.blood_charge + self.current_charge)) end
         self.chargeBar.charge:Render(bar_pos_vec, self:getChargeBarCharge(self.current_charge))
         self.chargeBar.extra:Render(bar_pos_vec, self:getChargeBarCharge(self.extra_charge))
         self.chargeBar.overlay:Render(bar_pos_vec)
