@@ -151,6 +151,11 @@ function Health.GetHealth(player_entity, player_number, is_twin)
         Health.Heart.GetHolyMantle(hearts[lastHeart])
     end
 
+    for i = #hearts, 1, -1 do
+        if hearts[i].heart ~= nil then break end
+        hearts[i] = nil
+    end
+
     return hearts
 end
 
