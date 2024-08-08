@@ -23,7 +23,7 @@
     [/list]
 
     [h3] Compatibility [/h3]
-    The following mods are officially compatible with Co-Op HUD+:
+    The following mods are compatible:
     [list]
         [*] Any mod that uses Custom Health API, which includes:
         [list]
@@ -39,8 +39,10 @@
     [h3] Known Incompatibilities [/h3]
     The following mods are known to cause issues:
     [list]
-        [*] Visible Lost Health (fix coming soon)
-        [*] Visible Holy Mantles (fix coming soon)
+        [*] Visible Lost Health
+        [*] Visible Holy Mantles
+        [*] Any mod that adds a custom pill / card (this is actively being looked into)
+        [*] Mods that render any new HUD elements (they could potentially not be rendered)
     [/list]
 
     [h3] Customization [/h3]
@@ -62,7 +64,7 @@
 
     [h3] Acknowledgements [/h3]
     [b] Srokks ( https://steamcommunity.com/id/srokks ) [/b]
-    coopHUD ( https://steamcommunity.com/sharedfiles/filedetails/?id=2731267631 )
+    [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2731267631] coopHUD [/url]
 
     [b] wofsauge ( https://steamcommunity.com/id/Wofsauge, https://github.com/wofsauge ) [/b]
     [url=https://wofsauge.github.io/IsaacDocs/rep/index.html] TBoI Lua API Documentation [/url]
@@ -70,9 +72,9 @@
 
     [b] _Kilburn [/b]
 
-    [b] The Modding of Isaac Discord server ( https://discord.gg/KbevtvgD4z ) [/b]
+    [b] [url=https://discord.gg/KbevtvgD4z] The Modding of Isaac Discord server [/url] [/b]
     </description>
-    <version>0.84</version>
+    <version>0.85</version>
     <visibility>Public</visibility>
     <tag id="Tweaks"/>
     <tag id="Graphics"/>
