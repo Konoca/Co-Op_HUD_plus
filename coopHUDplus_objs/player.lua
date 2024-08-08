@@ -74,7 +74,7 @@ function CoopHUDplus.Player:getIsReal()
     return true
 end
 
-function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror, vertical_mirror, offset)
+function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror, vertical_mirror, offset, pColor)
     if self.player_entity:IsCoopGhost() then return end
 
     -- TODO active/pocket item highlighting for Jacob & Esau
@@ -136,7 +136,7 @@ function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror
 
     -- stats & misc
     if self.is_real then
-        self.stats:render(edge, edge_indexed, edge_multipliers, Vector(0, 0))
+        self.stats:render(edge, edge_indexed, edge_multipliers, Vector(0, 0), pColor)
     end
 
     if self.twin then
@@ -149,6 +149,6 @@ function CoopHUDplus.Player:render(screen_size, screen_center, horizontal_mirror
         )
 
         -- TODO does not render correctly for P3 & P4
-        self.twin.stats:render(edge, edge_indexed, edge_multipliers, CoopHUDplus.config.stats.text.twin_offset)
+        self.twin.stats:render(edge, edge_indexed, edge_multipliers, CoopHUDplus.config.stats.text.twin_offset, pColor)
     end
 end

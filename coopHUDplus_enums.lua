@@ -108,3 +108,14 @@ CoopHUDplus.Misc.BLACK_HEART = 13
 CoopHUDplus.Misc.GIGA_BOMB = 14
 CoopHUDplus.Misc.RED_HEART = 15
 CoopHUDplus.Misc.POOP = 16
+
+CoopHUDplus.Player.COLORS = {
+    -- [1] = Color(0, 0, 255, 1, 0, 0, 0), -- blue
+    -- [2] = Color(255, 0, 0, 1, 0, 0, 0), -- red
+    -- [3] = Color(0, 255, 0, 1, 0, 0, 0), -- green
+    -- [4] = Color(255, 255, 0, 1, 0, 0, 0), -- yellow
+    [1] = {0.8, 0.9, 1.8, 0.25},
+    [2] = {1, 0.2, 0.2, 0.25},
+    [3] = {0.2, 1, 0.2, 0.25},
+    [4] = {1, 1, 0, 0.25},
+}

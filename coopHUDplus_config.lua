@@ -9,6 +9,8 @@ CoopHUDplus.config = {
 
     enable_toggle_hud = true,
 
+    player_colors = true,
+
     active_item = {
         book_correction_offset = Vector(0, -5),
         book_charge_outline = true,
@@ -107,7 +109,8 @@ CoopHUDplus.config = {
             lowered_offset = Vector(6, 6),
             scale = Vector(0.5, 0.5),
 
-            twin_offset = Vector(20, 0)
+            twin_offset = Vector(20, 0),
+            colors = true,
         }
     },
 
