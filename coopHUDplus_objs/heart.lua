@@ -191,20 +191,20 @@ function CoopHUDplus.Health:_getHeartsHelper(
 end
 
 function CoopHUDplus.Health:getHearts()
-    -- Custom Heart API compatibility
-    if CustomHealthAPI ~= nil
-        and self.pType ~= PlayerType.PLAYER_THELOST and self.pType ~= PlayerType.PLAYER_THELOST_B
-        and self.pType ~= PlayerType.PLAYER_KEEPER and self.pType ~= PlayerType.PLAYER_KEEPER_B
-    then
-        return self:getHeartsCHAPI()
-    end
-
     local hearts = {}
 
     if (Game():GetLevel():GetCurses() & 8) == 8 and not CoopHUDplus.config.health.ignore_curse then
         local curse_heart = CoopHUDplus.Heart.new('curse', false, false, false, false)
         table.insert(hearts, curse_heart)
         return hearts
+    end
+
+    -- Custom Heart API compatibility
+    if CustomHealthAPI ~= nil
+        and self.pType ~= PlayerType.PLAYER_THELOST and self.pType ~= PlayerType.PLAYER_THELOST_B
+        and self.pType ~= PlayerType.PLAYER_KEEPER and self.pType ~= PlayerType.PLAYER_KEEPER_B
+    then
+        return self:getHeartsCHAPI()
     end
 
     -- if player is (Tainted) Keeper, use coins instead of hearts
