@@ -1,6 +1,6 @@
 CoopHUDplus.PATHS = {
     ANIMATIONS = {
-        active_item = 'gfx/ui/items_coop.anm2', -- animation file taken from coopHUD, credit to Srokks. I custom made the book border
+        active_item = 'gfx/ui/items_coop.anm2', -- taken from coopHUD (Srokks), edited
         chargebar = 'gfx/ui/ui_chargebar.anm2',
         book = 'gfx/005.100_collectible.anm2',
         trinket = 'gfx/005.100_collectible.anm2',
@@ -16,6 +16,21 @@ CoopHUDplus.PATHS = {
     },
     FONTS = {
         streak = 'font/upheaval.fnt',
+    },
+    IMAGES = {
+        d_infinity = 'gfx/characters/costumes/costume_489_dinfinity.png',
+        virtues_belial = 'gfx/ui/hud_bookofvirtueswithbelial.png',
+        virtues = 'gfx/ui/hud_bookofvirtues.png',
+        belial = 'gfx/ui/hud_bookofbelial.png',
+        jar = 'gfx/characters/costumes/costume_rebirth_90_thejar.png',
+        jar_of_flies = 'gfx/characters/costumes/costume_434_jarofflies.png',
+        jar_of_wisps = 'gfx/ui/hud_jarofwisps.png',
+        everything_jar = 'gfx/ui/hud_everythingjar.png',
+        flip = 'gfx/ui/ui_flip_coop.png', -- taken from coopHUD (Srokks)
+        mama_mega = 'gfx/ui/hud_mamamega.png',
+        smelter = 'gfx/ui/hud_smelter.png',
+        glowing_hour_glass = 'gfx/ui/hud_glowinghourglass.png',
+        urn_of_souls = 'gfx/ui/hud_urnofsouls.png'
     }
 }
 
@@ -73,6 +88,19 @@ CoopHUDplus.PILL = {
     [PillEffect.PILLEFFECT_EXPERIMENTAL] = 'Experimental Pill',
 }
 
+CoopHUDplus.ActiveItem.D_INFINITY = {
+    D1 = 0,
+    D4 = 65536,
+    D6 = 131072,
+    E6 = 196608,
+    D7 = 262144,
+    D8 = 327680,
+    D10 = 393216,
+    D12 = 458752,
+    D20 = 524288,
+    D100 = 589824,
+}
+
 CoopHUDplus.Trinket.SLOT_PRIMARY = 0
 CoopHUDplus.Trinket.SLOT_SECONDARY = 1
 
@@ -119,3 +147,4 @@ CoopHUDplus.Player.COLORS = {
     [3] = {0.2, 1, 0.2, 0.25},
     [4] = {1, 1, 0, 0.25},
 }
+
