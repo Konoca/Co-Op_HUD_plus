@@ -13,13 +13,14 @@ function CoopHUDplus.Player.new(player_entity, player_num)
     local twin_entity = self.player_entity:GetOtherTwin()
     if twin_entity ~= nil and self.is_real then
         self.twin = CoopHUDplus.Player.new(twin_entity, player_num)
+        self.twin.is_twin = true
         self.twin.number = self.number
     end
     if not self.is_real then
         self.number = self.number * -1
     end
 
-    self.health = CoopHUDplus.Health.new(player_entity, self.number)
+    self.health = CoopHUDplus.Health.new(player_entity, self.number, self.is_twin)
 
     self.active_items = {
         [0] = CoopHUDplus.ActiveItem.new(player_entity, ActiveSlot.SLOT_PRIMARY),
@@ -48,7 +49,7 @@ function CoopHUDplus.Player.new(player_entity, player_num)
 end
 
 function CoopHUDplus.Player:update(player_entity)
-    self.health = CoopHUDplus.Health.new(player_entity, self.number)
+    self.health = CoopHUDplus.Health.new(player_entity, self.number, self.is_twin)
 
     self.active_items = {
         [0] = CoopHUDplus.ActiveItem.new(player_entity, ActiveSlot.SLOT_PRIMARY),
