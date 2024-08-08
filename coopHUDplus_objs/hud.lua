@@ -69,6 +69,7 @@ local function onRender()
     -- This is only a workaround until I can figure out how to determine what characters are unlocked
     if #CoopHUDplus.joining > 0 then
         setDefaultHUD(game, true)
+        CoopHUDplus.IS_HUD_VISIBLE = false
         return
     end
 
@@ -80,6 +81,7 @@ local function onRender()
         hudOff = not hudOff
     end
     setDefaultHUD(game, hudOff)
+    CoopHUDplus.IS_HUD_VISIBLE = not hudOff
     if hudOff then return end
 
     -- timer
