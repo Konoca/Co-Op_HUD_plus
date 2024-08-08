@@ -105,3 +105,11 @@ setmetatable(Better_Coop_HUD.Misc, {
 		return cls.new(...)
 	end,
 })
+
+Better_Coop_HUD.Inventory = {}
+Better_Coop_HUD.Inventory.__index = Better_Coop_HUD.Inventory
+setmetatable(Better_Coop_HUD.Inventory, {
+	__call = function(cls, ...)
+		return cls.new(...)
+	end,
+})

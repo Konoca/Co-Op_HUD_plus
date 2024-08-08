@@ -10,6 +10,7 @@ require('bch_objs/stat')
 require('bch_objs/heart')
 require('bch_objs/item')
 require('bch_objs/misc')
+require('bch_objs/inventory')
 require('bch_objs/player')
 require('bch_objs/hud')
 

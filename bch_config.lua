@@ -132,6 +132,13 @@ Better_Coop_HUD.config = {
         }
     },
 
+    inventory = {
+        pos = Vector(0, 40),
+        spacing = Vector(12, 12),
+        ignore_curse = false,
+        result_pos = Vector(65, 46)
+    },
+
     mods = {
         mAPI = {
             pos = Vector(4, 4),
@@ -139,7 +146,7 @@ Better_Coop_HUD.config = {
         },
         EID = {
             XPosition = 135,
-            YPosition = 0,
+            YPosition = 5,
             DisplayMode = 'local',
             HUDOffset = 10,
             enable = true,
