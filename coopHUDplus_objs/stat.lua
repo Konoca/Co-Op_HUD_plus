@@ -242,6 +242,8 @@ function CoopHUDplus.Stats:render(edge, edge_indexed, edge_multipliers, addition
 
     if not CoopHUDplus.config.stats.text.colors then pColor = {1, 1, 1, 0.5} end
 
+    CoopHUDplus.Utils.CreateCallback(CoopHUDplus.Callbacks.PRE_STATS_RENDER, self)
+
     for i = 0, #self.stats - 1, 1 do
         self.stats[i + 1]:render(
             pos + (CoopHUDplus.config.stats.offset * i),

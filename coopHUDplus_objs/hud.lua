@@ -232,6 +232,8 @@ local function onRender()
     -- if HPBars then
     --    -- https://github.com/wofsauge/Enhanced-Boss-Bars/blob/main/config.lua
     -- end
+
+    CoopHUDplus.Utils.CreateCallback(CoopHUDplus.Callbacks.POST_HUD_RENDER, screen_size, screen_center)
 end
 
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_RENDER, onRender)
