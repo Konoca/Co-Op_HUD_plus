@@ -10,6 +10,7 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
     enable_toggle_hud = true,
 
     player_colors = false,
+    display_during_pause = true,
 
     items = {
         display = true,

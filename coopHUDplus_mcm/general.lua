@@ -13,6 +13,16 @@ ModConfigMenu.AddSetting(
     CoopHUDplus.MCM.categories.general,
     {
         Type = ModConfigMenu.OptionType.BOOLEAN,
+        CurrentSetting = function() return CoopHUDplus.config.display_during_pause end,
+        Display = function() return 'Enable HUD on pause: ' .. (CoopHUDplus.config.display_during_pause and 'on' or 'off') end,
+        OnChange = function(b) CoopHUDplus.config.display_during_pause = b end,
+    }
+)
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.general,
+    {
+        Type = ModConfigMenu.OptionType.BOOLEAN,
         CurrentSetting = function() return CoopHUDplus.config.enable_toggle_hud end,
         Display = function() return 'Enable HUD toggle: ' .. (CoopHUDplus.config.enable_toggle_hud and 'on' or 'off') end,
         OnChange = function(b) CoopHUDplus.config.enable_toggle_hud = b end,
