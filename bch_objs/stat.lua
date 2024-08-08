@@ -27,23 +27,18 @@ function Better_Coop_HUD.Stat:getSprite()
 end
 
 
--- TODO p3 and p4 dont render
-function Better_Coop_HUD.Stat:render(pos_vector, text_pos_vector, scale, render_icon, is_upper_text)
+function Better_Coop_HUD.Stat:render(pos_vector, text_pos_vector, render_icon)
     if render_icon then
-        self.sprite.Scale = scale
+        self.sprite.Scale = Better_Coop_HUD.config.stats.scale
         self.sprite:Render(pos_vector)
-    end
-
-    if is_upper_text then
-        text_pos_vector.Y = text_pos_vector.Y - (Better_Coop_HUD.config.stats.space_between_icon_text / 2)
     end
 
     -- TODO visual difference if stat changed
     Isaac.RenderScaledText(
         string.format('%.2f', self.value),
         text_pos_vector.X, text_pos_vector.Y,
-        scale.X / 2,
-        scale.Y / 2,
+        Better_Coop_HUD.config.stats.text.scale.X,
+        Better_Coop_HUD.config.stats.text.scale.Y,
         1, 1, 1, 0.5
     )
 end
@@ -64,53 +59,36 @@ function Better_Coop_HUD.Stats.new(player_entity, player)
     return self
 end
 
-local function _render(stat, pos, offset, is_upper_text, render_sprite, mirrored, horizontal_edge, horizontal_multiplier, vertical_edge)
-    pos.X = horizontal_edge + (offset.X * horizontal_multiplier)
-    pos.Y = vertical_edge + offset.Y
-
-    local additional_text_offset = 0
-
-    if mirrored then
-        pos.X = pos.X + Better_Coop_HUD.config.stats.mirrored_offset.X
-        pos.Y = pos.Y + Better_Coop_HUD.config.stats.mirrored_offset.Y
-        additional_text_offset = Better_Coop_HUD.config.stats.space_between_icon_text * 1.5
-    end
-
-    local text_pos = Vector(
-        pos.X + ((Better_Coop_HUD.config.stats.space_between_icon_text + additional_text_offset) * horizontal_multiplier),
-        pos.Y
-    )
-
-    stat:render(
-        pos,
-        text_pos,
-        Better_Coop_HUD.config.stats.scale,
-        render_sprite,
-        is_upper_text
-    )
-
-    offset.Y = offset.Y + Better_Coop_HUD.config.stats.space_between_icons
-
-    return offset
-end
-
-function Better_Coop_HUD.Stats:render(horizontal_edge, horizontal_multiplier, vertical_edge)
-    local is_upper_text = self.player.number < 2
-    local render_sprite = is_upper_text and self.player.is_real
+function Better_Coop_HUD.Stats:render(edge, edge_indexed, edge_multipliers, additional_offset)
+    local is_lower_text = self.player.number > 1
+    local render_sprite = not is_lower_text and self.player.is_real
     local mirrored = ((self.player.number + 1) % 2) == 0
 
-    local offset = Vector(0, 0)
-    local pos = Vector(0, 0)
+    local edge_multipliers2 = edge_multipliers
+    edge_multipliers2.Y = 1
+
+    local edge2 = Vector(edge_indexed.X, edge.Y)
+
+    local pos = edge2 + (Better_Coop_HUD.config.stats.pos * edge_multipliers2)
+    local text_pos = edge2 + ((Better_Coop_HUD.config.stats.text.pos + additional_offset) * edge_multipliers2)
+
+    if mirrored then
+        pos = pos + Better_Coop_HUD.config.stats.mirrored_offset
+        text_pos = text_pos + Better_Coop_HUD.config.stats.text.mirrored_offset
+    end
+
+    if is_lower_text then
+        text_pos = text_pos + (Better_Coop_HUD.config.stats.text.offset / 2)
+    end
 
     local stats = {self.speed, self.fire_delay, self.damage, self.range, self.shot_speed, self.luck}
-    for i = 1, #stats, 1 do
-        offset = _render(
-            stats[i],
-            pos, offset,
-            is_upper_text,
-            render_sprite,
-            mirrored,
-            horizontal_edge, horizontal_multiplier, vertical_edge
+    for i = 0, #stats - 1, 1 do
+        print(edge, edge_indexed, edge_multipliers, mirrored, is_lower_text, pos, text_pos)
+        stats[i + 1]:render(
+            pos + (Better_Coop_HUD.config.stats.offset * i),
+            text_pos + (Better_Coop_HUD.config.stats.text.offset * i),
+            render_sprite
         )
     end
+
 end
