@@ -1,4 +1,4 @@
-CoopHUDplus.config = {
+function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
     disable = false,
 
     offset = Vector(20, 20),
@@ -150,3 +150,6 @@ CoopHUDplus.config = {
         },
     },
 }
+end
+
+CoopHUDplus.ResetConfig()

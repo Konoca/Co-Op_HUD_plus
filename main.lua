@@ -14,6 +14,8 @@ require('coopHUDplus_objs/inventory')
 require('coopHUDplus_objs/player')
 require('coopHUDplus_objs/hud')
 
+require('coopHUDplus_commands')
+
 require('coopHUDplus_callbacks')
 
 print('Co-Op HUD+ loaded v'..version)

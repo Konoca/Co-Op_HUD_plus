@@ -216,3 +216,9 @@ end
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, addCollectible)
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, shiftCollectibles, 0)
 
+
+local function customCommands(_, cmd, params)
+    print(cmd, params)
+    if cmd == CoopHUDplus.cmd_prefix..'reset' then CoopHUDplus.ResetConfig() end
+end
+CoopHUDplus:AddCallback(ModCallbacks.MC_EXECUTE_CMD, customCommands)
