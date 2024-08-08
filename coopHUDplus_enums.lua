@@ -152,4 +152,5 @@ CoopHUDplus.Player.COLORS = {
 CoopHUDplus.Callbacks = {
     POST_PLAYER_RENDER = 1,
     PRE_HEALTH_RENDER = 2,
+    PRE_MISC_RENDER = 3,
 }
