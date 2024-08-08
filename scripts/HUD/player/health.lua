@@ -47,8 +47,8 @@ end
 function Health.Heart.GetHolyMantle(sprite)
     local anim = heartAnim
 
-    if CustomHealthAPI ~= nil then 
-        anim = 'gfx/ui/CustomHealthAPI/hearts.anm2' 
+    if CustomHealthAPI ~= nil then
+        anim = 'gfx/ui/CustomHealthAPI/hearts.anm2'
     end
 
     sprite.heart = Sprite()

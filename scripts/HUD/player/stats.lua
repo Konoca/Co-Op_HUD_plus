@@ -48,10 +48,10 @@ function Stats.GetDevilAngelChance()
     local room = game:GetRoom()
     local stage = level:GetStage()
 
+    local curses = level:GetCurses()
+
     -- stages where you cant get a deal
-    -- TODO for some reason, first level of Alt doesnt show chances
     local disallowed_stages = {
-        [LevelStage.STAGE1_1] = true,
         [LevelStage.STAGE4_3] = true,
         [LevelStage.STAGE5] = true,
         [LevelStage.STAGE6] = true,
@@ -69,6 +69,12 @@ function Stats.GetDevilAngelChance()
 
     if level:IsPreAscent() then return chances end
     if disallowed_stages[stage] then return chances end
+
+    if stage == LevelStage.STAGE1_1
+        and (curses & LevelCurse.CURSE_OF_LABYRINTH) == 0
+        and level:GetStageType() ~= StageType.STAGETYPE_REPENTANCE
+        and level:GetStageType() ~= StageType.STAGETYPE_REPENTANCE_B
+    then return chances end
 
     chances.deal = room:GetDevilRoomChance()
     chances.deal = chances.deal > 1 and 1 or chances.deal
