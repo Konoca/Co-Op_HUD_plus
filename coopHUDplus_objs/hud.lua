@@ -23,7 +23,14 @@ end
 --
 
 local function renderTimerText(text)
-    Isaac.RenderScaledText(text, GetScreenCenter().X - (Isaac.GetTextWidth(text)/2), 7, 1, 1, 1, 1, 1, 0.25)
+    local f, _ = Font(CoopHUDplus.PATHS.FONTS[CoopHUDplus.config.fonts.timer])
+    f:DrawStringScaled(
+        text,
+        GetScreenCenter().X - (Isaac.GetTextWidth(text)/2), 7,
+        1, 1,
+        KColor(1, 1, 1, 0.25),
+        Isaac.GetTextWidth(text), true
+    )
 end
 
 local function renderTimer(game, lastTimeString)
@@ -171,7 +178,7 @@ local function onRender()
 
         local frame = CoopHUDplus.STREAK.sprite:GetFrame()
         if frame > 7 and frame < 60 then
-            local f, _ = Font(CoopHUDplus.PATHS.FONTS.streak)
+            local f, _ = Font(CoopHUDplus.PATHS.FONTS[CoopHUDplus.config.fonts.streaks])
             f:DrawStringScaled(
                 CoopHUDplus.STREAK.name,
                 pos.X + CoopHUDplus.config.streak.name.offset.X,

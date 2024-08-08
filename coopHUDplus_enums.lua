@@ -16,7 +16,26 @@ CoopHUDplus.PATHS = {
         streak = 'gfx/ui/ui_streak.anm2',
     },
     FONTS = {
-        streak = 'font/upheaval.fnt',
+        upheaval = 'font/upheaval.fnt',
+        upheavalmini = 'font/upheavalmini.fnt',
+
+        terminus = 'font/terminus.fnt',
+        terminus8 = 'font/terminus8.fnt',
+
+        droid = 'font/droid.fnt',
+
+        luamini = 'font/luamini.fnt',
+        luaminioutlined = 'font/luaminioutlined.fnt',
+
+        pftempestasevencondensed = 'font/pftempestasevencondensed.fnt',
+
+        teammeatfont10 = 'font/teammeatfont10.fnt',
+        teammeatfont12 = 'font/teammeatfont12.fnt',
+        teammeatfont16 = 'font/teammeatfont16.fnt',
+        teammeatfont16bold = 'font/teammeatfont16bold.fnt',
+        teammeatfont20bold = 'font/teammeatfont20bold.fnt',
+
+
     },
     IMAGES = {
         d_infinity = 'gfx/characters/costumes/costume_489_dinfinity.png',

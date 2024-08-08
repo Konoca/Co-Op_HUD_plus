@@ -1,5 +1,6 @@
 function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
     disable = false,
+    version = CoopHUDplus.version,
 
     offset = Vector(20, 20),
     mirrored_extra_offset = Vector(60, 0),
@@ -168,6 +169,16 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
             box_width = 10,
             box_center = true,
         }
+    },
+
+    fonts = {
+        streaks = 'upheaval',
+        timer = 'terminus8',
+        pickups = 'terminus8',
+        -- stats = 'luaminioutlined',
+        stats = 'terminus8',
+        pocket_items = 'terminus8',
+        extra_lives = 'terminus8',
     },
 
     mods = {
