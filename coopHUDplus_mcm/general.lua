@@ -59,6 +59,16 @@ ModConfigMenu.AddSetting(
         OnChange = function(b) CoopHUDplus.config.items.colors = b end,
     }
 )
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.general,
+    {
+        Type = ModConfigMenu.OptionType.BOOLEAN,
+        CurrentSetting = function() return CoopHUDplus.config.timer.display end,
+        Display = function() return 'Enable Timer: ' .. (CoopHUDplus.config.timer.display and 'on' or 'off') end,
+        OnChange = function(b) CoopHUDplus.config.timer.display = b end,
+    }
+)
 
 ModConfigMenu.AddSpace(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.general)
 ModConfigMenu.AddSetting(

@@ -1,13 +1,11 @@
 local heartAnim = CoopHUDplus.PATHS.ANIMATIONS.hearts
 
-function CoopHUDplus.Heart.new(heart_type, is_half_heart, is_golden, has_eternal, is_empty)
+function CoopHUDplus.Heart.new(heart_anim, is_golden, overlay)
     local self = setmetatable({}, CoopHUDplus.Heart)
 
-    self.heart_type = heart_type
-    self.is_half_heart = is_half_heart
-    self.is_empty = is_empty
+    self.heart_anim = heart_anim
     self.is_golden = is_golden
-    self.has_eternal = has_eternal
+    self.overlay_anim = overlay
 
     self.sprite = self:getSprite()
 
@@ -60,15 +58,15 @@ end
 
 function CoopHUDplus.Heart:getSprite()
     local sprite = {
-        heart = Sprite(),
+        heart = nil,
         golden = nil,
         eternal = nil,
     }
-    sprite.heart:Load(heartAnim, true)
-
-    local half = 'Full'
-    if self.is_half_heart then half = 'Half' end
-    if self.is_empty then half = 'Empty' end
+    if self.heart_anim then
+        sprite.heart = Sprite()
+        sprite.heart:Load(heartAnim, true)
+        sprite.heart:SetFrame(self.heart_anim, 0)
+    end
 
     if self.is_golden then
         sprite.golden = Sprite()
@@ -76,28 +74,10 @@ function CoopHUDplus.Heart:getSprite()
         sprite.golden:SetFrame('GoldHeartOverlay', 0)
     end
 
-    if self.has_eternal then
+    if self.overlay_anim and self.overlay_anim ~= '' then
         sprite.eternal = Sprite()
         sprite.eternal:Load(heartAnim, true)
-        sprite.eternal:SetFrame('WhiteHeartOverlay', 0)
-    end
-
-    sprite.heart:SetFrame(self.heart_type..'Heart'..half, 0)
-
-    if self.heart_type == 'empty' then
-        sprite.heart:SetFrame('EmptyHeart', 0)
-    end
-
-    if self.heart_type == 'empty_coin' then
-        sprite.heart:SetFrame('CoinEmpty', 0)
-    end
-
-    if self.heart_type == 'curse' then
-        sprite.heart:SetFrame('CurseHeart', 0)
-    end
-
-    if self.heart_type == 'holy_mantle' then
-        sprite.heart:SetFrame('HolyMantle', 0)
+        sprite.eternal:SetFrame(self.overlay_anim, 0)
     end
 
     return sprite
@@ -113,13 +93,15 @@ function CoopHUDplus.Heart:setHolyMantle()
         return
     end
 
-    self.heart_type = 'holy_mantle'
+    self.heart_anim = 'HolyMantle'
     self:updateSprite()
 end
 
 function CoopHUDplus.Heart:render(pos, flip)
-    self.sprite.heart.FlipX = flip
-    self.sprite.heart:Render(pos)
+    if self.sprite.heart then
+        self.sprite.heart.FlipX = flip
+        self.sprite.heart:Render(pos)
+    end
 
     if self.sprite.golden then
         self.sprite.golden.FlipX = flip
@@ -132,33 +114,14 @@ function CoopHUDplus.Heart:render(pos, flip)
     end
 end
 
-function CoopHUDplus.Health.new(player_entity, player_number)
+function CoopHUDplus.Health.new(player_entity, player_number, is_twin)
     local self = setmetatable({}, CoopHUDplus.Health)
     self.player_entity = player_entity
     self.player_number = player_number
     self.pType = self.player_entity:GetPlayerType()
+    self.is_twin = is_twin
 
-    -- given in half-heart units
-    self.max_red = player_entity:GetMaxHearts()
-    self.effective_max = self.player_entity:GetEffectiveMaxHearts()
-    self.red = self.player_entity:GetHearts()
-    self.soul = self.player_entity:GetSoulHearts()
-
-    -- given in binary, replaces soul heart sprites
-    self.black = self.player_entity:GetBlackHearts()
-
-    -- given in whole-heart units, replaces red heart sprite
-    self.bone = self.player_entity:GetBoneHearts()
-    self.golden = self.player_entity:GetGoldenHearts()
-    self.rotten = self.player_entity:GetRottenHearts()
-    self.broken = self.player_entity:GetBrokenHearts()
-
-    self.eternal = self.player_entity:GetEternalHearts()
-
-    -- not a heart sprite
     self.extra_lives = self.player_entity:GetExtraLives()
-
-    self.total_hearts = math.ceil((self.max_red + self.soul) / 2)
 
     self.hasHoly = self.player_entity:GetEffects():GetCollectibleEffect(CollectibleType.COLLECTIBLE_HOLY_MANTLE)
 
@@ -174,39 +137,11 @@ function CoopHUDplus.Health.new(player_entity, player_number)
     return self
 end
 
-function CoopHUDplus.Health:_getHeartsHelper(
-    iterations,
-    heart_type,
-    is_half_heart,
-    is_golden,
-    has_eternal,
-    is_empty,
-    bitmask,
-    bitmask_heart_type
-)
-    local hearts = {}
-    local bit = 1
-    local type = heart_type
-    for i = 1, iterations, 1 do
-        type = heart_type
-
-        if bitmask and bitmask_heart_type and ((bitmask & bit) == bit) then
-            type = bitmask_heart_type
-        end
-
-        local heart = CoopHUDplus.Heart.new(type, is_half_heart, is_golden, has_eternal, is_empty)
-        table.insert(hearts, heart)
-
-        bit = bit * 2
-    end
-    return hearts
-end
-
 function CoopHUDplus.Health:getHearts()
     local hearts = {}
 
     if (Game():GetLevel():GetCurses() & 8) == 8 and not CoopHUDplus.config.health.ignore_curse then
-        local curse_heart = CoopHUDplus.Heart.new('curse', false, false, false, false)
+        local curse_heart = CoopHUDplus.Heart.new('CurseHeart', false, nil)
         table.insert(hearts, curse_heart)
         return hearts
     end
@@ -221,85 +156,30 @@ function CoopHUDplus.Health:getHearts()
 
     if CustomHealthAPI ~= nil then heartAnim = CoopHUDplus.PATHS.ANIMATIONS.hearts_copy end
 
-    -- if player is (Tainted) Keeper, use coins instead of hearts
-    local red = 'Red'
-    local empty = 'empty'
-    local broken = 'Broken'
+    local number = self.player_number
+    if self.is_twin or number < 0 then number = math.abs(number) + 4 end
+    local heartsHUD = Game():GetHUD():GetPlayerHUD(number):GetHearts()
 
-    local player_type = self.player_entity:GetPlayerType()
-    if player_type == PlayerType.PLAYER_KEEPER or player_type == PlayerType.PLAYER_KEEPER_B then
-        red = 'Coin'
-        empty = 'empty_coin'
-        broken = 'BrokenCoin'
-    end
-
-    -- red hearts
-    local red_hearts_count = (self.red < self.max_red) and math.floor(self.red / 2) or math.floor(self.max_red / 2)
-    local red_hearts = self:_getHeartsHelper(red_hearts_count, red, false, false, false, false, nil, '')
-    if (self.red < self.max_red) and (self.red % 2 == 1) then
-        local half_heart = CoopHUDplus.Heart.new(red, true, false, false, false)
-        table.insert(red_hearts, half_heart)
-    end
-
-    -- empty red heart containers
-    local empty_hearts_count = math.floor((self.max_red - self.red) / 2)
-    local empty_hearts = self:_getHeartsHelper(empty_hearts_count, empty, false, false, false, false, nil, '')
-
-    -- soul / black hearts
-    local soul_hearts_count = math.ceil(self.soul / 2)
-    local soul_hearts = self:_getHeartsHelper(soul_hearts_count, 'Blue', false, false, false, false, self.black, 'Black')
-    if self.soul % 2 == 1 then
-        soul_hearts[#soul_hearts].is_half_heart = (self.soul % 2 == 1)
-        soul_hearts[#soul_hearts]:updateSprite()
-    end
-
-    -- broken hearts, TODO fix bc it broken?
-    local broken_hearts = self:_getHeartsHelper(self.broken, broken, false, false, false, false, nil, '')
-
-    -- bone hearts
-    local remaining_reds = self.red - self.max_red
-    for i = 1, self.bone + soul_hearts_count, 1 do
-        if self.player_entity:IsBoneHeart(i-1) then
-            table.insert(soul_hearts, i, CoopHUDplus.Heart.new('Bone', remaining_reds == 1, false, false, remaining_reds <= 0))
-            remaining_reds = remaining_reds - 2
-        end
-    end
-
-    -- eternal heart
-    if self.eternal == 1 then
-        local eternal_table = soul_hearts
-        if #red_hearts ~= 0 then
-            eternal_table = red_hearts
+    local lastHeart = 1
+    local heartsSkipped = false
+    for _, v in pairs(heartsHUD) do
+        if not v:IsVisible() then
+            table.insert(hearts, CoopHUDplus.Heart.new(nil, nil, nil))
+            heartsSkipped = true
+            goto skip_heart
         end
 
-        eternal_table[#eternal_table].has_eternal = true
-        eternal_table[#eternal_table]:updateSprite()
+        local anim = v:GetHeartAnim()
+        local golden = v:IsGoldenHeartOverlayVisible()
+        local overlay = v:GetHeartOverlayAnim()
+
+        table.insert(hearts, CoopHUDplus.Heart.new(anim, golden, overlay))
+        if not heartsSkipped then lastHeart = lastHeart + 1 end
+        ::skip_heart::
     end
 
-    -- rotten hearts
-    local type2 = ''
-    for i = 0, self.rotten - 1, 1 do
-        type2 = red_hearts[#red_hearts - i].heart_type
-        if type2 == 'Red' then type2 = '' end
-        red_hearts[#red_hearts - i].heart_type = 'Rotten' .. type2
-        red_hearts[#red_hearts - i]:updateSprite()
-    end
-
-    for i = 1, #red_hearts, 1 do table.insert(hearts, red_hearts[i]) end
-    for i = 1, #empty_hearts, 1 do table.insert(hearts, empty_hearts[i]) end
-    for i = 1, #soul_hearts, 1 do table.insert(hearts, soul_hearts[i]) end
-
-    -- golden hearts
-    for i = 0, self.golden - 1, 1 do
-        hearts[#hearts - i].is_golden = true
-        hearts[#hearts - i]:updateSprite()
-    end
-
-    for i = 1, #broken_hearts, 1 do table.insert(hearts, broken_hearts[i]) end
-
-    -- TODO eventually render over a heart instead of replace heart
     if self.hasHoly then
-        hearts[#hearts]:setHolyMantle()
+        hearts[lastHeart]:setHolyMantle()
     end
 
     return hearts
@@ -525,7 +405,7 @@ function CoopHUDplus.Health:render(edge_indexed, edge_multipliers)
     CoopHUDplus.Utils.CreateCallback(CoopHUDplus.Callbacks.PRE_HEALTH_RENDER, self, self.player_entity)
 
     local row = 0
-    for i = 0, #self.hearts-1, 1 do
+    for i = 0, #self.hearts - 1, 1 do
         if i % CoopHUDplus.config.health.hearts_per_row == 0 and i ~= 0 then
             row = row + 1
             offset.X = 0
@@ -533,7 +413,7 @@ function CoopHUDplus.Health:render(edge_indexed, edge_multipliers)
         end
 
         pos = edge + (offset * edge_multipliers)
-
+--
         self.hearts[i+1]:render(pos, edge_multipliers.X == -1)
 
         offset.X = offset.X + CoopHUDplus.config.health.space_between_hearts

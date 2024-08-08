@@ -13,6 +13,10 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
     player_colors = false,
     display_during_pause = true,
 
+    timer = {
+        display = true,
+    },
+
     items = {
         display = true,
         pos = Vector(-10, 195),

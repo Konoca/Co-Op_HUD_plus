@@ -14,7 +14,7 @@ local function onGameStart(_, isCont)
 
     if data.config then
         local savedData = CoopHUDplus.Utils.decodeConfigVectors(data.config)
-        if savedData.version == CoopHUDplus.version then CoopHUDplus.config = CoopHUDplus.Utils.ensureCompatibility(CoopHUDplus.config, savedData) end
+        if savedData.version ~= nil then CoopHUDplus.config = CoopHUDplus.Utils.ensureCompatibility(CoopHUDplus.config, savedData) end
     end
 
     if isCont then
@@ -34,7 +34,6 @@ local function onGameExit(_, shouldSave)
         for i = 0, #CoopHUDplus.players, 1 do
             local p = CoopHUDplus.players[i]
             if p then
-                -- local idx = p.player_entity.ControllerIndex
                 local idx = p.number
                 data.players[idx] = {}
                 data.players[idx].inv = p.inventory.inv
