@@ -201,7 +201,6 @@ function CoopHUDplus.Stats.new(player_entity, player)
 
     self.stats = {self.speed, self.fire_delay, self.damage, self.range, self.shot_speed, self.luck}
 
-    -- TODO handle duality
     if self.player.number == 0 and self.player.is_real then
         local duality = CoopHUDplus.Stat.new(player_entity, CoopHUDplus.Stat.DUALITY, true)
         if duality.value == nil then
