@@ -12,6 +12,7 @@ CoopHUDplus.PATHS = {
         inv = 'gfx/ui/coopHUDplus_inventory.anm2', -- custom, edited from default
         crafting = 'gfx/ui/coopHUDplus_crafting.anm2', -- custom, edited from default
         poops = 'gfx/ui/ui_poops.anm2',
+        streak = 'gfx/ui/ui_streak.anm2',
     },
 }
 

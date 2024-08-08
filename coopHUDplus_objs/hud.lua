@@ -114,6 +114,14 @@ local function onRender()
     -- bombs, keys, coins, etc.
     CoopHUDplus.Miscs.new():render(screen_size, screen_center)
 
+    -- for idx, animation in pairs(CoopHUDplus.ANIMATIONS) do
+    --     animation:Update()
+    --     animation:Render(Vector(), Vector.Zero, Vector.Zero)
+    --     if animation:IsFinished() then
+    --         CoopHUDplus.ANIMATIONS[idx] = nil
+    --     end
+    -- end
+
     -- mod overrides
     if MinimapAPI and CoopHUDplus.config.mods.mAPI.override then
         -- https://github.com/TazTxUK/MinimapAPI/blob/master/scripts/minimapapi/config.lua

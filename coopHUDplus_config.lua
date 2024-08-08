@@ -134,6 +134,12 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
         result_pos = Vector(65, 46)
     },
 
+    streak = {
+        pos = Vector(0, -50),
+        center_anchor = true,
+        bottom_anchor = false,
+    },
+
     mods = {
         mAPI = {
             pos = Vector(4, 4),
