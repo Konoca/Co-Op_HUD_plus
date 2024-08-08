@@ -1,5 +1,52 @@
 local json = require('json')
 
+function CoopHUDplus.encodeConfigVectors(config)
+    local new_config = {}
+    for key, value in pairs(config) do
+        if key == nil or value == nil then goto skip_encode end
+        if type(value) == 'table' then
+            value = CoopHUDplus.encodeConfigVectors(value)
+        end
+        if type(value) == 'userdata' then
+            new_config[key..'X'] = value.X
+            new_config[key..'Y'] = value.Y
+            goto skip_encode
+        end
+
+        new_config[key] = value
+        ::skip_encode::
+    end
+    return new_config
+end
+
+function CoopHUDplus.decodeConfigVectors(config)
+    local new_config = {}
+    for key, value in pairs(config) do
+        local num = tonumber(key)
+        if key == nil or value == nil then goto skip_decode end
+
+        if type(key) == 'string' and num ~= nil then
+            key = num
+        end
+
+        if type(value) == 'table' then
+            value = CoopHUDplus.decodeConfigVectors(value)
+        end
+
+        if type(key) == 'string' and key:sub(-1) == 'Y' then
+            goto skip_decode
+        end
+        if type(key) == 'string' and key:sub(-1) == 'X' then
+            key = key:sub(1, -2)
+            value = Vector(value, config[key..'Y'])
+        end
+
+        new_config[key] = value
+        ::skip_decode::
+    end
+    return new_config
+end
+
 local function onGameStart(_, isCont)
     CoopHUDplus.players = {}
     CoopHUDplus.joining = {}
@@ -8,8 +55,12 @@ local function onGameStart(_, isCont)
         known = {},
     }
 
-    if isCont and CoopHUDplus:HasData() then
-        local data = json.decode(CoopHUDplus:LoadData())
+    if not CoopHUDplus:HasData() then return end
+    local data = json.decode(CoopHUDplus:LoadData())
+
+    if data.config then CoopHUDplus.config = CoopHUDplus.decodeConfigVectors(data.config) end
+
+    if isCont then
         CoopHUDplus.SAVED_PLAYER_DATA = data.player_invs
         CoopHUDplus.pills = data.pills
     end
@@ -17,17 +68,17 @@ end
 CoopHUDplus:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, onGameStart)
 
 local function onGameExit(_, shouldSave)
-    if not shouldSave then return end
+    local data = {}
+    data.config = CoopHUDplus.encodeConfigVectors(CoopHUDplus.config)
 
-    local data = {
-        player_invs = {},
-        pills = CoopHUDplus.pills,
-    }
-
-    for i = 0, #CoopHUDplus.players, 1 do
-        local p = CoopHUDplus.players[i]
-        if p then
-            data.player_invs[p.player_entity.ControllerIndex] = p.inventory.inv
+    if shouldSave then
+        data.pills = CoopHUDplus.pills
+        data.player_invs = {}
+        for i = 0, #CoopHUDplus.players, 1 do
+            local p = CoopHUDplus.players[i]
+            if p then
+                data.player_invs[p.player_entity.ControllerIndex] = p.inventory.inv
+            end
         end
     end
 
