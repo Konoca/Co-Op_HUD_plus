@@ -22,3 +22,28 @@ A mod for The Binding of Isaac: Repentence that changes the HUD to better displa
     * Improves the look of heart icons
 * Encyclopedia (https://steamcommunity.com/sharedfiles/filedetails/?id=2376005362)
     * Allows players to check their current items and what they do
+
+## Customization
+The placement of almost everything can be changed within `bch_config.lua`
+
+## Acknowledgements
+Srokks (https://steamcommunity.com/id/srokks)
+*  coopHUD (https://steamcommunity.com/sharedfiles/filedetails/?id=2731267631) was used to aid in development, specifically
+    * How to overhaul HUD
+    * How to create objects in Lua (I literally have never used Lua outside of CC: Tweaked)
+    * Item animation file
+    * Bethany & T. Bethany charge bar color
+    * Stat placement
+    * Coin, Key, Bomb, etc. placement
+
+wofsauge (https://steamcommunity.com/id/Wofsauge, https://github.com/wofsauge) 
+* TBoI Lua API Documentation (https://wofsauge.github.io/IsaacDocs/rep/index.html)
+* reHUD (https://steamcommunity.com/sharedfiles/filedetails/?id=1906405707) was used to aid in development, specifically
+    * Top-Centered Timer
+
+_Kilburn
+* Lead developer of Antibirth mod
+* Code of theirs was used in reHUD, which I made use of
+
+The Modding of Isaac Discord server (https://discord.gg/KbevtvgD4z)
+* Very helpful community
