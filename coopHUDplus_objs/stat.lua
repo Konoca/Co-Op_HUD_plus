@@ -177,12 +177,14 @@ function CoopHUDplus.Stat:render(pos_vector, text_pos_vector, render_icon, pColo
     end
 
     -- TODO visual difference if stat changed
-    Isaac.RenderScaledText(
+    local f, _ = Font(CoopHUDplus.PATHS.FONTS[CoopHUDplus.config.fonts.stats])
+    f:DrawStringScaled(
         string.format(self.is_percent and '%.1f%%' or '%.2f', self.value),
         text_pos_vector.X, text_pos_vector.Y,
         CoopHUDplus.config.stats.text.scale.X,
         CoopHUDplus.config.stats.text.scale.Y,
-        pColor[1], pColor[2], pColor[3], 0.5
+        KColor(pColor[1], pColor[2], pColor[3], 0.5),
+        0, true
     )
 end
 
@@ -235,7 +237,7 @@ function CoopHUDplus.Stats:render(edge, edge_indexed, edge_multipliers, addition
 
     if is_lower_text then
         -- text_pos = text_pos + (CoopHUDplus.config.stats.text.offset / 2)
-        text_pos = text_pos + CoopHUDplus.config.stats.text.lowered_offset
+        text_pos = text_pos + (CoopHUDplus.config.stats.text.lowered_offset * edge_multipliers2)
     end
 
     if not CoopHUDplus.config.stats.text.colors then pColor = {1, 1, 1, 0.5} end

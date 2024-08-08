@@ -58,6 +58,18 @@ ModConfigMenu.AddSetting(
         OnChange = function(n) CoopHUDplus.config.stats.mirrored_offset.Y = n end,
     }
 )
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.stats,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        -- Maximum = 100.0,
+        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.stats.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.stats.scale.X * 100) .. '%' end,
+        OnChange = function(n) CoopHUDplus.config.stats.scale = Vector(n/100, n/100) end,
+    }
+)
 
 ModConfigMenu.AddSpace(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.stats)
 ModConfigMenu.AddText(CoopHUDplus.MCM.title, CoopHUDplus.MCM.categories.stats, 'Text')
@@ -159,6 +171,18 @@ ModConfigMenu.AddSetting(
         CurrentSetting = function() return CoopHUDplus.config.stats.text.lowered_offset.Y end,
         Display = function() return 'Lowered Offset (Y): ' .. CoopHUDplus.config.stats.text.lowered_offset.Y end,
         OnChange = function(n) CoopHUDplus.config.stats.text.lowered_offset.Y = n end,
+    }
+)
+ModConfigMenu.AddSetting(
+    CoopHUDplus.MCM.title,
+    CoopHUDplus.MCM.categories.stats,
+    {
+        Type = ModConfigMenu.OptionType.NUMBER,
+        Minimum = 0.0,
+        -- Maximum = 100.0,
+        CurrentSetting = function() return tonumber(string.format('%.0f', CoopHUDplus.config.stats.text.scale.X * 100)) end,
+        Display = function() return 'Scale: ' .. string.format('%.0f', CoopHUDplus.config.stats.text.scale.X * 100) .. '%' end,
+        OnChange = function(n) CoopHUDplus.config.stats.text.scale = Vector(n/100, n/100) end,
     }
 )
 

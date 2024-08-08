@@ -1,5 +1,6 @@
 function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
     disable = false,
+    version = CoopHUDplus.version,
 
     offset = Vector(20, 20),
     mirrored_extra_offset = Vector(60, 0),
@@ -103,11 +104,11 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
         mirrored_offset = Vector(60, 0),
 
         text = {
-            pos = Vector(10, 84),
+            pos = Vector(10, 79),
             offset = Vector(0, 12),
             mirrored_offset = Vector(45, 0),
             lowered_offset = Vector(6, 6),
-            scale = Vector(0.5, 0.5),
+            scale = Vector(1, 1),
 
             twin_offset = Vector(20, 0),
             colors = true,
@@ -168,6 +169,15 @@ function CoopHUDplus.ResetConfig() CoopHUDplus.config = {
             box_width = 10,
             box_center = true,
         }
+    },
+
+    fonts = {
+        streaks = 'upheaval',
+        timer = 'terminus8',
+        pickups = 'terminus8',
+        stats = 'luaminioutlined',
+        pocket_items = 'terminus8',
+        extra_lives = 'terminus8',
     },
 
     mods = {
