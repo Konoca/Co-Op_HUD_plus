@@ -8,7 +8,6 @@ local mods = {
 local function loadModCallbacks(_)
     for _, mod in pairs(mods) do
         if mod.condition() then
-            print(mod.file)
             mod.file()
         end
     end
