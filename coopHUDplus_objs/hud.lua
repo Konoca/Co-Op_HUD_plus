@@ -31,6 +31,7 @@ local function renderTimerText(text)
         KColor(1, 1, 1, 0.25),
         Isaac.GetTextWidth(text), true
     )
+    f:Unload()
 end
 
 local function renderTimer(game, lastTimeString)
@@ -203,6 +204,7 @@ local function onRender()
                 conf.box_width,
                 conf.box_center
             )
+            f:Unload()
         end
 
         if CoopHUDplus.STREAK.sprite:IsFinished() then
