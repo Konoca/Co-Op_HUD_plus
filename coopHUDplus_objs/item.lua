@@ -265,15 +265,15 @@ end
 -- Pocket Item (pill, card, rune)
 local function getPocketItemName(item_config)
     if not item_config then return '???' end
-
-    local name = item_config.Name
-    if name:sub(1, 1) ~= '#' then return name end
-
-    name = name:sub(2, -5)
-    name = name:gsub('_', ' ')
-    name = name:lower():gsub('%f[%a].', string.upper)
-    return name
-    -- return XMLData.GetEntryById(XMLNode.ITEM, item_config.ID).name
+    --
+    -- local name = item_config.Name
+    -- if name:sub(1, 1) ~= '#' then return name end
+    --
+    -- name = name:sub(2, -5)
+    -- name = name:gsub('_', ' ')
+    -- name = name:lower():gsub('%f[%a].', string.upper)
+    -- return name
+    return XMLData.GetEntryById(XMLNode.ITEM, item_config.ID).name
 end
 
 function CoopHUDplus.PocketItem.new(entity, slot)
