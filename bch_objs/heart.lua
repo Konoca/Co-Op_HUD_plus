@@ -232,9 +232,10 @@ function Better_Coop_HUD.Health:getHearts()
     return hearts
 end
 
-function Better_Coop_HUD.Health:render(horizontal_edge, horizontal_multiplier, vertical_edge, vertical_multiplier)
-    local offset = Vector(0, 0)
+function Better_Coop_HUD.Health:render(edge_indexed, edge_multipliers)
     local pos = Vector(0, 0)
+    local offset = Vector(0, 0)
+    local edge = edge_indexed + (Better_Coop_HUD.config.health.pos * edge_multipliers)
 
     local row = 0
     for i = 0, #self.hearts-1, 1 do
@@ -244,8 +245,7 @@ function Better_Coop_HUD.Health:render(horizontal_edge, horizontal_multiplier, v
             offset.Y = offset.Y + Better_Coop_HUD.config.health.space_between_rows
         end
 
-        pos.X = horizontal_edge + (offset.X * horizontal_multiplier)
-        pos.Y = vertical_edge + (offset.Y * vertical_multiplier)
+        pos = edge + (offset * edge_multipliers)
 
         self.hearts[i+1]:render(pos)
 
