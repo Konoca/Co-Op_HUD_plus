@@ -1,5 +1,5 @@
-# Better Coop HUD
-A mod for The Binding of Isaac: Repentence that changes the HUD to better display information when playing with multiple people.
+# Co-Op HUD+
+A mod for The Binding of Isaac: Repentence that changes the HUD to better display information when playing with multiple people. This mod is based on coopHUD by Srokks, which is no longer being updated.
 
 ## Required Mods
 * MinimapAPI (https://steamcommunity.com/sharedfiles/filedetails/?id=1978904635)
